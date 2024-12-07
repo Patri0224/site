@@ -663,3 +663,4 @@ const displayTracks = () => {
     });
 };
 
+handleRedirect();
