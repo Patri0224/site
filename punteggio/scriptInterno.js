@@ -600,7 +600,8 @@ const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/puntegg
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
 const SCOPES = 'user-read-currently-playing';
-let current_track = { 0: null };
+let current_track = [];
+current_track[0] = null;
 let accessToken = null;
 
 // Step 1: Login to Spotify
