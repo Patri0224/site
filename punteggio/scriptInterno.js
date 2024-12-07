@@ -663,4 +663,3 @@ const displayTracks = () => {
     });
 };
 
-document.getElementById('loginButton').addEventListener('click', login);
