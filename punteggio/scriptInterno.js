@@ -226,8 +226,14 @@ function reset() {
         squadra1 = "";
         squadra2 = "";
         fra = 0;
+        localStorage.removeItem('access_token');
+        sessionStorage.removeItem('access_token');
+
+        // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
-        accessToken = null;
+
+        // Reindirizza l'utente alla home o a una pagina di login
+        window.location.href = '/';
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
         localStorage.setItem("it1", document.getElementById('1').src);
@@ -240,7 +246,7 @@ function reset() {
         localStorage.setItem("m2", squadra2);
         localStorage.setItem("fra", fra);
         localStorage.setItem("songs", current_track.join(";;"));
-
+        handleRedirect();
     }
     updateBackground();
     controlImgBackground();
