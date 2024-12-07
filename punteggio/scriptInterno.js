@@ -632,7 +632,7 @@ let accessToken = null;
 
 // Step 1: Login to Spotify
 const login = () => {
-    const url = `${AUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPES)}&prompt=login`;
+    const url = `${AUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}&prompt=login`;
 
     window.location.href = url;
 };
@@ -650,7 +650,7 @@ const handleRedirect = () => {
 // Step 3: Fetch the currently playing track
 const fetchCurrentTrack = async () => {
     if (!accessToken) {
-        alert('Login first!');
+        
         current_track.push(null);
         return;
     }
