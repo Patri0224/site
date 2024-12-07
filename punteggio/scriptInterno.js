@@ -433,9 +433,17 @@ function showGraf() {
     showMenu(2);
 }
 function mostraCanzone(index) {
+    console.log("canzone" + index)
     let obj = document.getElementById("canzone" + index);
-    if (obj.style.display == "none") obj.style.display == "block";
-    else obj.style.display == "none"
+    console.log(obj);
+    if (obj.style.display == "none") {
+        obj.style.display == "block";
+        console.log("block");
+    }
+    else {
+        obj.style.display == "none";
+        console.log("none");
+    }
 }
 //gestione ctrl-z
 function indietroPunteggio() {
@@ -642,6 +650,7 @@ const handleRedirect = () => {
 const fetchCurrentTrack = async () => {
     if (!accessToken) {
         alert('Login first!');
+        current_track.push(null);
         return;
     }
 
@@ -655,9 +664,11 @@ const fetchCurrentTrack = async () => {
             current_track.push(data);
         } else {
             console.error('No track playing or API error:', response);
+            current_track.push(null);
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
+        current_track.push(null);
     }
 };
 
