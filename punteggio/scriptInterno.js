@@ -444,24 +444,26 @@ function showGraf() {
             str += `<p class="text1">${persone[key - 1]}: ${value}</p>`;
         }
     }
-    str += "</div>";
+    str += "</div><div id='cici'></div>";
 
     // Mostrare il risultato
     document.getElementById("grafico").innerHTML = str;
     document.getElementById("grafico").style.display = "block";
     showMenu(2);
 }
+function todiv(str) {
+    document.getElementById("cici").innerHTML += str;
+}
 function mostraCanzone(index) {
     console.log("canzone" + index)
+    todiv("canzone" + index);
     let obj = document.getElementById("canzone" + index);
     console.log(obj);
     if (obj.style.display == "none") {
         obj.style.display = "block";
-        console.log("block");
     }
     else {
         obj.style.display = "none";
-        console.log("none");
     }
 }
 //gestione ctrl-z
@@ -656,6 +658,7 @@ const handleRedirect = () => {
         const params = new URLSearchParams(hash.substring(1));
         accessToken = params.get('access_token');
         console.log('Access Token:', accessToken);
+        todiv('Access Token:', accessToken);
     }
 };
 
@@ -679,33 +682,13 @@ const fetchCurrentTrack = async () => {
             current_track.push(data);
         } else {
             console.error('No track playing or API error:', response);
+            todiv('No track playing or API error:'+ response);
             current_track.push(null);
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
+        todiv('Error fetching current track:'+ error);
         current_track.push(null);
     }
 };
-
-// Step 4: Save track data offline
-const saveTrack = (track) => {
-    const storedTracks = JSON.parse(localStorage.getItem('tracks')) || [];
-    storedTracks.push(track);
-    localStorage.setItem('tracks', JSON.stringify(storedTracks));
-    displayTracks();
-};
-
-// Step 5: Display saved tracks
-const displayTracks = () => {
-    const trackList = document.getElementById('trackList');
-    trackList.innerHTML = '';
-
-    const storedTracks = JSON.parse(localStorage.getItem('tracks')) || [];
-    storedTracks.forEach((track, index) => {
-        const li = document.createElement('li');
-        li.textContent = `${index + 1}. ${track.item.name} by ${track.item.artists.map(artist => artist.name).join(', ')}`;
-        trackList.appendChild(li);
-    });
-};
-
 handleRedirect();
