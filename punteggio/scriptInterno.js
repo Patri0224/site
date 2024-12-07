@@ -226,6 +226,7 @@ function reset() {
         squadra1 = "";
         squadra2 = "";
         fra = 0;
+        window.location.hash = '';
         accessToken = null;
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
@@ -385,7 +386,7 @@ function showGraf() {
             a = a * 50 / (var1 + var2);
             let b = 50 + a;
             let c = 50 - a;
-            str += `<div class='riga' onclick="mostraCanzone(${index})"> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"><p>${pA}</p></div><div class="centro2" style="width:${c}%"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
+            str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
             str += `<div id="canzone${index}" class='riga' style="display:none"><p>${current_track[index - 1].item.name} at ${current_track[index - 1].progress_ms / 1000} by ${current_track[index - 1].item.artists.map(artist => artist.name).join(', ')} </div>`;
 
         }
