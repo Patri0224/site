@@ -222,10 +222,11 @@ function reset() {
         document.getElementById('2').src = null;
         punteggio1 = "0|-1";
         punteggio2 = "0|-1";
-        current_track = { 0: null };
+        current_track = [];
         squadra1 = "";
         squadra2 = "";
         fra = 0;
+        accessToken = null;
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
         localStorage.setItem("it1", document.getElementById('1').src);
@@ -384,7 +385,9 @@ function showGraf() {
             a = a * 50 / (var1 + var2);
             let b = 50 + a;
             let c = 50 - a;
-            str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"><p>${pA}</p></div><div class="centro2" style="width:${c}%"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
+            str += `<div class='riga' onclick="mostraCanzone(${index})"> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"><p>${pA}</p></div><div class="centro2" style="width:${c}%"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
+            str += `<div id="canzone${index}" class='riga' style="display:none"><p>${current_track[index - 1].item.name} at ${current_track[index - 1].progress_ms / 1000} by ${current_track[index - 1].item.artists.map(artist => artist.name).join(', ')} </div>`;
+
         }
     }
     // Ordinamento dell'array
@@ -417,6 +420,11 @@ function showGraf() {
     document.getElementById("grafico").innerHTML = str;
     document.getElementById("grafico").style.display = "block";
     showMenu(2);
+}
+function mostraCanzone(index) {
+    let obj = document.getElementById("canzone" + index);
+    if (obj.style.display == "none") obj.style.display == "block";
+    else obj.style.display == "none"
 }
 //gestione ctrl-z
 function indietroPunteggio() {
@@ -601,7 +609,6 @@ const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
 const SCOPES = 'user-read-currently-playing';
 let current_track = [];
-current_track[0] = null;
 let accessToken = null;
 
 // Step 1: Login to Spotify
