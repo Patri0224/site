@@ -295,7 +295,7 @@ window.addEventListener('load', function () {
 });
 //aggiunta ultimo valore nella cronologia del punteggio
 function updateStringhe() {
-    fetchCurrentTrack(current_track.length);
+    fetchCurrentTrack();
     punteggio1 += ";" + document.getElementById('score-team1').textContent + "|" + getSelectedValue1();
     punteggio2 += ";" + document.getElementById('score-team2').textContent + "|" + getSelectedValue2();
     document.getElementById("ind").style.backgroundColor = "blue";
@@ -620,7 +620,7 @@ const handleRedirect = () => {
 };
 
 // Step 3: Fetch the currently playing track
-const fetchCurrentTrack = async (posizioneArray) => {
+const fetchCurrentTrack = async () => {
     if (!accessToken) {
         alert('Login first!');
         return;
@@ -633,7 +633,7 @@ const fetchCurrentTrack = async (posizioneArray) => {
 
         if (response.status === 200) {
             const data = await response.json();
-            current_track[posizioneArray] = data;
+            current_track.push(data);
         } else {
             console.error('No track playing or API error:', response);
         }
