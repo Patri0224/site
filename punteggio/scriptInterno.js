@@ -11,11 +11,7 @@ const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
 const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
 const spessoreBarra = 2;//in percentuale
 const maxSpostamento = 20;//range dello spostamento fino a una massima differenza tra i due punteggi
-var CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';
-const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio.html'; // Cambia se necessario
-const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
-const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
-const SCOPES = 'user-read-currently-playing';
+
 let current_track = [];
 let accessToken = null;
 
@@ -636,8 +632,19 @@ function deselectCheckboxs() {
 
 // Step 1: Login to Spotify
 const login = () => {
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+    window.location.hash = ''; // Rimuove il token nell'URL
+    // Dichiarazione delle variabili necessarie
+    const AUTH_URL = 'https://accounts.spotify.com/authorize';  // URL di autorizzazione Spotify
+    const CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';  // Sostituisci con il tuo Client ID di Spotify
+    const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/redirect.html';  // Il tuo URI di redirect
+    const SCOPES = 'user-library-read user-top-read';  // Permessi necessari per l'accesso a Spotify
+
+    // Costruisci l'URL di autorizzazione con l'opzione 'prompt=login'
     const url = `${AUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPES)}&prompt=login`;
 
+    // Reindirizza l'utente a Spotify per il login
     window.location.href = url;
 };
 
