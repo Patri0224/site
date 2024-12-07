@@ -638,8 +638,8 @@ const login = () => {
     // Dichiarazione delle variabili necessarie
     const AUTH_URL = 'https://accounts.spotify.com/authorize';  // URL di autorizzazione Spotify
     const CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';  // Sostituisci con il tuo Client ID di Spotify
-    const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/redirect.html';  // Il tuo URI di redirect
-    const SCOPES = 'user-library-read user-top-read';  // Permessi necessari per l'accesso a Spotify
+    const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio.html';  // Il tuo URI di redirect
+    const SCOPES = 'user-read-currently-playing user-read-playback-state';  // Permessi necessari per l'accesso a Spotify
 
     // Costruisci l'URL di autorizzazione con l'opzione 'prompt=login'
     const url = `${AUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPES)}&prompt=login`;
