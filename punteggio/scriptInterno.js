@@ -366,6 +366,8 @@ function showGraf() {
     let prev1 = 0;
     let prev2 = 0;
     for (let index = 0; index < arr1.length; index++) {
+
+        let item = current_track[index - 1] || null;
         let pA = "";
         let pB = "";
         let p1 = arr1[index].split("|")[1];
@@ -393,7 +395,9 @@ function showGraf() {
             let b = 50 + a;
             let c = 50 - a;
             str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
-            str += `<div id="canzone${index}" class='riga' style="display:none"><p>${current_track[index - 1].item.name} at ${current_track[index - 1].progress_ms / 1000} by ${current_track[index - 1].item.artists.map(artist => artist.name).join(', ')} </div>`;
+
+            if (item != null) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item.item.name} at ${item.progress_ms / 1000} by ${item.item.artists.map(artist => artist.name).join(', ')}</p> </div>`;
+            else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
 
         }
     }
