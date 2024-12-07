@@ -596,7 +596,7 @@ function deselectCheckboxs() {
     document.getElementById('team2-checkbox3').checked = false;
 }
 var CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';
-const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio'; // Cambia se necessario
+const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio.html'; // Cambia se necessario
 const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
 const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
 const SCOPES = 'user-read-currently-playing';
