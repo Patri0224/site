@@ -344,6 +344,7 @@ function showGraf() {
         return;
     }
     console.log(current_track);
+    todiv(current_track);
     var array = {
         0: 0,
         1: 0,
@@ -455,8 +456,6 @@ function todiv(str) {
     document.getElementById("cici").innerHTML += str;
 }
 function mostraCanzone(index) {
-    console.log("canzone" + index)
-    todiv("canzone" + index);
     let obj = document.getElementById("canzone" + index);
     console.log(obj);
     if (obj.style.display == "none") {
