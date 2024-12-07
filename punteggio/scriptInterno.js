@@ -387,7 +387,7 @@ function showGraf() {
     let prev2 = 0;
     for (let index = 0; index < arr1.length; index++) {
 
-        let item = current_track[index - 1] || null;
+        let item = current_track[index - 1] || 1;
         let pA = "";
         let pB = "";
         let p1 = arr1[index].split("|")[1];
@@ -416,7 +416,7 @@ function showGraf() {
             let c = 50 - a;
             str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
-            if (item != null) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item.item.name} at ${item.progress_ms / 1000} by ${item.item.artists.map(artist => artist.name).join(', ')}</p> </div>`;
+            if (item != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item.item.name} at ${item.progress_ms / 1000} by ${item.item.artists.map(artist => artist.name).join(', ')}</p> </div>`;
             else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
 
         }
@@ -453,7 +453,7 @@ function showGraf() {
     showMenu(2);
 }
 function todiv(str) {
-    document.getElementById("cici").innerHTML += str;
+    //document.getElementById("cici").innerHTML += str;
 }
 function mostraCanzone(index) {
     let obj = document.getElementById("canzone" + index);
@@ -667,7 +667,7 @@ const fetchCurrentTrack = async () => {
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
 
-        current_track.push(null);
+        current_track.push(1);
         return;
     }
 
@@ -682,12 +682,12 @@ const fetchCurrentTrack = async () => {
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:'+ response);
-            current_track.push(null);
+            current_track.push(1);
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
         todiv('Error fetching current track:'+ error);
-        current_track.push(null);
+        current_track.push(1);
     }
 };
 handleRedirect();
