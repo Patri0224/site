@@ -639,6 +639,7 @@ const login = () => {
     const AUTH_URL = 'https://accounts.spotify.com/authorize';  // URL di autorizzazione Spotify
     const CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';  // Sostituisci con il tuo Client ID di Spotify
     const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio.html';  // Il tuo URI di redirect
+
     const SCOPES = 'user-read-currently-playing user-read-playback-state';  // Permessi necessari per l'accesso a Spotify
 
     // Costruisci l'URL di autorizzazione con l'opzione 'prompt=login'
@@ -660,8 +661,10 @@ const handleRedirect = () => {
 
 // Step 3: Fetch the currently playing track
 const fetchCurrentTrack = async () => {
+
+    const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
-        
+
         current_track.push(null);
         return;
     }
