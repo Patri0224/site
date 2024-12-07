@@ -1,3 +1,25 @@
+//variabili globali
+var persone = { 0: "Alice", 1: "Andre", 2: "Busti", 3: "Fede", 4: "Fra", 5: "Friggi", 6: "Giorgia", 7: "Giulia", 8: "Marco", 9: "Mati", 10: "Pat", 11: "Totta", 12: "Viola" }
+var premuto = false;//per conferma indietro
+var pReload = false;//per conferma reload
+var punteggio1 = "0|-1";
+var punteggio2 = "0|-1";
+var squadra1 = "";
+var squadra2 = "";
+var fra = 0;
+const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
+const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
+const spessoreBarra = 2;//in percentuale
+const maxSpostamento = 20;//range dello spostamento fino a una massima differenza tra i due punteggi
+var CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';
+const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio.html'; // Cambia se necessario
+const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
+const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
+const SCOPES = 'user-read-currently-playing';
+let current_track = [];
+let accessToken = null;
+
+
 function changeTeamName(team) {
     const teamElement = document.getElementById('name-' + team);
     const newName = prompt("Inserisci il nuovo nome della squadra:");
@@ -233,6 +255,7 @@ function reset() {
         // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
 
+        // Reindirizza l'utente alla home o a una pagina di login
         window.location.href = 'https://www.spotify.com/logout/';
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
@@ -582,19 +605,7 @@ function reload() {
         }, 2000);
     }
 }
-//variabili globali
-var persone = { 0: "Alice", 1: "Andre", 2: "Busti", 3: "Fede", 4: "Fra", 5: "Friggi", 6: "Giorgia", 7: "Giulia", 8: "Marco", 9: "Mati", 10: "Pat", 11: "Totta", 12: "Viola" }
-var premuto = false;//per conferma indietro
-var pReload = false;//per conferma reload
-var punteggio1 = "0|-1";
-var punteggio2 = "0|-1";
-var squadra1 = "";
-var squadra2 = "";
-var fra = 0;
-const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
-const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
-const spessoreBarra = 2;//in percentuale
-const maxSpostamento = 20;//range dello spostamento fino a una massima differenza tra i due punteggi
+
 // Funzione per aggiungere punti in base alle checkbox selezionate
 function addSelectedPoints(team) {
     let totalPoints = 0;
@@ -622,13 +633,6 @@ function deselectCheckboxs() {
     document.getElementById('team2-checkbox2').checked = false;
     document.getElementById('team2-checkbox3').checked = false;
 }
-var CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';
-const REDIRECT_URI = 'https://shimmering-bienenstitch-adedce.netlify.app/punteggio/punteggio.html'; // Cambia se necessario
-const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
-const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
-const SCOPES = 'user-read-currently-playing';
-let current_track = [];
-let accessToken = null;
 
 // Step 1: Login to Spotify
 const login = () => {
@@ -650,7 +654,7 @@ const handleRedirect = () => {
 // Step 3: Fetch the currently playing track
 const fetchCurrentTrack = async () => {
     if (!accessToken) {
-        
+        alert('Login first!');
         current_track.push(null);
         return;
     }
