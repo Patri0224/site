@@ -433,7 +433,7 @@ function indietroPunteggio() {
             punteggio2 = valori.join(";");
             document.getElementById('score-team1').textContent = a.split("|")[0];
             document.getElementById('score-team2').textContent = b.split("|")[0];
-            let q=current_track.pop();
+            current_track.pop();
             updateBackground();
             controlloIndietro();
         }
