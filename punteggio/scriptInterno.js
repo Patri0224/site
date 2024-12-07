@@ -445,7 +445,7 @@ function showGraf() {
             str += `<p class="text1">${persone[key - 1]}: ${value}</p>`;
         }
     }
-    str += "</div><div id='cici'></div>";
+    str += "</div>";
 
     // Mostrare il risultato
     document.getElementById("grafico").innerHTML = str;
