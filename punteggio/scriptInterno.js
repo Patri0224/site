@@ -226,14 +226,14 @@ function reset() {
         squadra1 = "";
         squadra2 = "";
         fra = 0;
+        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
 
         // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
 
-        // Reindirizza l'utente alla home o a una pagina di login
-        window.location.href = '/';
+        window.location.href = 'https://www.spotify.com/logout/';
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
         localStorage.setItem("it1", document.getElementById('1').src);
@@ -632,7 +632,8 @@ let accessToken = null;
 
 // Step 1: Login to Spotify
 const login = () => {
-    const url = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
+    const url = `${AUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPES)}&prompt=login`;
+
     window.location.href = url;
 };
 
