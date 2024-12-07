@@ -437,11 +437,11 @@ function mostraCanzone(index) {
     let obj = document.getElementById("canzone" + index);
     console.log(obj);
     if (obj.style.display == "none") {
-        obj.style.display == "block";
+        obj.style.display = "block";
         console.log("block");
     }
     else {
-        obj.style.display == "none";
+        obj.style.display = "none";
         console.log("none");
     }
 }
