@@ -649,6 +649,19 @@ const login = () => {
     // Reindirizza l'utente a Spotify per il login
     window.location.href = url;
 };
+const logout = () => {
+    // Rimuovi il token di accesso dal localStorage o sessionStorage
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+
+    // Rimuovi il token dalla barra degli indirizzi
+    window.location.hash = '';
+
+    // Reindirizza alla home o alla pagina di login
+    window.location.href = '/';
+
+    window.location.href = 'https://www.spotify.com/logout/';
+};
 
 // Step 2: Handle redirect and get token
 const handleRedirect = () => {
@@ -681,12 +694,12 @@ const fetchCurrentTrack = async () => {
             current_track.push(data);
         } else {
             console.error('No track playing or API error:', response);
-            todiv('No track playing or API error:'+ response);
+            todiv('No track playing or API error:' + response);
             current_track.push(1);
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
-        todiv('Error fetching current track:'+ error);
+        todiv('Error fetching current track:' + error);
         current_track.push(1);
     }
 };
