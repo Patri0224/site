@@ -416,7 +416,7 @@ function showGraf() {
             let c = 50 - a;
             str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
-            if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${item[2] / 1000} by ${item[1]}</p> </div>`;
+            if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${item[2]} by ${item[1]}</p> </div>`;
             else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
 
         }
@@ -508,7 +508,7 @@ function showMenu(op) {
         document.getElementById("menu").style.display = "none";
     } else {
         document.getElementById("menu").style.display = "block";
-        document.getElementById("grafico").style.display = "none";        
+        document.getElementById("grafico").style.display = "none";
     }
 }
 //Usati per gestire le squadre
@@ -632,6 +632,59 @@ function deselectCheckboxs() {
     document.getElementById('team2-checkbox3').checked = false;
 }
 
+
+
+
+
+function listaCanzoni() {
+    if (document.getElementById("canzoni").style.display == "block") {
+        document.getElementById("canzoni").style.display = "none";
+        return;
+    }
+    var str = "";
+    const arr1 = punteggio1.split(";");
+    const arr2 = punteggio2.split(";");
+    for (let index = 0; index < current_track.length; index++) {
+        const song = array[index];
+        if (song[0] != 1) {
+
+            let p1 = arr1[index + 1].split("|")[1];
+            let p2 = arr2[index + 1].split("|")[1];
+            let persona = "errore";
+            if (p1 != 0) {
+                persona = persone[p1];
+            } else if (p2 != 0) {
+                persona = persone[p2];
+            }
+            str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${song[2]}</p></div></div>`
+        }
+    }
+    document.getElementById("canzoni").innerHTML = str;
+    document.getElementById("canzoni").style.display = "block";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Step 1: Login to Spotify
 const login = () => {
     localStorage.removeItem('access_token');
@@ -695,7 +748,7 @@ const fetchCurrentTrack = async () => {
             const data = await response.json();
             ogg[0] = data.item.name;
             ogg[1] = data.item.artists.map(artist => artist.name).join(', ');
-            ogg[2] = data.progress_ms;
+            ogg[2] = Math.round(data.progress_ms / 1000);
 
             current_track.push(ogg);
         } else {

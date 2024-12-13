@@ -247,7 +247,27 @@ footer #fra {
     float: right;
     width: fit-content;
 }
-
+#canzoni {
+    display: none;
+    position: absolute;
+    z-index: 25;
+    padding: 0%;
+    width: 90%;
+    height: 90%;
+    border: 5px solid rgb(153, 153, 153);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 1%;
+    background-color: #2c2c2cee;
+    justify-content: left;
+    align-items: top;
+    flex-direction: column;
+    background-color: #0a002d;
+}
 /*grafico storia*/
 #grafico {
     display: none;
@@ -349,8 +369,8 @@ footer #fra {
     display: none;
     z-index: 5;
     position: absolute;
-    left:0%;
-    top:0%;
+    left: 0%;
+    top: 0%;
     margin-top: 0%;
     width: 85%;
     height: 100%;
@@ -358,12 +378,12 @@ footer #fra {
     justify-content: left;
     align-items: top;
     flex-direction: column;
-    background-color: #0a002d; 
+    background-color: #0a002d;
     border-radius: 2px;
     border-right: #ffffff65 2px solid;
 }
 
-#menu .rig {
+.rig {
     display: flex;
     justify-content: left;
     align-items: top;
@@ -378,7 +398,7 @@ footer #fra {
     border-bottom: #b4b4b465 2px solid;
 }
 
-#menu .rigg {
+.rigg {
     display: flex;
     justify-content: left;
     align-items: top;
@@ -412,12 +432,12 @@ footer #fra {
     background-color: #218838;
 }
 
-#menu p {
+.rigg p {
     margin-top: 1px;
     margin-bottom: 0px;
 }
 
-#menu .desc {
+.rigg .desc {
     font-size: 0.8em;
     margin-top: 1%;
 }
