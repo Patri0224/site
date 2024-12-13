@@ -508,6 +508,7 @@ function showMenu(op) {
         document.getElementById("menu").style.display = "none";
     } else {
         document.getElementById("menu").style.display = "block";
+        document.getElementById("grafico").style.display = "none";        
     }
 }
 //Usati per gestire le squadre

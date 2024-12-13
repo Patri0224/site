@@ -178,6 +178,7 @@ body {
 
 /*footer css*/
 footer {
+    z-index: 30;
     width: 100%;
     background-color: #333;
     color: #fff;
@@ -348,14 +349,18 @@ footer #fra {
     display: none;
     z-index: 5;
     position: absolute;
-    margin-top: 2%;
-    width: 90%;
-    height: 88%;
-    padding: 2%;
+    left:0%;
+    top:0%;
+    margin-top: 0%;
+    width: 85%;
+    height: 100%;
+    padding: 0%;
     justify-content: left;
     align-items: top;
     flex-direction: column;
-    background-color: #1a1a1aed;
+    background-color: #0a002d; 
+    border-radius: 2px;
+    border-right: #ffffff65 2px solid;
 }
 
 #menu .rig {
@@ -366,11 +371,11 @@ footer #fra {
     padding: 1%;
     width: 98%;
     margin-top: 1%;
-    margin-bottom: 5%;
+    margin-bottom: 1%;
+    padding-bottom: 4%;
     gap: 5px;
-    /*border-radius: 1px;
-    border: #b4b4b465 2px solid;
-    background-color: #6d6d6d5b;*/
+    border-radius: 1px;
+    border-bottom: #b4b4b465 2px solid;
 }
 
 #menu .rigg {
