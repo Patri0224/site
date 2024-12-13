@@ -693,8 +693,8 @@ const fetchCurrentTrack = async () => {
             const data = await response.json();
             var ogg = [3];
             ogg[0] = data.item.name;
-            ogg[0] = data.item.artists.map(artist => artist.name).join(', ');
-            ogg[0] = data.progress_ms;
+            ogg[1] = data.item.artists.map(artist => artist.name).join(', ');
+            ogg[2] = data.progress_ms;
 
             current_track.push(ogg);
         } else {
