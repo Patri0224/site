@@ -244,15 +244,7 @@ function reset() {
         squadra1 = "";
         squadra2 = "";
         fra = 0;
-        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
-        localStorage.removeItem('access_token');
-        sessionStorage.removeItem('access_token');
 
-        // Rimuovi il token dalla barra degli indirizzi
-        window.location.hash = '';
-
-        // Reindirizza l'utente alla home o a una pagina di login
-        window.location.href = 'https://www.spotify.com/logout/';
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
         localStorage.setItem("it1", document.getElementById('1').src);
@@ -264,6 +256,15 @@ function reset() {
         localStorage.setItem("m1", squadra1);
         localStorage.setItem("m2", squadra2);
         localStorage.setItem("fra", fra);
+        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+        localStorage.removeItem('access_token');
+        sessionStorage.removeItem('access_token');
+
+        // Rimuovi il token dalla barra degli indirizzi
+        window.location.hash = '';
+
+        // Reindirizza l'utente alla home o a una pagina di login
+        window.location.href = 'https://www.spotify.com/logout/';
         localStorage.setItem("songs", current_track.join(";;"));
         handleRedirect();
     }
@@ -287,7 +288,7 @@ window.addEventListener('beforeunload', function () {
     localStorage.setItem("m1", squadra1);
     localStorage.setItem("m2", squadra2);
     localStorage.setItem("fra", fra);
-    localStorage.setItem("songs", current_track.join(";;"));
+    localStorage.setItem("songs", songsToString(current_track));
 });
 window.addEventListener('load', function () {
     const nameTeam1 = localStorage.getItem("nt1");
@@ -314,7 +315,7 @@ window.addEventListener('load', function () {
     if (m1) squadra1 = m1;
     if (m2) squadra2 = m2;
     if (fraa) fra = fraa;
-    if (songs) current_track = songs.split(";;");
+    if (songs) current_track = songsFromString(songs);
     updateBackground();
     controlImgBackground();
     controlloIndietro();
@@ -344,7 +345,6 @@ function showGraf() {
         return;
     }
     console.log(current_track);
-    todiv(current_track);
     var array = {
         0: 0,
         1: 0,
@@ -387,7 +387,7 @@ function showGraf() {
     let prev2 = 0;
     for (let index = 0; index < arr1.length; index++) {
 
-        let item = current_track[index - 1] || 1;
+        let item = current_track[index - 1];
         let pA = "";
         let pB = "";
         let p1 = arr1[index].split("|")[1];
@@ -416,7 +416,7 @@ function showGraf() {
             let c = 50 - a;
             str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
-            if (item != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${item[2] / 1000} by ${item[1]}</p> </div>`;
+            if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${item[2] / 1000} by ${item[1]}</p> </div>`;
             else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
 
         }
@@ -662,7 +662,6 @@ const logout = () => {
 
     window.location.href = 'https://www.spotify.com/logout/';
 };
-
 // Step 2: Handle redirect and get token
 const handleRedirect = () => {
     const hash = window.location.hash;
@@ -676,11 +675,13 @@ const handleRedirect = () => {
 
 // Step 3: Fetch the currently playing track
 const fetchCurrentTrack = async () => {
-
+    var ogg = [3];
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
-
-        current_track.push(1);
+        ogg[0] = 1
+        ogg[1] = 1;
+        ogg[2] = 1;
+        current_track.push(ogg);
         return;
     }
 
@@ -691,7 +692,6 @@ const fetchCurrentTrack = async () => {
 
         if (response.status === 200) {
             const data = await response.json();
-            var ogg = [3];
             ogg[0] = data.item.name;
             ogg[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg[2] = data.progress_ms;
@@ -700,12 +700,38 @@ const fetchCurrentTrack = async () => {
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
-            current_track.push(1);
+            ogg[0] = 1
+            ogg[1] = 1;
+            ogg[2] = 1;
+            current_track.push(ogg);
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
         todiv('Error fetching current track:' + error);
-        current_track.push(1);
+        ogg[0] = 1
+        ogg[1] = 1;
+        ogg[2] = 1;
+        current_track.push(ogg);
     }
 };
+
+function songsToString(ogg) {
+    var str = "";
+    for (let index = 0; index < ogg.length; index++) {
+        str += ogg[index][0] + "||" + ogg[index][1] + "||" + ogg[index][2];
+        if (index < ogg.length - 1) {
+            str += "///";
+        }
+    }
+    return str;
+}
+function songsFromString(str) {
+    var ogg = [];
+    var ogg1 = str.split("///");
+    for (let index = 0; index < ogg1.length; index++) {
+        let ogg2 = ogg1[index].split("||");
+        ogg.push(ogg2);
+    }
+    return ogg;
+}
 handleRedirect();
