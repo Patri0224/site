@@ -416,7 +416,7 @@ function showGraf() {
             let c = 50 - a;
             str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
-            if (item != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item.name} at ${item.progress_ms / 1000} by ${item.artisti}</p> </div>`;
+            if (item != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${item[2] / 1000} by ${item[1]}</p> </div>`;
             else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
 
         }
@@ -691,11 +691,11 @@ const fetchCurrentTrack = async () => {
 
         if (response.status === 200) {
             const data = await response.json();
-            var ogg = {
-                name: data.item.name,
-                artisti: data.item.artists.map(artist => artist.name).join(', '),
-                progress_ms: data.progress_ms
-            }
+            var ogg = [3];
+            ogg[0] = data.item.name;
+            ogg[0] = data.item.artists.map(artist => artist.name).join(', ');
+            ogg[0] = data.progress_ms;
+
             current_track.push(ogg);
         } else {
             console.error('No track playing or API error:', response);
