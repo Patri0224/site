@@ -46,8 +46,7 @@ function addPoints(team, points) {
     const scoreElement = document.getElementById('score-' + team);
     let currentScore = parseInt(scoreElement.textContent);
     scoreElement.textContent = currentScore + points;
-let t=getCurrentTimeInSeconds();
-if(tempi[punto]!=0)tempi[punto]=t-tempi[punto];
+document.getElementById("currentSong").innerHTML ="";
     updateStringhe();
     updateBackground();
     controlImgBackground();
@@ -624,6 +623,8 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
+let t=getCurrentTimeInSeconds();
+if(tempi[punto]!=0)tempi[punto]=t-tempi[punto];
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
