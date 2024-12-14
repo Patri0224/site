@@ -438,7 +438,7 @@ function showGraf() {
 
             }
         }
-    } catch (ERRORE) {
+    } catch (errore) {
         str += "errore" + errore;
         console.log(errore);
     }
