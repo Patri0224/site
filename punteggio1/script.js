@@ -674,9 +674,7 @@ function settaSquadre() {
 
 function setTitoloChecked(op) {
     let t = getCurrentTimeInSeconds();
-    if (tempi[punto] - 1 == -1) {
-        tempi[punto] = t - tempi[punto];
-    }
+    tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
@@ -713,7 +711,7 @@ function reload() {
 function addSelectedPoints(team) {
     if (current_track[punto][0] == 1)
         fetchCurrentTrack();
-    tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
+    
     let totalPoints = 0;
     const checkbox1 = document.getElementById(team + '-checkbox1');
     const checkbox2 = document.getElementById(team + '-checkbox2');
