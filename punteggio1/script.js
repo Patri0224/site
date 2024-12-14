@@ -883,7 +883,7 @@ const fetchCurrentTrack = async () => {
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
             current_track[punto] = ogg1;
- document.getElementById("currentSong").innerHTML = data.item.name+ogg[1];
+ document.getElementById("currentSong").innerHTML = data.item.name+ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
