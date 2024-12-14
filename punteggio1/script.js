@@ -521,6 +521,7 @@ function controlloIndietro() {
 }
 //per mostrare il menu
 function showMenu(op) {
+    document.getElementById("canzoni").style.display = "none";
     if (op == 2) {
         document.getElementById("menu").style.display = "none";
     } else if (document.getElementById("menu").style.display == "block") {
@@ -676,7 +677,7 @@ function listaCanzoni() {
         const arr1 = punteggio1.split(";");
         const arr2 = punteggio2.split(";");
         for (let index = 0; index < current_track.length; index++) {
-            const song = array[index];
+            const song = current_track[index];
             if (song[0] != 1) {
 
                 let p1 = arr1[index + 1].split("|")[1];
