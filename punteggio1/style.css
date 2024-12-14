@@ -420,6 +420,7 @@ footer #fra {
     background-color: #0a002d;
     border-radius: 2px;
     border-right: #ffffff65 2px solid;
+    overflow-y: scroll;
 }
 
 .rig {
