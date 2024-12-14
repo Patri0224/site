@@ -31,13 +31,13 @@ main {
 .songs {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 /* Stile per ogni canzone */
 .song {
     background: white;
-    padding: 15px;
+    padding: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -49,10 +49,10 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.song h2 {
-    margin: 0 0 10px;
-    font-size: 1.5rem;
-    color: #4CAF50;
+.song h3 {
+    margin: 0 0 3px;
+    font-size: 1.3rem;
+    color: #001c01;
 }
 
 .song p {

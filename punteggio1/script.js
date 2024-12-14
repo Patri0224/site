@@ -813,7 +813,7 @@ function canzoniPerPersona(person) {
     for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
         strr += `
             <article class="song">
-                <h2>Titolo: ${arrayCanzoniPerPersona[index][0]}</h2>
+                <h3>Titolo: ${arrayCanzoniPerPersona[index][0]}</h3>
                 <p><strong>Autori:</strong> ${arrayCanzoniPerPersona[index][1]}</p>
                 <p><strong>Tempo:</strong> ${arrayTempoPerPersona[index]} secondi</p>
             </article>
