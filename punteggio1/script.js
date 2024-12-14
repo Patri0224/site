@@ -15,7 +15,9 @@ let punto = 0;
 let current_track = [];
 let accessToken = null;
 let tempi = [];
-
+let ogg = [];
+ogg[0] = 1;
+ogg[1] = 1;
 function changeTeamName(team) {
     const teamElement = document.getElementById('name-' + team);
     const newName = prompt("Inserisci il nuovo nome della squadra:");
@@ -340,6 +342,8 @@ window.addEventListener('load', function () {
 //aggiunta ultimo valore nella cronologia del punteggio
 function updateStringhe() {
     punto = parseInt(punto) + 1;
+    current_track[punto] = ogg;
+    tempi[punto] = 0;
     punteggio1 += ";" + document.getElementById('score-team1').textContent + "|" + getSelectedValue1();
     punteggio2 += ";" + document.getElementById('score-team2').textContent + "|" + getSelectedValue2();
     document.getElementById("ind").style.backgroundColor = "blue";
@@ -411,9 +415,6 @@ function showGraf() {
     // Aggiornamento dell'array e generazione della stringa
     let prev1 = 0;
     let prev2 = 0;
-    let ogg = [];
-    ogg[0] = 1;
-    ogg[1] = 1;
     try {
         for (let index = 0; index < arr1.length; index++) {
 
@@ -519,7 +520,7 @@ function indietroPunteggio() {
             document.getElementById('score-team1').textContent = a.split("|")[0];
             document.getElementById('score-team2').textContent = b.split("|")[0];
             current_track.pop();
-            punto=punto-1;
+            punto = punto - 1;
             updateBackground();
             controlloIndietro();
         }
@@ -719,7 +720,7 @@ function listaCanzoni() {
 }
 
 function getCanzone() {
-
+    fetchCurrentTrack();
 }
 
 
@@ -786,12 +787,10 @@ const handleRedirect = () => {
 
 // Step 3: Fetch the currently playing track
 const fetchCurrentTrack = async () => {
-    var ogg = [2];
+
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
-        ogg[0] = 1
-        ogg[1] = 1;
-        current_track[punto]=ogg;
+        current_track[punto] = ogg;
         return;
     }
 
@@ -802,43 +801,40 @@ const fetchCurrentTrack = async () => {
 
         if (response.status === 200) {
             const data = await response.json();
-            ogg[0] = data.item.name;
-            ogg[1] = data.item.artists.map(artist => artist.name).join(', ');
+            let ogg1 = [2];
+            ogg1[0] = data.item.name;
+            ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
 
-            current_track[punto]=ogg;
+            current_track[punto] = ogg1;
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
-            ogg[0] = 1
-            ogg[1] = 1;
-            current_track[punto]=ogg;
+            current_track[punto] = ogg;
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
         todiv('Error fetching current track:' + error);
-        ogg[0] = 1
-        ogg[1] = 1;
-        current_track[punto]=ogg;
+        current_track[punto] = ogg;
     }
 };
 
-function songsToString(ogg) {
+function songsToString(oggg) {
     var str = "";
-    for (let index = 0; index < ogg.length; index++) {
-        str += ogg[index][0] + "||" + ogg[index][1];
-        if (index < ogg.length - 1) {
+    for (let index = 0; index < oggg.length; index++) {
+        str += oggg[index][0] + "||" + oggg[index][1];
+        if (index < oggg.length - 1) {
             str += "///";
         }
     }
     return str;
 }
 function songsFromString(str) {
-    var ogg = [];
-    var ogg1 = str.split("///");
-    for (let index = 0; index < ogg1.length; index++) {
-        let ogg2 = ogg1[index].split("||");
-        ogg.push(ogg2);
+    var oggg = [];
+    var oggg1 = str.split("///");
+    for (let index = 0; index < oggg1.length; index++) {
+        let oggg2 = oggg1[index].split("||");
+        oggg.push(oggg2);
     }
-    return ogg;
+    return oggg;
 }
 handleRedirect();
