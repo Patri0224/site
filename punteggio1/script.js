@@ -400,71 +400,76 @@ function showGraf() {
     // Aggiornamento dell'array e generazione della stringa
     let prev1 = 0;
     let prev2 = 0;
-    try{
-    for (let index = 0; index < arr1.length; index++) {
+    try {
+        for (let index = 0; index < arr1.length; index++) {
 
-        let item = current_track[index - 1];
-        let tempo = tempi[index - 1];
-        let pA = "";
-        let pB = "";
-        let p1 = arr1[index].split("|")[1];
-        let p2 = arr2[index].split("|")[1];
-        let var1 = parseInt(arr1[index].split("|")[0]);
-        let var2 = parseInt(arr2[index].split("|")[0]);
-        let a = var1 - var2;
-        array[parseInt(p1)]++;
-        array[parseInt(p2)]++;
-        array1[parseInt(p1)]++;
-        array1[parseInt(p2)]++;
-        if (var1 - prev1 == 2) array1[parseInt(p1)]++;
-        if (var2 - prev2 == 2) array1[parseInt(p2)]++;
+            let item = current_track[index - 1];
+            let tempo = tempi[index - 1];
+            let pA = "";
+            let pB = "";
+            let p1 = arr1[index].split("|")[1];
+            let p2 = arr2[index].split("|")[1];
+            let var1 = parseInt(arr1[index].split("|")[0]);
+            let var2 = parseInt(arr2[index].split("|")[0]);
+            let a = var1 - var2;
+            array[parseInt(p1)]++;
+            array[parseInt(p2)]++;
+            array1[parseInt(p1)]++;
+            array1[parseInt(p2)]++;
+            if (var1 - prev1 == 2) array1[parseInt(p1)]++;
+            if (var2 - prev2 == 2) array1[parseInt(p2)]++;
 
-        prev1 = var1;
-        prev2 = var2;
+            prev1 = var1;
+            prev2 = var2;
 
-        if (p1 != 0) pA = persone[p1];
-        if (p2 != 0) pB = persone[p2];
+            if (p1 != 0) pA = persone[p1];
+            if (p2 != 0) pB = persone[p2];
 
-        if (var1 + var2 == 0) {
-            str += `<div class='riga'> <p class='sinistra'>0</p><div class="centro1" style="width:50%"></div><div class="centro2" style="width:50%"></div><p class='destra'>0</p></div>`;
-        } else {
-            a = a * 50 / (var1 + var2);
-            let b = 50 + a;
-            let c = 50 - a;
-            str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
+            if (var1 + var2 == 0) {
+                str += `<div class='riga'> <p class='sinistra'>0</p><div class="centro1" style="width:50%"></div><div class="centro2" style="width:50%"></div><p class='destra'>0</p></div>`;
+            } else {
+                a = a * 50 / (var1 + var2);
+                let b = 50 + a;
+                let c = 50 - a;
+                str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
-            if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${tempo} by ${item[1]}</p> </div>`;
-            else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
+                if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${tempo} by ${item[1]}</p> </div>`;
+                else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
 
+            }
         }
+    } catch (ERRORE) {
+        str += "errore" + errore;
+        console.log(errore);
     }
-    // Ordinamento dell'array
-    let sortedArray = Object.entries(array);
-    sortedArray.sort((a, b) => b[1] - a[1]);
-    str += `<div class="punteggiSingoli"><p>Ordine titolo indovinati</p>`;
+    try {
+        // Ordinamento dell'array
+        let sortedArray = Object.entries(array);
+        sortedArray.sort((a, b) => b[1] - a[1]);
+        str += `<div class="punteggiSingoli"><p>Ordine titolo indovinati</p>`;
 
-    for (let i = 0; i < sortedArray.length; i++) {
-        const key = sortedArray[i][0]; // La chiave dell'elemento
-        const value = sortedArray[i][1];
-        if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
-            str += `<p class="text1">${persone[key]}: ${value}</p>`;
+        for (let i = 0; i < sortedArray.length; i++) {
+            const key = sortedArray[i][0]; // La chiave dell'elemento
+            const value = sortedArray[i][1];
+            if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
+                str += `<p class="text1">${persone[key]}: ${value}</p>`;
+            }
         }
-    }
-    str += "</div>";
-    let sortedArray1 = Object.entries(array1);
-    sortedArray1.sort((a, b) => b[1] - a[1]);
-    str += `<div class="punteggiSingoli"><p>Ordine punti guadagnati</p>`;
+        str += "</div>";
+        let sortedArray1 = Object.entries(array1);
+        sortedArray1.sort((a, b) => b[1] - a[1]);
+        str += `<div class="punteggiSingoli"><p>Ordine punti guadagnati</p>`;
 
-    for (let i = 0; i < sortedArray1.length; i++) {
-        const key = sortedArray1[i][0]; // La chiave dell'elemento
-        const value = sortedArray1[i][1];
-        if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
-            str += `<p class="text1">${persone[key]}: ${value}</p>`;
+        for (let i = 0; i < sortedArray1.length; i++) {
+            const key = sortedArray1[i][0]; // La chiave dell'elemento
+            const value = sortedArray1[i][1];
+            if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
+                str += `<p class="text1">${persone[key]}: ${value}</p>`;
+            }
         }
-    }
-    str += "</div>";
-    }catch(errore){
-        str+="errore"+errore;
+        str += "</div>";
+    } catch (errore) {
+        str += "errore" + errore;
     }
     // Mostrare il risultato
     document.getElementById("grafico").innerHTML = str;
@@ -691,8 +696,8 @@ function listaCanzoni() {
                 str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${song[2]}</p></div></div>`
             }
         }
-    } catch (errore){
-        str += "errore"+errore;
+    } catch (errore) {
+        str += "errore" + errore;
     }
     document.getElementById("canzoni").innerHTML = str;
     document.getElementById("canzoni").style.display = "block";
