@@ -46,6 +46,8 @@ function addPoints(team, points) {
     const scoreElement = document.getElementById('score-' + team);
     let currentScore = parseInt(scoreElement.textContent);
     scoreElement.textContent = currentScore + points;
+let t=getCurrentTimeInSeconds();
+if(tempi[punto]!=0)tempi[punto]=t-tempi[punto];
     updateStringhe();
     updateBackground();
     controlImgBackground();
