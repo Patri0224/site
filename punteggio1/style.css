@@ -240,7 +240,26 @@ footer #fra {
     float: right;
     width: fit-content;
 }
+#getCanzone{
+    position: fixed;
+    width: fit-content;
+    margin:1%;    
+    background-color: #e5ff00;
+    color: #000000;
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+    width: 20%;
+    margin: 1px 0;
+    bottom:50px;
 
+}
+#getCanzone:hover{
+    background-color: #ffdd00;
+}
 #reload {
     color: #fff;
     margin: 1%;

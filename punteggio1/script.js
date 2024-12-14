@@ -11,7 +11,7 @@ const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
 const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
 const spessoreBarra = 2;//in percentuale
 const maxSpostamento = 20;//range dello spostamento fino a una massima differenza tra i due punteggi
-
+let punto = 0;
 let current_track = [];
 let accessToken = null;
 let tempi = [];
@@ -151,6 +151,7 @@ function saveData() {
     const m1 = squadra1;
     const m2 = squadra2;
     const fraa = fra;
+    const punt = punto;
     const songs = current_track.join(";;");
     const temps = tempi.join(";");
 
@@ -172,7 +173,8 @@ function saveData() {
         },
         fra: fraa,
         songs: songs,
-        temps: temps
+        temps: temps,
+        punt: punt
     };
 
     const jsonData = JSON.stringify(data, null, 2); // null, 2 per un formato leggibile
@@ -215,6 +217,7 @@ function loadData(event) {
             squadra1 = data.team1.member;
             squadra2 = data.team2.member;
             fra = data.fra;
+            punto = data.punt;
             current_track = data.songs.split(";;");
             tempi = data.temps.split(";");
             console.log(squadra1, squadra2);
@@ -245,6 +248,7 @@ function reset() {
         punteggio2 = "0|-1";
         current_track = [];
         tempi = [];
+        punto = 0;
         squadra1 = "";
         squadra2 = "";
         fra = 0;
@@ -260,6 +264,7 @@ function reset() {
         localStorage.setItem("m1", squadra1);
         localStorage.setItem("m2", squadra2);
         localStorage.setItem("fra", fra);
+        localStorage.setItem("punt", punto);
         localStorage.setItem("songs", current_track);
         localStorage.setItem("temps", tempi);
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
@@ -293,6 +298,7 @@ window.addEventListener('beforeunload', function () {
     localStorage.setItem("m1", squadra1);
     localStorage.setItem("m2", squadra2);
     localStorage.setItem("fra", fra);
+    localStorage.setItem("punt", punto);
     localStorage.setItem("songs", songsToString(current_track));
     localStorage.setItem("temps", tempi.join(";"));
 });
@@ -308,8 +314,9 @@ window.addEventListener('load', function () {
     const m1 = localStorage.getItem("m1");
     const m2 = localStorage.getItem("m2");
     const fraa = localStorage.getItem("fra");
-    const songs = this.localStorage.getItem("songs");
-    const temps = this.localStorage.getItem("temps");
+    const songs = localStorage.getItem("songs");
+    const temps = localStorage.getItem("temps");
+    const punt = localStorage.getItem("punt");
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
     if (imageTeam1) document.getElementById('1').src = imageTeam1;
@@ -324,6 +331,7 @@ window.addEventListener('load', function () {
     if (fraa) fra = fraa;
     if (songs) current_track = songsFromString(songs);
     if (temps) tempi = temps.split(";");
+    if (punt) punto = parseInt(punt);
     updateBackground();
     controlImgBackground();
     controlloIndietro();
@@ -331,6 +339,7 @@ window.addEventListener('load', function () {
 });
 //aggiunta ultimo valore nella cronologia del punteggio
 function updateStringhe() {
+    punto = parseInt(punto) + 1;
     punteggio1 += ";" + document.getElementById('score-team1').textContent + "|" + getSelectedValue1();
     punteggio2 += ";" + document.getElementById('score-team2').textContent + "|" + getSelectedValue2();
     document.getElementById("ind").style.backgroundColor = "blue";
@@ -408,7 +417,7 @@ function showGraf() {
     try {
         for (let index = 0; index < arr1.length; index++) {
 
-            let item = current_track[index - 1]||ogg;
+            let item = current_track[index - 1] || ogg;
             let tempo = tempi[index - 1];
             let pA = "";
             let pB = "";
@@ -510,6 +519,7 @@ function indietroPunteggio() {
             document.getElementById('score-team1').textContent = a.split("|")[0];
             document.getElementById('score-team2').textContent = b.split("|")[0];
             current_track.pop();
+            punto=punto-1;
             updateBackground();
             controlloIndietro();
         }
@@ -708,7 +718,9 @@ function listaCanzoni() {
     document.getElementById("canzoni").style.display = "block";
 }
 
+function getCanzone() {
 
+}
 
 
 
@@ -779,7 +791,7 @@ const fetchCurrentTrack = async () => {
     if (!accessToken) {
         ogg[0] = 1
         ogg[1] = 1;
-        current_track.push(ogg);
+        current_track[punto]=ogg;
         return;
     }
 
@@ -793,20 +805,20 @@ const fetchCurrentTrack = async () => {
             ogg[0] = data.item.name;
             ogg[1] = data.item.artists.map(artist => artist.name).join(', ');
 
-            current_track.push(ogg);
+            current_track[punto]=ogg;
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
             ogg[0] = 1
             ogg[1] = 1;
-            current_track.push(ogg);
+            current_track[punto]=ogg;
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
         todiv('Error fetching current track:' + error);
         ogg[0] = 1
         ogg[1] = 1;
-        current_track.push(ogg);
+        current_track[punto]=ogg;
     }
 };
 
