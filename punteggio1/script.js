@@ -15,6 +15,7 @@ let punto = 0;
 let current_track = [];
 let accessToken = null;
 let tempi = [];
+let tempoTemp = 0;
 let ogg = [];
 ogg[0] = 1;
 ogg[1] = 1;
@@ -46,7 +47,7 @@ function addPoints(team, points) {
     const scoreElement = document.getElementById('score-' + team);
     let currentScore = parseInt(scoreElement.textContent);
     scoreElement.textContent = currentScore + points;
-document.getElementById("currentSong").innerHTML ="";
+    document.getElementById("currentSong").innerHTML = "";
     updateStringhe();
     updateBackground();
     controlImgBackground();
@@ -345,7 +346,6 @@ window.addEventListener('load', function () {
 function updateStringhe() {
     punto = parseInt(punto) + 1;
     current_track[punto] = ogg;
-    tempi[punto] = 0;
     punteggio1 += ";" + document.getElementById('score-team1').textContent + "|" + getSelectedValue1();
     punteggio2 += ";" + document.getElementById('score-team2').textContent + "|" + getSelectedValue2();
     document.getElementById("ind").style.backgroundColor = "blue";
@@ -623,8 +623,10 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
-let t=getCurrentTimeInSeconds();
-if(tempi[punto]-1==-1){tempi[punto]=t-tempi[punto];} 
+    let t = getCurrentTimeInSeconds();
+    if (tempi[punto] - 1 == -1) {
+        tempi[punto] = t - tempi[punto];
+    }
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
@@ -661,14 +663,7 @@ function reload() {
 function addSelectedPoints(team) {
     if (current_track[punto][0] == 1)
         fetchCurrentTrack();
-
-    let secondi = getCurrentTimeInSeconds();
-    if (tempi[punto] == 0) {
-        secondi = "non dato";
-    } else {
-        secondi = secondi - tempi[punto];
-    }
-
+    tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
     let totalPoints = 0;
     const checkbox1 = document.getElementById(team + '-checkbox1');
     const checkbox2 = document.getElementById(team + '-checkbox2');
@@ -743,9 +738,7 @@ function listaCanzoni() {
 }
 
 function getCanzone() {
-    if (tempi[punto] == 0) {
-        tempi[punto] = getCurrentTimeInSeconds();
-    }
+    tempoTemp = getCurrentTimeInSeconds();
     fetchCurrentTrack();
 }
 
@@ -844,15 +837,15 @@ const logout = () => {
     // Rimuovi il token di accesso dal localStorage o sessionStorage
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
-document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+    document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
     // Rimuovi il token dalla barra degli indirizzi
     window.location.hash = '';
 
     // Reindirizza alla home o alla pagina di login
     window.location.href = '/';
-    let newWindow=window.open('https://www.spotify.com/logout/', '_blank');
-newWindow.blur(); // Cerca di togliere il focus
-        window.focus();
+    let newWindow = window.open('https://www.spotify.com/logout/', '_blank');
+    newWindow.blur(); // Cerca di togliere il focus
+    window.focus();
 };
 // Step 2: Handle redirect and get token
 const handleRedirect = () => {
@@ -886,7 +879,7 @@ const fetchCurrentTrack = async () => {
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
             current_track[punto] = ogg1;
- document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
+            document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
