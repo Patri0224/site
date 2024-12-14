@@ -847,8 +847,9 @@ document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/'
 
     // Reindirizza alla home o alla pagina di login
     window.location.href = '/';
-    window.open('https://www.spotify.com/logout/', '_blank');
-
+    let newWindow=window.open('https://www.spotify.com/logout/', '_blank');
+newWindow.blur(); // Cerca di togliere il focus
+        window.focus();
 };
 // Step 2: Handle redirect and get token
 const handleRedirect = () => {
