@@ -18,6 +18,7 @@ let tempi = [];
 let ogg = [];
 ogg[0] = 1;
 ogg[1] = 1;
+ogg[2] = 1;
 function changeTeamName(team) {
     const teamElement = document.getElementById('name-' + team);
     const newName = prompt("Inserisci il nuovo nome della squadra:");
@@ -467,7 +468,7 @@ function showGraf() {
             const key = sortedArray[i][0]; // La chiave dell'elemento
             const value = sortedArray[i][1];
             if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
-                str += `<p class="text1">${persone[key]}: ${value}</p>`;
+                str += `<p class="text1" onclick="canzoniPerPersona(${key})">${persone[key]}: ${value}</p>`;
             }
         }
         str += "</div>";
@@ -727,8 +728,47 @@ function getCanzone() {
 
 
 
+function canzoniPerPersona(person) {
+    let arrayCanzoniPerPersona = [];
+    let arrayTempoPerPersona = [];
+    const arr1 = punteggio1.split(";");
+    const arr2 = punteggio2.split(";");
+    for (let index = 0; index < arr1.length; index++) {
 
-
+        let item = current_track[index - 1] || ogg;
+        let tempo = tempi[index - 1];
+        let p1 = arr1[index].split("|")[1];
+        let p2 = arr2[index].split("|")[1];
+        if (p1 == person || p2 == person) {
+            arrayCanzoniPerPersona.push(item);
+            arrayTempoPerPersona.push(tempo);
+        }
+    }
+    const newWindow = window.open('', '_blank');
+    // Controlla se la finestra è stata aperta
+    if (newWindow) {
+        // Scrivi il contenuto della nuova pagina HTML
+        newWindow.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Pagina Creata con JavaScript</title>
+            <link rel="stylesheet" href="style1.css">
+            <script src="script1.js" defer></script>
+        </head>
+        <body>
+            <div id="nomePersona">${persone[person]}</div>
+            <div id="elenco">${songsToString(arrayCanzoniPerPersona)}</div>
+            <div id="elencoTempi">${arrayTempoPerPersona.join(";")}</div>
+        </body>
+        </html>
+    `);
+        // Facoltativo: chiudi lo stream di scrittura per la nuova finestra
+        newWindow.document.close();
+    }
+}
 
 
 
@@ -823,7 +863,7 @@ const fetchCurrentTrack = async () => {
 function songsToString(oggg) {
     var str = "";
     for (let index = 0; index < oggg.length; index++) {
-        str += oggg[index][0] + "||" + oggg[index][1];
+        str += oggg[index][0] + "||" + oggg[index][1] + "||" + oggg[index][2];
         if (index < oggg.length - 1) {
             str += "///";
         }
