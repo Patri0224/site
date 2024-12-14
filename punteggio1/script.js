@@ -770,7 +770,7 @@ function canzoniPerPersona(person) {
             <article class="song">
                 <h2>Titolo: ${arrayCanzoniPerPersona[index][0]}</h2>
                 <p><strong>Autori:</strong> ${arrayCanzoniPerPersona[index][1]}</p>
-                <p><strong>Anno:</strong> ${arrayTempoPerPersona[index]}</p>
+                <p><strong>Tempo:</strong> ${arrayTempoPerPersona[index]}</p>
             </article>
             `;
     }
