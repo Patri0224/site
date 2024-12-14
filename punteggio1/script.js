@@ -412,18 +412,18 @@ function showGraf() {
         let var1 = parseInt(arr1[index].split("|")[0]);
         let var2 = parseInt(arr2[index].split("|")[0]);
         let a = var1 - var2;
-        array[parseInt(p1) + 1]++;
-        array[parseInt(p2) + 1]++;
-        array1[parseInt(p1) + 1]++;
-        array1[parseInt(p2) + 1]++;
-        if (var1 - prev1 == 2) array1[parseInt(p1) + 1]++;
-        if (var2 - prev2 == 2) array1[parseInt(p2) + 1]++;
+        array[parseInt(p1)]++;
+        array[parseInt(p2)]++;
+        array1[parseInt(p1)]++;
+        array1[parseInt(p2)]++;
+        if (var1 - prev1 == 2) array1[parseInt(p1)]++;
+        if (var2 - prev2 == 2) array1[parseInt(p2)]++;
 
         prev1 = var1;
         prev2 = var2;
 
-        if (p1 != -1) pA = persone[p1];
-        if (p2 != -1) pB = persone[p2];
+        if (p1 != 0) pA = persone[p1];
+        if (p2 != 0) pB = persone[p2];
 
         if (var1 + var2 == 0) {
             str += `<div class='riga'> <p class='sinistra'>0</p><div class="centro1" style="width:50%"></div><div class="centro2" style="width:50%"></div><p class='destra'>0</p></div>`;
@@ -447,7 +447,7 @@ function showGraf() {
         const key = sortedArray[i][0]; // La chiave dell'elemento
         const value = sortedArray[i][1];
         if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
-            str += `<p class="text1">${persone[key - 1]}: ${value}</p>`;
+            str += `<p class="text1">${persone[key]}: ${value}</p>`;
         }
     }
     str += "</div>";
@@ -459,7 +459,7 @@ function showGraf() {
         const key = sortedArray1[i][0]; // La chiave dell'elemento
         const value = sortedArray1[i][1];
         if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
-            str += `<p class="text1">${persone[key - 1]}: ${value}</p>`;
+            str += `<p class="text1">${persone[key]}: ${value}</p>`;
         }
     }
     str += "</div>";
