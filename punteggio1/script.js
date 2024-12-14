@@ -239,6 +239,55 @@ function loadData(event) {
     updateBackground();
     showMenu(2);
 }
+function preset() {
+    const newName = prompt("inserisci qualcosa per attivare il preset");
+    if (newName) {
+        document.getElementById('name-team1').textContent = "Andrilde";
+        document.getElementById('score-team1').textContent = "0";
+        document.getElementById('1').src = null;
+        document.getElementById('name-team2').textContent = "Frarco";
+        document.getElementById('score-team2').textContent = "0";
+        document.getElementById('2').src = null;
+        punteggio1 = "0|0";
+        punteggio2 = "0|0";
+        current_track = [];
+        tempi = [];
+        punto = 0;
+        squadra1 = "2;9;11;13";
+        squadra2 = "1;6;10;14";
+        fra = 0;
+
+        localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
+        localStorage.setItem("st1", document.getElementById('score-team1').textContent);
+        localStorage.setItem("it1", document.getElementById('1').src);
+        localStorage.setItem("nt2", document.getElementById('name-team2').textContent);
+        localStorage.setItem("st2", document.getElementById('score-team2').textContent);
+        localStorage.setItem("it2", document.getElementById('2').src);
+        localStorage.setItem("h1", punteggio1);
+        localStorage.setItem("h2", punteggio2);
+        localStorage.setItem("m1", squadra1);
+        localStorage.setItem("m2", squadra2);
+        localStorage.setItem("fra", fra);
+        localStorage.setItem("punt", punto);
+        localStorage.setItem("songs", current_track);
+        localStorage.setItem("temps", tempi);
+        document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+        localStorage.removeItem('access_token');
+        sessionStorage.removeItem('access_token');
+
+        // Rimuovi il token dalla barra degli indirizzi
+        window.location.hash = '';
+
+        // Reindirizza l'utente alla home o a una pagina di login
+        window.open('https://www.spotify.com/logout/', '_blank');
+        handleRedirect();
+    }
+    updateBackground();
+    controlImgBackground();
+    controlloIndietro();
+    showMenu(2);
+    location.reload();
+}
 //reset pagina a opzioni default (anche dati temporanei)
 function reset() {
     const newName = prompt("inserisci qualcosa per resettare");
@@ -249,8 +298,8 @@ function reset() {
         document.getElementById('name-team2').textContent = "Team 2";
         document.getElementById('score-team2').textContent = "0";
         document.getElementById('2').src = null;
-        punteggio1 = "0|-1";
-        punteggio2 = "0|-1";
+        punteggio1 = "0|0";
+        punteggio2 = "0|0";
         current_track = [];
         tempi = [];
         punto = 0;
@@ -583,6 +632,7 @@ function Set1() {
     squadra1 = squadra1.slice(1);
     document.getElementById("Sq1").style.display = "none";
     settaSquadre();
+    console.log(squadra1);
 }
 function Set2() {
     const selectedCheckboxes = document.querySelectorAll('.t2:checked');
