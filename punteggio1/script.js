@@ -841,7 +841,7 @@ const logout = () => {
     // Rimuovi il token di accesso dal localStorage o sessionStorage
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
-
+document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
     // Rimuovi il token dalla barra degli indirizzi
     window.location.hash = '';
 
