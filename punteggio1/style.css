@@ -266,12 +266,12 @@ footer #fra {
     position: fixed;
     width: fit-content;
     margin: 1%;
-    background-color: #e5005040;
+    background-color: #35003050;
     color: #000000;
     padding: 5px 10px;
-    font-size: 0.7em;
+    font-size: 0.75em;
     cursor: pointer;
-    border: none;
+    border: 1px solid black;
     border-radius: 2px;
     transition: background-color 0.3s;
     margin: 1px 0;
