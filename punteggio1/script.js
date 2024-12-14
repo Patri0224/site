@@ -673,8 +673,8 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
-    let t = getCurrentTimeInSeconds();
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
+    tempoTemp = getCurrentTimeInSeconds();
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
@@ -709,9 +709,10 @@ function reload() {
 
 // Funzione per aggiungere punti in base alle checkbox selezionate
 function addSelectedPoints(team) {
-    if (current_track[punto][0] == 1)
-        fetchCurrentTrack();
-    
+    if (current_track[punto] != null) {
+        if (current_track[punto][0] == 1)
+            fetchCurrentTrack();
+    }
     let totalPoints = 0;
     const checkbox1 = document.getElementById(team + '-checkbox1');
     const checkbox2 = document.getElementById(team + '-checkbox2');
@@ -814,7 +815,7 @@ function canzoniPerPersona(person) {
             <article class="song">
                 <h2>Titolo: ${arrayCanzoniPerPersona[index][0]}</h2>
                 <p><strong>Autori:</strong> ${arrayCanzoniPerPersona[index][1]}</p>
-                <p><strong>Tempo:</strong> ${arrayTempoPerPersona[index]}</p>
+                <p><strong>Tempo:</strong> ${arrayTempoPerPersona[index]} secondi</p>
             </article>
             `;
     }
