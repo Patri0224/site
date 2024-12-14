@@ -1,5 +1,5 @@
 //variabili globali
-var persone = { 0: "nessuno", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola" }
+const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola" }
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
@@ -352,6 +352,8 @@ function showGraf() {
         return;
     }
     console.log(current_track);
+    console.log(punteggio1);
+    console.log(punteggio2);
     var array = {
         0: 0,
         1: 0,
@@ -400,10 +402,13 @@ function showGraf() {
     // Aggiornamento dell'array e generazione della stringa
     let prev1 = 0;
     let prev2 = 0;
+    let ogg = [];
+    ogg[0] = 1;
+    ogg[1] = 1;
     try {
         for (let index = 0; index < arr1.length; index++) {
 
-            let item = current_track[index - 1];
+            let item = current_track[index - 1]||ogg;
             let tempo = tempi[index - 1];
             let pA = "";
             let pB = "";
@@ -422,8 +427,8 @@ function showGraf() {
             prev1 = var1;
             prev2 = var2;
 
-            if (p1 != 0) pA = persone[p1];
-            if (p2 != 0) pB = persone[p2];
+            pA = persone[p1];
+            pB = persone[p2];
 
             if (var1 + var2 == 0) {
                 str += `<div class='riga'> <p class='sinistra'>0</p><div class="centro1" style="width:50%"></div><div class="centro2" style="width:50%"></div><p class='destra'>0</p></div>`;
@@ -580,7 +585,7 @@ function Set2() {
     settaSquadre();
 }
 function settaSquadre() {
-    let str = `<label for="1p-1"><input type="radio" id="1p-1" name="pTeam1" value="-1" checked>Nessuno</label>`;
+    let str = `<label for="1p-1"><input type="radio" id="1p-1" name="pTeam1" value="0" checked>Nessuno</label>`;
 
     if (squadra1.length != 0) {
         let sq = squadra1.split(";");
@@ -590,7 +595,7 @@ function settaSquadre() {
     }
     document.getElementById("partecipanti1").innerHTML = str;
 
-    str = `<label for="2p-1"><input type="radio" id="2p-1" name="pTeam2" value="-1" checked>Nessuno</label>`;
+    str = `<label for="2p-1"><input type="radio" id="2p-1" name="pTeam2" value="0" checked>Nessuno</label>`;
 
     if (squadra2.length != 0) {
         sq = squadra2.split(";");
