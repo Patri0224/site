@@ -1,5 +1,5 @@
 //variabili globali
-var persone = { 0: "Alice", 1: "Andre", 2: "Busti", 3: "Fede", 4: "Fra", 5: "Friggi", 6: "Giorgia", 7: "Giulia", 8: "Marco", 9: "Mati", 10: "Pat", 11: "Totta", 12: "Viola" }
+var persone = { 0: "Alice", 1: "Andre", 2: "Busti", 3: "Fede", 4: "Fra", 5: "Friggi", 6: "Dani", 7: "Giulia", 8: "Marco", 9: "Mati", 10: "Pat", 11: "Totta", 12: "Viola" }
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
