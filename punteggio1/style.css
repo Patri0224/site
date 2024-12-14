@@ -240,10 +240,11 @@ footer #fra {
     float: right;
     width: fit-content;
 }
-#getCanzone{
+
+#getCanzone {
     position: fixed;
     width: fit-content;
-    margin:1%;    
+    margin: 1%;
     background-color: #e5ff00;
     color: #000000;
     padding: 5px 10px;
@@ -254,18 +255,21 @@ footer #fra {
     transition: background-color 0.3s;
     width: 20%;
     margin: 1px 0;
-    bottom:50px;
+    bottom: 50px;
 
 }
-#getCanzone:hover{
+
+#getCanzone:hover {
     background-color: #ffdd00;
 }
+
 #reload {
     color: #fff;
     margin: 1%;
     float: right;
     width: fit-content;
 }
+
 #canzoni {
     display: none;
     position: absolute;
@@ -287,6 +291,7 @@ footer #fra {
     flex-direction: column;
     background-color: #0a002d;
 }
+
 /*grafico storia*/
 #grafico {
     display: none;
@@ -489,4 +494,10 @@ input[type="file"] {
 
 .text1 {
     font-size: smaller;
+}
+
+.text2 {
+    font-size: smaller;
+    margin: 0%;
+    margin-left: 5%;
 }

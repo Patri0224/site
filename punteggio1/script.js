@@ -448,8 +448,8 @@ function showGraf() {
                 let c = 50 - a;
                 str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
-                if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p>${item[0]} at ${tempo} by ${item[1]}</p> </div>`;
-                else str += `<div id="canzone${index}" class='riga' style="display:none"><p>not found</p> </div>`;
+                if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p class="text2">${item[0]} at ${tempo} by ${item[1]}</p> </div>`;
+                else str += `<div id="canzone${index}" class='riga' style="display:none"><p class="text2">not found</p> </div>`;
 
             }
         }
@@ -699,7 +699,9 @@ function listaCanzoni() {
         const arr2 = punteggio2.split(";");
         for (let index = 0; index < current_track.length; index++) {
             const song = current_track[index];
-            if (song[0] != 1) {
+            if (song == null) {
+
+            } else if (song[0] != 1) {
 
                 let p1 = arr1[index + 1].split("|")[1];
                 let p2 = arr2[index + 1].split("|")[1];
@@ -801,10 +803,10 @@ const fetchCurrentTrack = async () => {
 
         if (response.status === 200) {
             const data = await response.json();
-            let ogg1 = [2];
+            let ogg1 = [3];
             ogg1[0] = data.item.name;
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
-
+            ogg1[2] = data.item.id;
             current_track[punto] = ogg1;
         } else {
             console.error('No track playing or API error:', response);
