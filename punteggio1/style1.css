@@ -1,0 +1,61 @@
+/* Impostazioni generali */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Stile per l'header */
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+/* Stile per il contenuto principale */
+main {
+    padding: 20px;
+}
+
+/* Stile per la lista delle canzoni */
+.songs {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Stile per ogni canzone */
+.song {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.song:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.song h2 {
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    color: #4CAF50;
+}
+
+.song p {
+    margin: 5px 0;
+    font-size: 1rem;
+}

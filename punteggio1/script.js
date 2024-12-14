@@ -656,6 +656,16 @@ function reload() {
 
 // Funzione per aggiungere punti in base alle checkbox selezionate
 function addSelectedPoints(team) {
+    if (current_track[punto][0] == 1)
+        fetchCurrentTrack();
+
+    let secondi = getCurrentTimeInSeconds();
+    if (tempi[punto] == 0) {
+        secondi = "non dato";
+    } else {
+        secondi = secondi - tempi[punto];
+    }
+
     let totalPoints = 0;
     const checkbox1 = document.getElementById(team + '-checkbox1');
     const checkbox2 = document.getElementById(team + '-checkbox2');
@@ -674,8 +684,15 @@ function addSelectedPoints(team) {
     checkbox3.checked = false;
 }
 
+function getCurrentTimeInSeconds() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
 
-
+    // Converti tutto in secondi
+    return hours * 3600 + minutes * 60 + seconds;
+}
 function deselectCheckboxs() {
     document.getElementById('team1-checkbox1').checked = false;
     document.getElementById('team1-checkbox2').checked = false;
@@ -723,6 +740,9 @@ function listaCanzoni() {
 }
 
 function getCanzone() {
+    if (tempi[punto] == 0) {
+        tempi[punto] = getCurrentTimeInSeconds();
+    }
     fetchCurrentTrack();
 }
 
@@ -744,6 +764,17 @@ function canzoniPerPersona(person) {
             arrayTempoPerPersona.push(tempo);
         }
     }
+    let strr = `<section class="songs" id="song-list">`;
+    for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
+        strr += `
+            <article class="song">
+                <h2>Titolo: ${arrayCanzoniPerPersona[index][0]}</h2>
+                <p><strong>Autori:</strong> ${arrayCanzoniPerPersona[index][1]}</p>
+                <p><strong>Anno:</strong> ${arrayTempoPerPersona[index]}</p>
+            </article>
+            `;
+    }
+    strr += `</section>`;
     const newWindow = window.open('', '_blank');
     // Controlla se la finestra è stata aperta
     if (newWindow) {
@@ -759,9 +790,12 @@ function canzoniPerPersona(person) {
             <script src="script1.js" defer></script>
         </head>
         <body>
-            <div id="nomePersona">${persone[person]}</div>
-            <div id="elenco">${songsToString(arrayCanzoniPerPersona)}</div>
-            <div id="elencoTempi">${arrayTempoPerPersona.join(";")}</div>
+            <header>
+                <h1>${persone[person]}</h1>
+            </header>
+            <main>
+            ${strr}
+            </main>
         </body>
         </html>
     `);
