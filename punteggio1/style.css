@@ -262,7 +262,22 @@ footer #fra {
 #getCanzone:hover {
     background-color: #ffdd00;
 }
+#currentSong{
+    position: fixed;
+    width: fit-content;
+    margin: 1%;
+    background-color: #e5005040;
+    color: #000000;
+    padding: 5px 10px;
+    font-size: 0.7em;
+    cursor: pointer;
+    border: none;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+    margin: 1px 0;
+    bottom: 80px;
 
+} 
 #reload {
     color: #fff;
     margin: 1%;
