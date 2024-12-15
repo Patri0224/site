@@ -678,6 +678,7 @@ function setTitoloChecked(op) {
     console.log(tempoTemp);
     getCurrentTimeInSeconds();
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
+    console.log(tempi, punto, tempi[punto]);
     tempoTemp = getCurrentTimeInSeconds();
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
