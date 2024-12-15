@@ -675,6 +675,8 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
+    console.log(tempoTemp);
+    getCurrentTimeInSeconds();
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
     tempoTemp = getCurrentTimeInSeconds();
     document.getElementById("team" + op + "-checkbox1").checked = true;
