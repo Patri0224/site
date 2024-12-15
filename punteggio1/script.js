@@ -48,7 +48,7 @@ function addPoints(team, points) {
     const scoreElement = document.getElementById('score-' + team);
     let currentScore = parseInt(scoreElement.textContent);
     scoreElement.textContent = currentScore + points;
-    document.getElementById("currentSong").innerHTML = "";
+
     updateStringhe();
     updateBackground();
     controlImgBackground();
@@ -712,8 +712,9 @@ function reload() {
 function addSelectedPoints(team) {
     if (current_track[punto] != null) {
         if (current_track[punto][0] == 1)
-            fetchCurrentTrack();
+            fetchCurrentTrack(2);
     }
+    document.getElementById("currentSong").innerHTML = "";
     let totalPoints = 0;
     const checkbox1 = document.getElementById(team + '-checkbox1');
     const checkbox2 = document.getElementById(team + '-checkbox2');
@@ -789,7 +790,7 @@ function listaCanzoni() {
 
 function getCanzone() {
     tempoTemp = getCurrentTimeInSeconds();
-    fetchCurrentTrack();
+    fetchCurrentTrack(1);
 }
 
 
@@ -809,11 +810,9 @@ function canzoniPerPersona(person) {
         let p2 = arr2[index].split("|")[1];
 
         if (p1 == person || p2 == person) {
-            arrayCanzoniPerPersona.push(item);
-            arrayTempoPerPersona.push(tempo);
-            console.log(item+"aa");
             if (item[0] != 1) {
-                console.log(item+"bb");
+                arrayCanzoniPerPersona.push(item);
+                arrayTempoPerPersona.push(tempo);
                 let auts = item[1].split(", ");
                 for (let i = 0; i < auts.length; i++) {
                     let presente = false;
@@ -825,7 +824,7 @@ function canzoniPerPersona(person) {
                     }
                     if (!presente) {
                         autori[autori.length] = auts[i];
-                        numAutori[autori.length-1] = 1;
+                        numAutori[autori.length - 1] = 1;
                     }
                 }
             }
@@ -841,16 +840,14 @@ function canzoniPerPersona(person) {
             </article>
             `;
     }
-    console.log(autori);
-    console.log(numAutori);
     strr += `</section>`;
-    let strrr = `<div id="autori">`;
+    let strrr = `<section class="songs" id="song-list">`;
     for (let index = 0; index < autori.length; index++) {
-        strrr += `<div class="autore">
-                <p class="nome">${autori[index]}</p><p>${numAutori[index]}</p>
-                </div>`;
+        strrr += `<article class="song">
+                <p class="nome">${autori[index]}: ${numAutori[index]}</p>
+                </article>`;
     }
-    strrr += `</div>`;
+    strrr += `</section>`;
     nwindow = window.open('', '_blank');
     // Controlla se la finestra è stata aperta
     if (nwindow) {
@@ -938,7 +935,7 @@ const handleRedirect = () => {
 };
 
 // Step 3: Fetch the currently playing track
-const fetchCurrentTrack = async () => {
+const fetchCurrentTrack = async (bol) => {
 
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
@@ -958,7 +955,8 @@ const fetchCurrentTrack = async () => {
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
             current_track[punto] = ogg1;
-            document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
+            if (bol == 1)
+                document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
