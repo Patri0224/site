@@ -419,6 +419,7 @@ function showGraf() {
     console.log(current_track);
     console.log(punteggio1);
     console.log(punteggio2);
+    console.log(tempi);
     var array = {
         0: 0,
         1: 0,
@@ -712,7 +713,7 @@ function reload() {
 function addSelectedPoints(team) {
     if (current_track[punto] != null) {
         if (current_track[punto][0] == 1)
-            fetchCurrentTrack(2);
+            fetchCurrentTrack();
     }
     document.getElementById("currentSong").innerHTML = "";
     let totalPoints = 0;
@@ -790,7 +791,7 @@ function listaCanzoni() {
 
 function getCanzone() {
     tempoTemp = getCurrentTimeInSeconds();
-    fetchCurrentTrack(1);
+    fetchCurrentTrack();
 }
 
 
@@ -935,7 +936,7 @@ const handleRedirect = () => {
 };
 
 // Step 3: Fetch the currently playing track
-const fetchCurrentTrack = async (bol) => {
+const fetchCurrentTrack = async () => {
 
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
@@ -955,8 +956,7 @@ const fetchCurrentTrack = async (bol) => {
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
             current_track[punto] = ogg1;
-            if (bol == 1)
-                document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
+            document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
             todiv('No track playing or API error:' + response);
