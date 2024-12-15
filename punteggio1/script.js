@@ -20,6 +20,7 @@ let ogg = [];
 ogg[0] = 1;
 ogg[1] = 1;
 ogg[2] = 1;
+let nwindow;
 function changeTeamName(team) {
     const teamElement = document.getElementById('name-' + team);
     const newName = prompt("Inserisci il nuovo nome della squadra:");
@@ -796,17 +797,36 @@ function getCanzone() {
 function canzoniPerPersona(person) {
     let arrayCanzoniPerPersona = [];
     let arrayTempoPerPersona = [];
+    let autori = [];
+    let numAutori = [];
     const arr1 = punteggio1.split(";");
     const arr2 = punteggio2.split(";");
-    for (let index = 0; index < arr1.length; index++) {
+    for (let index = 1; index < arr1.length; index++) {
 
         let item = current_track[index - 1] || ogg;
         let tempo = tempi[index - 1];
         let p1 = arr1[index].split("|")[1];
         let p2 = arr2[index].split("|")[1];
+        if (ogg[0] != 1) {
+            let auts = current_track[index - 1][1].split(", ");
+            for (let i = 0; i < auts.length; i++) {
+                let presente = false;
+                for (let l = 0; l < autori.length; l++) {
+                    if (auts[i] == autori[l]) {
+                        presente = true;
+                        numAutori[l]++;
+                    }
+                }
+                if (!presente) {
+                    autori[autori.length] = auts[i];
+                    numAutori[autori.length] = 1;
+                }
+            }
+        }
         if (p1 == person || p2 == person) {
             arrayCanzoniPerPersona.push(item);
             arrayTempoPerPersona.push(tempo);
+
         }
     }
     let strr = `<section class="songs" id="song-list">`;
@@ -820,11 +840,18 @@ function canzoniPerPersona(person) {
             `;
     }
     strr += `</section>`;
-    const newWindow = window.open('', '_blank');
+    let strrr = `<div id="autori">`;
+    for (let index = 0; index < autori.length; index++) {
+        strrr += `<div class="autore">
+                <p class="nome">${autori[index]}</p><p>${numAutori[index]}</p>
+                </div>`;
+    }
+    strrr += `</div>`;
+    nwindow = window.open('', '_blank');
     // Controlla se la finestra è stata aperta
-    if (newWindow) {
+    if (nwindow) {
         // Scrivi il contenuto della nuova pagina HTML
-        newWindow.document.write(`
+        nwindow.document.write(`
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -832,7 +859,7 @@ function canzoniPerPersona(person) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Pagina Creata con JavaScript</title>
             <link rel="stylesheet" href="style1.css">
-            <script src="script1.js" defer></script>
+            <script src="script.js" defer></script>
         </head>
         <body>
             <header>
@@ -841,13 +868,16 @@ function canzoniPerPersona(person) {
             <main>
             ${strr}
             </main>
+            ${strrr}
         </body>
         </html>
     `);
         // Facoltativo: chiudi lo stream di scrittura per la nuova finestra
-        newWindow.document.close();
+        nwindow.document.close();
     }
 }
+
+
 
 
 
@@ -886,15 +916,11 @@ const logout = () => {
     // Rimuovi il token di accesso dal localStorage o sessionStorage
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
-    document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+    document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/punteggio1/';
     // Rimuovi il token dalla barra degli indirizzi
     window.location.hash = '';
-
-    // Reindirizza alla home o alla pagina di login
-    window.location.href = '/';
     let newWindow = window.open('https://www.spotify.com/logout/', '_blank');
-    newWindow.blur(); // Cerca di togliere il focus
-    window.focus();
+
 };
 // Step 2: Handle redirect and get token
 const handleRedirect = () => {
