@@ -811,8 +811,8 @@ function canzoniPerPersona(person) {
         if (p1 == person || p2 == person) {
             arrayCanzoniPerPersona.push(item);
             arrayTempoPerPersona.push(tempo);
-            if (ogg[0] != 1) {
-                let auts = current_track[index - 1][1].split(", ");
+            if (item[0] != 1) {
+                let auts = item[1].split(", ");
                 for (let i = 0; i < auts.length; i++) {
                     let presente = false;
                     for (let l = 0; l < autori.length; l++) {
