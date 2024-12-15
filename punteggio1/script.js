@@ -811,7 +811,9 @@ function canzoniPerPersona(person) {
         if (p1 == person || p2 == person) {
             arrayCanzoniPerPersona.push(item);
             arrayTempoPerPersona.push(tempo);
+            console.log(item+"aa");
             if (item[0] != 1) {
+                console.log(item+"bb");
                 let auts = item[1].split(", ");
                 for (let i = 0; i < auts.length; i++) {
                     let presente = false;
@@ -839,6 +841,8 @@ function canzoniPerPersona(person) {
             </article>
             `;
     }
+    console.log(autori);
+    console.log(numAutori);
     strr += `</section>`;
     let strrr = `<div id="autori">`;
     for (let index = 0; index < autori.length; index++) {
