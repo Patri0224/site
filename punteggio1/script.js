@@ -825,7 +825,7 @@ function canzoniPerPersona(person) {
                     }
                     if (!presente) {
                         autori[autori.length] = auts[i];
-                        numAutori[autori.length] = 1;
+                        numAutori[autori.length-1] = 1;
                     }
                 }
             }
