@@ -807,26 +807,26 @@ function canzoniPerPersona(person) {
         let tempo = tempi[index - 1];
         let p1 = arr1[index].split("|")[1];
         let p2 = arr2[index].split("|")[1];
-        if (ogg[0] != 1) {
-            let auts = current_track[index - 1][1].split(", ");
-            for (let i = 0; i < auts.length; i++) {
-                let presente = false;
-                for (let l = 0; l < autori.length; l++) {
-                    if (auts[i] == autori[l]) {
-                        presente = true;
-                        numAutori[l]++;
-                    }
-                }
-                if (!presente) {
-                    autori[autori.length] = auts[i];
-                    numAutori[autori.length] = 1;
-                }
-            }
-        }
+
         if (p1 == person || p2 == person) {
             arrayCanzoniPerPersona.push(item);
             arrayTempoPerPersona.push(tempo);
-
+            if (ogg[0] != 1) {
+                let auts = current_track[index - 1][1].split(", ");
+                for (let i = 0; i < auts.length; i++) {
+                    let presente = false;
+                    for (let l = 0; l < autori.length; l++) {
+                        if (auts[i] == autori[l]) {
+                            presente = true;
+                            numAutori[l]++;
+                        }
+                    }
+                    if (!presente) {
+                        autori[autori.length] = auts[i];
+                        numAutori[autori.length] = 1;
+                    }
+                }
+            }
         }
     }
     let strr = `<section class="songs" id="song-list">`;
