@@ -802,6 +802,8 @@ function canzoniPerPersona(person) {
     let numAutori = [];
     const arr1 = punteggio1.split(";");
     const arr2 = punteggio2.split(";");
+    let n = 0;
+    let t = 0;
     for (let index = 1; index < arr1.length; index++) {
 
         let item = current_track[index - 1] || ogg;
@@ -810,6 +812,8 @@ function canzoniPerPersona(person) {
         let p2 = arr2[index].split("|")[1];
 
         if (p1 == person || p2 == person) {
+            t += tempo;
+            n++;
             if (item[0] != 1) {
                 arrayCanzoniPerPersona.push(item);
                 arrayTempoPerPersona.push(tempo);
@@ -830,12 +834,8 @@ function canzoniPerPersona(person) {
             }
         }
     }
-    let n = 0;
-    let t = 0;
-    for (let index = 0; index < arrayTempoPerPersona.length; index++) {
-        t += arrayTempoPerPersona[index];
-        n++;
-    }
+
+
     if (n != 0)
         t = t / n;
     let strr = `<section class="songs" id="song-list">`;
