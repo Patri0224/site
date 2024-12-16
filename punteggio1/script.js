@@ -779,7 +779,7 @@ function listaCanzoni() {
                 } else if (p2 != 0) {
                     persona = persone[p2];
                 }
-                str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${t}</p><p class="desc">https://open.spotify.com/track/${song[2]}</p></div></div>`
+                str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${t} <a href="https://open.spotify.com/track/${song[2]}" target="_blank">Link</a></p></div></div>`
             }
         }
     } catch (errore) {
