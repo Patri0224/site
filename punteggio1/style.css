@@ -262,7 +262,8 @@ footer #fra {
 #getCanzone:hover {
     background-color: #ffdd00;
 }
-#currentSong{
+
+#currentSong {
     position: fixed;
     width: fit-content;
     margin: 1%;
@@ -277,7 +278,8 @@ footer #fra {
     margin: 1px 0;
     bottom: 80px;
 
-} 
+}
+
 #reload {
     color: #fff;
     margin: 1%;
@@ -386,24 +388,55 @@ footer #fra {
     display: none;
     z-index: 6;
     position: absolute;
-    top: 2%;
-    left: 2%;
-    width: 96%;
-    height: 96%;
-    justify-content: left;
-    align-items: top;
-    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 70%;
+    padding: 10%;
+    padding-top: 5%;
+    transform: translate(-50%, -54%);
+    flex-wrap: wrap;
     background-color: #1a1a1a;
 }
 
-.SelectorSq label.btn {
-    display: inline-block;
-    color: white;
-    cursor: pointer;
-    margin: 0px;
-    padding: 0px;
+.SelectorSq label {
+    display: flex; /* Layout flessibile */
+    align-items: center; /* Allinea checkbox e testo verticalmente */
+    justify-content: flex-start; /* Allinea il contenuto orizzontalmente */
+    color: white; /* Colore del testo */
+    cursor: pointer; /* Icona della mano */
+    flex: 0 0 44%; /* Due colonne: ogni elemento occupa il 48% */
+    margin: 8px 1%; /* Spaziatura uniforme */
+    background-color: #333; /* Sfondo del label */
+    border-radius: 4px; /* Angoli arrotondati */
+    text-align: center; /* Testo centrato */
+    transition: background-color 0.3s ease; /* Effetto al passaggio del mouse */
+    gap: 8px; /* Spaziatura tra il checkbox e il testo */
+    padding: 4px; /* Aggiunge spazio interno */
 }
 
+.SelectorSq label:hover,
+.SelectorSq label:focus {
+    background-color: #555;
+    /* Highlight on hover or focus */
+}
+.SelectorSq label p{
+    margin: 0px;
+    padding: 0px;
+    margin-top: 4px;
+}
+.SelectorSq button{
+    margin: 5px;
+    width: 94%;
+    margin-left: 3%;
+}
+.SelectorSq h3{
+    margin-top: 0px;
+    margin-bottom: 5px;
+    width: 94%;
+    margin-left: 3%;
+    text-align: center;
+}
 #menu {
     display: none;
     z-index: 5;
@@ -420,7 +453,7 @@ footer #fra {
     background-color: #0a002d;
     border-radius: 2px;
     border-right: #ffffff65 2px solid;
-    overflow-y:scroll;
+    overflow-y: scroll;
 }
 
 .rig {
@@ -449,8 +482,8 @@ footer #fra {
 
 #menu button,
 #menu .dv {
-    background-color: #00b40c70;
-    color: #fff;
+    background-color: #0a008f;
+    color: #dbf8ff;
     font-size: 1em;
     cursor: pointer;
     border: none;
@@ -469,7 +502,7 @@ footer #fra {
 }
 
 #menu button:hover {
-    background-color: #218838;
+    background-color: #0014a9;
 }
 
 .rigg p {
@@ -479,7 +512,8 @@ footer #fra {
 
 .rigg .desc {
     font-size: 0.8em;
-    margin-top: 1%;
+    margin-top: 5px;
+    color: #cccccc;
 }
 
 input[type="file"] {

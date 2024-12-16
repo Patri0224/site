@@ -605,18 +605,21 @@ function showMenu(op) {
 }
 //Usati per gestire le squadre
 function changeSquadra1() {
-    let str = "";
+    let str = `<h3>Squadra 1</h3>`;
     for (let key in persone) {
-        str += `<label><input type="checkbox" class="t1" value="${key}">${persone[key]}</label>`;
+        if (key != 0)
+            str += `<label><input type="checkbox" class="t1" value="${key}"><p>${persone[key]}</p></label>`;
     }
     str += `<button onclick="Set1()">Set</button>`;
     document.getElementById("Sq1").innerHTML = str;
     document.getElementById("Sq1").style.display = "flex";
 }
+
 function changeSquadra2() {
-    let str = "";
+    let str = `<h3>Squadra 2</h3>`;
     for (let key in persone) {
-        str += `<label><input type="checkbox" class="t2" value="${key}">${persone[key]}</label>`;
+        if (key != 0)
+            str += `<label><input type="checkbox" class="t2" value="${key}"><p>${persone[key]}</p></label>`;
     }
     str += `<button onclick="Set2()">Set</button>`;
     document.getElementById("Sq2").innerHTML = str;
@@ -671,8 +674,8 @@ function settaSquadre() {
 
 function setTitoloChecked(op) {
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
-    tempoTemp=getCurrentTimeInSeconds();
-    
+    tempoTemp = getCurrentTimeInSeconds();
+
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
