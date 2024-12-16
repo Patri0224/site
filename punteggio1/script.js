@@ -549,7 +549,6 @@ function todiv(str) {
 }
 function mostraCanzone(index) {
     let obj = document.getElementById("canzone" + index);
-    console.log(obj);
     if (obj.style.display == "none") {
         obj.style.display = "block";
     }
@@ -634,18 +633,15 @@ function Set1() {
     squadra1 = squadra1.slice(1);
     document.getElementById("Sq1").style.display = "none";
     settaSquadre();
-    console.log(squadra1);
 }
 function Set2() {
     const selectedCheckboxes = document.querySelectorAll('.t2:checked');
     const selectedValues = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
     squadra2 = "";
-    console.log(selectedCheckboxes, selectedValues);
     for (let key in selectedValues) {
         squadra2 += ";" + selectedValues[key];
     }
     squadra2 = squadra2.slice(1);
-    console.log(squadra2);
     document.getElementById("Sq2").style.display = "none";
     settaSquadre();
 }
@@ -655,7 +651,7 @@ function settaSquadre() {
     if (squadra1.length != 0) {
         let sq = squadra1.split(";");
         for (let index = 0; index < sq.length; index++) {
-            str += `<label  onclick="setTitoloChecked(1)"  for="1p${sq[index]}"><input type="radio" id="1p${sq[index]}" name="pTeam1" value="${sq[index]}">${persone[sq[index]]}</label>`;
+            str += `<label  for="1p${sq[index]}"><input onclick="setTitoloChecked(1)"  type="radio" id="1p${sq[index]}" name="pTeam1" value="${sq[index]}">${persone[sq[index]]}</label>`;
         }
     }
     document.getElementById("partecipanti1").innerHTML = str;
@@ -665,7 +661,7 @@ function settaSquadre() {
     if (squadra2.length != 0) {
         sq = squadra2.split(";");
         for (let index = 0; index < sq.length; index++) {
-            str += `<label onclick="setTitoloChecked(2)" for="2p${sq[index]}"><input  type="radio" id="2p${sq[index]}" name="pTeam2" value="${sq[index]}">${persone[sq[index]]}</label>`;
+            str += `<label  for="2p${sq[index]}"><input onclick="setTitoloChecked(2)" type="radio" id="2p${sq[index]}" name="pTeam2" value="${sq[index]}">${persone[sq[index]]}</label>`;
         }
     }
     document.getElementById("partecipanti2").innerHTML = str;
@@ -675,11 +671,9 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
-    console.log(tempoTemp);
-    getCurrentTimeInSeconds();
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
-    console.log(tempi, punto, tempi[punto]);
-    tempoTemp = getCurrentTimeInSeconds();
+    tempoTemp=getCurrentTimeInSeconds();
+    
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
