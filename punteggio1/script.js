@@ -830,6 +830,14 @@ function canzoniPerPersona(person) {
             }
         }
     }
+    let n = 0;
+    let t = 0;
+    for (let index = 0; index < arrayTempoPerPersona.length; index++) {
+        t += arrayTempoPerPersona[index];
+        n++;
+    }
+    if (n != 0)
+        t = t / n;
     let strr = `<section class="songs" id="song-list">`;
     for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
         strr += `
@@ -864,7 +872,7 @@ function canzoniPerPersona(person) {
         </head>
         <body>
             <header>
-                <h1>${persone[person]}</h1>
+                <h1>${persone[person]}</h1><p>tempo medio: ${t}</p>
             </header>
             <main>
             ${strr}
