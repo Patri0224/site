@@ -21,6 +21,31 @@ ogg[0] = 1;
 ogg[1] = 1;
 ogg[2] = 1;
 let nwindow;
+const consoleDiv = document.getElementById("cici");
+
+// Salva i metodi originali della console
+const originalLog = console.log;
+const originalError = console.error;
+
+// Funzione per aggiungere testo al div
+function appendToDiv(message, type = "log") {
+    const logElement = document.createElement("div");
+    logElement.textContent = `[${type.toUpperCase()}] ${message}`;
+    logElement.style.color = type === "error" ? "red" : "lightgray";
+    consoleDiv.appendChild(logElement);
+}
+
+// Sovrascrive console.log
+console.log = function (...args) {
+    originalLog.apply(console, args); // Mantiene il comportamento originale
+    appendToDiv(args.join(" "), "log"); // Aggiunge al div
+};
+
+// Sovrascrive console.error
+console.error = function (...args) {
+    originalError.apply(console, args); // Mantiene il comportamento originale
+    appendToDiv(args.join(" "), "error"); // Aggiunge al div
+};
 function changeTeamName(team) {
     const teamElement = document.getElementById('name-' + team);
     const newName = prompt("Inserisci il nuovo nome della squadra:");
@@ -228,8 +253,6 @@ function loadData(event) {
             tempi = data.temps.split(";");
         } catch (error) {
             alert("Errore nel caricamento del file. Assicurati che sia un file JSON valido.");
-
-            todiv("Errore nel caricamento del file. Assicurati che sia un file JSON valido." + error);
         }
         controlloIndietro();
         controlImgBackground();
@@ -417,14 +440,9 @@ function showGraf() {
         document.getElementById("grafico").style.display = "none";
         return;
     }
-
-    todiv('current_track :' + current_track.join(";"));
     console.log(current_track);
-    todiv("p1" + punteggio1);
     console.log(punteggio1);
-    todiv("p2" + punteggio2);
     console.log(punteggio2);
-    todiv("tempi" + tempi);
     console.log(tempi);
     var array = {
         0: 0,
@@ -544,15 +562,11 @@ function showGraf() {
         str += "</div>";
     } catch (errore) {
         str += "errore" + errore;
-        todiv('Error :' + errore);
     }
     // Mostrare il risultato
     document.getElementById("grafico").innerHTML = str;
     document.getElementById("grafico").style.display = "block";
     showMenu(2);
-}
-function todiv(str) {
-    document.getElementById("cici").innerHTML += str;
 }
 function mostraCanzone(index) {
     let obj = document.getElementById("canzone" + index);
@@ -804,7 +818,6 @@ function listaCanzoni() {
         }
     } catch (errore) {
         str += "errore" + errore;
-        todiv('Error :' + errore);
     }
 
     document.getElementById("canzoni").innerHTML = str;
@@ -961,7 +974,6 @@ const handleRedirect = () => {
         const params = new URLSearchParams(hash.substring(1));
         accessToken = params.get('access_token');
         console.log('Access Token:', accessToken);
-        todiv('Access Token:', accessToken);
     }
 };
 
@@ -989,12 +1001,10 @@ const fetchCurrentTrack = async () => {
             document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
-            todiv('No track playing or API error:' + response);
             current_track[punto] = ogg;
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
-        todiv('Error fetching current track:' + error);
         current_track[punto] = ogg;
     }
 };
