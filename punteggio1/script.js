@@ -228,6 +228,8 @@ function loadData(event) {
             tempi = data.temps.split(";");
         } catch (error) {
             alert("Errore nel caricamento del file. Assicurati che sia un file JSON valido.");
+
+            todiv("Errore nel caricamento del file. Assicurati che sia un file JSON valido." + error);
         }
         controlloIndietro();
         controlImgBackground();
@@ -415,9 +417,14 @@ function showGraf() {
         document.getElementById("grafico").style.display = "none";
         return;
     }
+
+    todiv('current_track :' + current_track.join(";"));
     console.log(current_track);
+    todiv("p1" + punteggio1);
     console.log(punteggio1);
+    todiv("p2" + punteggio2);
     console.log(punteggio2);
+    todiv("tempi" + tempi);
     console.log(tempi);
     var array = {
         0: 0,
@@ -537,6 +544,7 @@ function showGraf() {
         str += "</div>";
     } catch (errore) {
         str += "errore" + errore;
+        todiv('Error :' + errore);
     }
     // Mostrare il risultato
     document.getElementById("grafico").innerHTML = str;
@@ -544,7 +552,7 @@ function showGraf() {
     showMenu(2);
 }
 function todiv(str) {
-    //document.getElementById("cici").innerHTML += str;
+    document.getElementById("cici").innerHTML += str;
 }
 function mostraCanzone(index) {
     let obj = document.getElementById("canzone" + index);
@@ -571,6 +579,7 @@ function indietroPunteggio() {
             document.getElementById('score-team1').textContent = a.split("|")[0];
             document.getElementById('score-team2').textContent = b.split("|")[0];
             current_track.pop();
+            tempi.pop();
             punto = punto - 1;
             updateBackground();
             controlloIndietro();
@@ -591,9 +600,13 @@ function controlloIndietro() {
         document.getElementById("ind").style.backgroundColor = "red";
     }
 }
+function showError() {
+    document.getElementById("cici").style.display = "block";
+}
 //per mostrare il menu
 function showMenu(op) {
     document.getElementById("canzoni").style.display = "none";
+    document.getElementById("cici").style.display = "none";
     if (op == 2) {
         document.getElementById("menu").style.display = "none";
     } else if (document.getElementById("menu").style.display == "block") {
@@ -779,12 +792,21 @@ function listaCanzoni() {
                 } else if (p2 != 0) {
                     persona = persone[p2];
                 }
-                str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${t} <a href="https://open.spotify.com/track/${song[2]}" target="_blank">Link</a></p></div></div>`
+                str += `<div class="rig">
+                            <div class="rigg">
+                                <p>${song[0]}</p>
+                            </div>
+                            <div class="rigg">
+                                <p class="desc">indovinata da:${persona} a ${t} <a href="https://open.spotify.com/track/${song[2]}" target="_blank">Link</a></p>
+                            </div>
+                        </div>`
             }
         }
     } catch (errore) {
         str += "errore" + errore;
+        todiv('Error :' + errore);
     }
+
     document.getElementById("canzoni").innerHTML = str;
     document.getElementById("canzoni").style.display = "block";
 }

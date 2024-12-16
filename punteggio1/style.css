@@ -308,7 +308,24 @@ footer #fra {
     flex-direction: column;
     background-color: #0a002d;
 }
-
+#cici {
+    display: none;
+    position: absolute;
+    z-index: 20;
+    padding: 0%;
+    width: 90%;
+    height: 90%;
+    border: 5px solid rgb(153, 153, 153);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border-radius: 1%;
+    background-color: #000000ee;
+    color: white;
+}
 /*grafico storia*/
 #grafico {
     display: none;
