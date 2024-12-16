@@ -226,7 +226,6 @@ function loadData(event) {
             punto = data.punt;
             current_track = data.songs.split(";;");
             tempi = data.temps.split(";");
-            console.log(squadra1, squadra2);
         } catch (error) {
             alert("Errore nel caricamento del file. Assicurati che sia un file JSON valido.");
         }
@@ -502,7 +501,7 @@ function showGraf() {
                 str += `<div class='riga'> <p class='sinistra'>${arr1[index].split("|")[0]}</p><div class="centro1" style="width:${b}%"  onclick="mostraCanzone(${index})"><p>${pA}</p></div><div class="centro2" style="width:${c}%"  onclick="mostraCanzone(${index})"><p>${pB}</p></div><p class='destra'>${arr2[index].split("|")[0]}</p></div>`;
 
                 if (item[0] != 1) str += `<div id="canzone${index}" class='riga' style="display:none"><p class="text2">${item[0]} at ${tempo} by ${item[1]}</p> </div>`;
-                else str += `<div id="canzone${index}" class='riga' style="display:none"><p class="text2">not found</p> </div>`;
+                else str += `<div id="canzone${index}" class='riga' style="display:none"><p class="text2">not found at ${tempo}</p> </div>`;
 
             }
         }
