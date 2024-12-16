@@ -766,6 +766,7 @@ function listaCanzoni() {
         const arr2 = punteggio2.split(";");
         for (let index = 0; index < current_track.length; index++) {
             const song = current_track[index];
+            const t = tempi[index];
             if (song == null) {
 
             } else if (song[0] != 1) {
@@ -778,7 +779,7 @@ function listaCanzoni() {
                 } else if (p2 != 0) {
                     persona = persone[p2];
                 }
-                str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${song[2]}</p></div></div>`
+                str += `<div class="rig"><div class="rigg"><p>${song[0]}</p></div><div class="rigg"><p class="desc">indovinata da:${persona} a ${t}</p><p class="desc">https://open.spotify.com/track/${song[2]}</p></div></div>`
             }
         }
     } catch (errore) {
