@@ -1075,7 +1075,7 @@ function generaPDF() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
     let nome_partita = prompt("Inserisci il nemo della partita:");
-
+    const wid = pdf.internal.pageSize.width;
     // Bordi del foglio
     pdf.setLineWidth(1);// rettangolo esterno
 
@@ -1105,6 +1105,8 @@ function generaPDF() {
     pdf.setTextColor(150, 0, 0);
     pdf.text(a, centerX75(a, pdf), riga);
     rigaAdd(pdf, 10);
+    pdf.setLineWidth(0.5); // Spessore della linea
+    pdf.line(10, riga, wid - 10, riga);
     rigaAdd(pdf, 10);
     let r = riga;
     pdf.setFontSize(12);
@@ -1257,6 +1259,9 @@ function generaPDF() {
         if (n != 0) {
             t = t / n;
             rigaAdd(pdf, 10);
+            pdf.setLineWidth(0.5); // Spessore della linea
+            pdf.line(10, riga, wid/2, riga);
+            rigaAdd(pdf, 10);
             pdf.setFont("helvetica", "bold");
             pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
             pdf.setFont("helvetica", "normal");
@@ -1280,6 +1285,8 @@ function generaPDF() {
         }
     }
     rigaAdd(pdf, 10);
+    pdf.setLineWidth(0.5); // Spessore della linea
+    pdf.line(10, riga, wid - 10, riga);
     rigaAdd(pdf, 10);
     pdf.setFont("helvetica", "bold");
     pdf.text("Lista canzoni: ", 15, riga);
@@ -1299,21 +1306,27 @@ function generaPDF() {
             } else if (p2 != 0) {
                 persona = persone[p2];
             }
-            rigaAdd(pdf, 10);
+            rigaAdd(pdf, 11);
             pdf.text(song[0], 20, riga);
-            rigaAdd(pdf, 9);
-            pdf.text("indovinata da: " + persona + " a " + t, 20, riga);
+            rigaAdd(pdf, 8);
+            const t1 = "indovinata da: " + persona + " a " + t + "s.";
+            pdf.text(t1, 20, riga);
             const text = "Link a Spotify";
             const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
 
-            rigaAdd(pdf, 9);
+            rigaAdd(pdf, 8);
             // Aggiunge il testo visibile
             const x = 20;
             pdf.text(text, x, riga);
 
             // Aggiunge il link cliccabile sulla stessa posizione
             const textWidth = pdf.getTextWidth(text);
-            pdf.link(x, riga - 5, textWidth, 4, { url: url });
+            pdf.link(x, riga - 5, textWidth, 3, { url: url });
+            rigaAdd(pdf, 6);
+            pdf.setLineWidth(0.3); // Spessore della linea
+            pdf.setDrawColor(100, 100, 100);
+            pdf.line(x, riga, pdf.getTextWidth(t1) + x, riga);
+            pdf.setDrawColor(0, 0, 0);
 
         }
     }
