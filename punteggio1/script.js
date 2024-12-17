@@ -1201,7 +1201,7 @@ function generaPDF() {
     riga = r;
     // Sezione: Punti per persona (precisi)
     pdf.setFont("helvetica", "bold");
-    pdf.text("Punti per persona (precisi):", 115, riga);
+    pdf.text("Punti per persona (precisi):", 75, riga);
     pdf.setFont("helvetica", "normal");
     let sortedArray1 = Object.entries(array1);
     sortedArray1.sort((a, b) => b[1] - a[1]);
@@ -1213,7 +1213,7 @@ function generaPDF() {
             rigaAdd(pdf, 10);
             if (squadraAppartenenza(key) == 1) pdf.setTextColor(0, 0, 150);
             if (squadraAppartenenza(key) == 2) pdf.setTextColor(150, 0, 0);
-            pdf.text(persone[key] + ": " + value, 120, riga);
+            pdf.text(persone[key] + ": " + value, 80, riga);
             pdf.setTextColor(0, 0, 0);
         }
     }
