@@ -1030,13 +1030,43 @@ function songsFromString(str) {
     return oggg;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+function squadraAppartenenza(num) {
+    let as1 = squadra1.split(";")
+    for (let index = 0; index < as1.length; index++) {
+        if (as1[index] == num)
+            return 1;
+    }
+    as1 = squadra2.split(";")
+    for (let index = 0; index < as1.length; index++) {
+        if (as1[index] == num)
+            return 2;
+    }
+    return 0;
+}
+
+
+
+
 let riga = 20;
 function rigaAdd(pdf, num) { // Gestione di testi su più righe
     let margin = 20;
     const pageHeight = pdf.internal.pageSize.height;
-    riga += num;
+    riga += num - 3;
     // Verifica se serve una nuova pagina
-    if (riga > pageHeight - margin ) {
+    if (riga > pageHeight - margin) {
         pdf.addPage(); // Aggiunge una nuova pagina
         riga = margin; // Resetta la posizione Y
     }
@@ -1054,24 +1084,31 @@ function generaPDF() {
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(20);
     pdf.text(nome_partita, centerX(nome_partita, pdf), riga);
-    rigaAdd(pdf,10);
-    rigaAdd(pdf,5);
+    rigaAdd(pdf, 10);
+    rigaAdd(pdf, 5);
     // Squadre e punteggi
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(16);
-    let a = document.getElementById("name-team1").textContent;
+    let a = "Squadra " + document.getElementById("name-team1").textContent;
+    pdf.setTextColor(0, 0, 150);
     pdf.text(a, centerX25(a, pdf), riga);
-    a = document.getElementById("name-team2").textContent;
+    a = "Squadra " + document.getElementById("name-team2").textContent;
+    pdf.setTextColor(150, 0, 0);
     pdf.text(a, centerX75(a, pdf), riga);
-    rigaAdd(pdf,10);
+    rigaAdd(pdf, 10);
+
+    pdf.setFontSize(14);
     a = "Punteggio finale: " + document.getElementById("score-team1").textContent;
+    pdf.setTextColor(0, 0, 150);
     pdf.text(a, centerX25(a, pdf), riga);
     a = "Punteggio finale: " + document.getElementById("score-team2").textContent;
+    pdf.setTextColor(150, 0, 0);
     pdf.text(a, centerX75(a, pdf), riga);
-    rigaAdd(pdf,10);
-    rigaAdd(pdf,10);
+    rigaAdd(pdf, 10);
+    rigaAdd(pdf, 10);
     let r = riga;
     pdf.setFontSize(12);
+    pdf.setTextColor(0, 0, 0);
     pdf.setFont("helvetica", "bold");
     pdf.text("Punti per persona:", 15, riga);
     pdf.setFont("helvetica", "normal");
@@ -1152,8 +1189,11 @@ function generaPDF() {
         const key = sortedArray[i][0]; // La chiave dell'elemento
         const value = sortedArray[i][1];
         if (key != 0 && value > 0) {
-            rigaAdd(pdf,10);
+            rigaAdd(pdf, 10);
+            if (squadraAppartenenza(key) == 1) pdf.setTextColor(0, 0, 150);
+            if (squadraAppartenenza(key) == 2) pdf.setTextColor(150, 0, 0);
             pdf.text(persone[key] + ": " + value, 20, riga);
+            pdf.setTextColor(0, 0, 0);
         }
     }
     riga = r;
@@ -1168,13 +1208,16 @@ function generaPDF() {
         const key = sortedArray1[i][0]; // La chiave dell'elemento
         const value = sortedArray1[i][1];
         if (key != 0 && value > 0) {
-            rigaAdd(pdf,10);
+            rigaAdd(pdf, 10);
+            if (squadraAppartenenza(key) == 1) pdf.setTextColor(0, 0, 150);
+            if (squadraAppartenenza(key) == 2) pdf.setTextColor(150, 0, 0);
             pdf.text(persone[key] + ": " + value, 120, riga);
+            pdf.setTextColor(0, 0, 0);
         }
     }
 
-    rigaAdd(pdf,10);
-    rigaAdd(pdf,10);
+    rigaAdd(pdf, 10);
+    rigaAdd(pdf, 10);
     // Sezione: Canzoni indovinate
     for (let indexx = 1; indexx < numPersone; indexx++) {
         let arrayCanzoniPerPersona = [];
@@ -1213,21 +1256,21 @@ function generaPDF() {
         }
         if (n != 0) {
             t = t / n;
-            rigaAdd(pdf,10);
+            rigaAdd(pdf, 10);
             pdf.setFont("helvetica", "bold");
             pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
             pdf.setFont("helvetica", "normal");
-            rigaAdd(pdf,10);
+            rigaAdd(pdf, 10);
             pdf.text("Ogni canzone trovata:", 20, riga);
             for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
-                rigaAdd(pdf,10);
+                rigaAdd(pdf, 10);
                 let sstr = arrayCanzoniPerPersona[index][0] + " di " + arrayCanzoniPerPersona[index][1] + " in " + arrayTempoPerPersona[index] + "s";
                 pdf.text(sstr, 25, riga);
             }
-            rigaAdd(pdf,10);
+            rigaAdd(pdf, 10);
             pdf.text("Autori trovati:", 20, riga);
             for (let index = 0; index < autori.length; index++) {
-                rigaAdd(pdf,10);
+                rigaAdd(pdf, 10);
                 let sstr = autori[index] + " trovato " + numAutori[index];
                 if (numAutori[index] == 1) sstr += " volta"
                 else sstr += " volte";
@@ -1236,10 +1279,44 @@ function generaPDF() {
             }
         }
     }
-    rigaAdd(pdf,10);
-    // Aggiungere più contenuti...
-    pdf.text("...", 15, riga);
+    rigaAdd(pdf, 10);
+    rigaAdd(pdf, 10);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Lista canzoni: ", 15, riga);
+    pdf.setFont("helvetica", "normal");
+    for (let index = 0; index < current_track.length; index++) {
+        const song = current_track[index];
+        const t = tempi[index];
+        if (song == null) {
 
+        } else if (song[0] != 1) {
+
+            let p1 = arr1[index + 1].split("|")[1];
+            let p2 = arr2[index + 1].split("|")[1];
+            let persona = "errore";
+            if (p1 != 0) {
+                persona = persone[p1];
+            } else if (p2 != 0) {
+                persona = persone[p2];
+            }
+            rigaAdd(pdf, 10);
+            pdf.text(song[0], 20, riga);
+            rigaAdd(pdf, 9);
+            pdf.text("indovinata da: " + persona + " a " + t, 20, riga);
+            const text = "Link a Spotify";
+            const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
+
+            rigaAdd(pdf, 9);
+            // Aggiunge il testo visibile
+            const x = 20;
+            pdf.text(text, x, riga);
+
+            // Aggiunge il link cliccabile sulla stessa posizione
+            const textWidth = pdf.getTextWidth(text);
+            pdf.link(x, riga - 5, textWidth, 4, { url: url });
+
+        }
+    }
     // Salvataggio del file
     pdf.save(nome_partita + "_report_partita.pdf");
 }
