@@ -1032,11 +1032,11 @@ function songsFromString(str) {
 
 let riga = 20;
 function rigaAdd(pdf, num) { // Gestione di testi su più righe
-    let margin = 10;
+    let margin = 20;
     const pageHeight = pdf.internal.pageSize.height;
     riga += num;
     // Verifica se serve una nuova pagina
-    if (riga > pageHeight - margin * 2) {
+    if (riga > pageHeight - margin ) {
         pdf.addPage(); // Aggiunge una nuova pagina
         riga = margin; // Resetta la posizione Y
     }
