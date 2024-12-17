@@ -1,5 +1,6 @@
 //variabili globali
 const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola" }
+let numPersone = 15;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
@@ -183,7 +184,7 @@ function saveData() {
     const m2 = squadra2;
     const fraa = fra;
     const punt = punto;
-    const songs = current_track.join(";;");
+    const songs = songsToString(current_track);
     const temps = tempi.join(";");
 
     // Crea una stringa con i dati formattati
@@ -249,7 +250,7 @@ function loadData(event) {
             squadra2 = data.team2.member;
             fra = data.fra;
             punto = data.punt;
-            current_track = data.songs.split(";;");
+            current_track = songsFromString(data.songs);
             tempi = data.temps.split(";");
         } catch (error) {
             alert("Errore nel caricamento del file. Assicurati che sia un file JSON valido.");
@@ -1028,4 +1029,236 @@ function songsFromString(str) {
     }
     return oggg;
 }
+
+let riga = 20;
+function rigaAdd(pdf, num) { // Gestione di testi su più righe
+    let margin = 10;
+    const pageHeight = pdf.internal.pageSize.height;
+    riga += num;
+    // Verifica se serve una nuova pagina
+    if (riga > pageHeight - margin * 2) {
+        pdf.addPage(); // Aggiunge una nuova pagina
+        riga = margin; // Resetta la posizione Y
+    }
+}
+function generaPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+    let nome_partita = prompt("Inserisci il nemo della partita:");
+
+    // Bordi del foglio
+    pdf.setLineWidth(1);// rettangolo esterno
+
+
+    // Intestazione
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(20);
+    pdf.text(nome_partita, centerX(nome_partita, pdf), riga);
+    rigaAdd(pdf,10);
+    rigaAdd(pdf,5);
+    // Squadre e punteggi
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(16);
+    let a = document.getElementById("name-team1").textContent;
+    pdf.text(a, centerX25(a, pdf), riga);
+    a = document.getElementById("name-team2").textContent;
+    pdf.text(a, centerX75(a, pdf), riga);
+    rigaAdd(pdf,10);
+    a = "Punteggio finale: " + document.getElementById("score-team1").textContent;
+    pdf.text(a, centerX25(a, pdf), riga);
+    a = "Punteggio finale: " + document.getElementById("score-team2").textContent;
+    pdf.text(a, centerX75(a, pdf), riga);
+    rigaAdd(pdf,10);
+    rigaAdd(pdf,10);
+    let r = riga;
+    pdf.setFontSize(12);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Punti per persona:", 15, riga);
+    pdf.setFont("helvetica", "normal");
+
+    var array = {
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 0,
+        7: 0,
+        8: 0,
+        9: 0,
+        10: 0,
+        11: 0,
+        12: 0,
+        13: 0,
+        14: 0,
+        15: 0,
+        16: 0,
+        17: 0
+    };
+    var array1 = {
+        0: 0,
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 0,
+        7: 0,
+        8: 0,
+        9: 0,
+        10: 0,
+        11: 0,
+        12: 0,
+        13: 0,
+        14: 0,
+        15: 0,
+        16: 0,
+        17: 0
+    };
+
+    const arr1 = punteggio1.split(";");
+    const arr2 = punteggio2.split(";");
+
+    // Aggiornamento dell'array e generazione della stringa
+    let prev1 = 0;
+    let prev2 = 0;
+    try {
+        for (let index = 0; index < arr1.length; index++) {
+            let item = current_track[index - 1] || ogg;
+            let tempo = tempi[index - 1];
+            let p1 = arr1[index].split("|")[1];
+            let p2 = arr2[index].split("|")[1];
+            let var1 = parseInt(arr1[index].split("|")[0]);
+            let var2 = parseInt(arr2[index].split("|")[0]);
+            let a = var1 - var2;
+            array[parseInt(p1)]++;
+            array[parseInt(p2)]++;
+            array1[parseInt(p1)]++;
+            array1[parseInt(p2)]++;
+            if (var1 - prev1 == 2) array1[parseInt(p1)]++;
+            if (var2 - prev2 == 2) array1[parseInt(p2)]++;
+            prev1 = var1;
+            prev2 = var2;
+        }
+    } catch (errore) {
+        console.log(errore);
+    }
+    // Ordinamento dell'array
+    let sortedArray = Object.entries(array);
+    sortedArray.sort((a, b) => b[1] - a[1]);
+
+    for (let i = 0; i < sortedArray.length; i++) {
+        const key = sortedArray[i][0]; // La chiave dell'elemento
+        const value = sortedArray[i][1];
+        if (key != 0 && value > 0) {
+            rigaAdd(pdf,10);
+            pdf.text(persone[key] + ": " + value, 20, riga);
+        }
+    }
+    riga = r;
+    // Sezione: Punti per persona (precisi)
+    pdf.setFont("helvetica", "bold");
+    pdf.text("Punti per persona (precisi):", 115, riga);
+    pdf.setFont("helvetica", "normal");
+    let sortedArray1 = Object.entries(array1);
+    sortedArray1.sort((a, b) => b[1] - a[1]);
+
+    for (let i = 0; i < sortedArray1.length; i++) {
+        const key = sortedArray1[i][0]; // La chiave dell'elemento
+        const value = sortedArray1[i][1];
+        if (key != 0 && value > 0) {
+            rigaAdd(pdf,10);
+            pdf.text(persone[key] + ": " + value, 120, riga);
+        }
+    }
+
+    rigaAdd(pdf,10);
+    rigaAdd(pdf,10);
+    // Sezione: Canzoni indovinate
+    for (let indexx = 1; indexx < numPersone; indexx++) {
+        let arrayCanzoniPerPersona = [];
+        let arrayTempoPerPersona = [];
+        let autori = [];
+        let numAutori = [];
+        let n = 0;
+        let t = 0;
+        for (let index = 1; index < arr1.length; index++) {
+            let item = current_track[index - 1] || ogg;
+            let tempo = tempi[index - 1];
+            let p1 = arr1[index].split("|")[1];
+            let p2 = arr2[index].split("|")[1];
+            if (p1 == indexx || p2 == indexx) {
+                t += tempo;
+                n++;
+                if (item[0] != 1) {
+                    arrayCanzoniPerPersona.push(item);
+                    arrayTempoPerPersona.push(tempo);
+                    let auts = item[1].split(", ");
+                    for (let i = 0; i < auts.length; i++) {
+                        let presente = false;
+                        for (let l = 0; l < autori.length; l++) {
+                            if (auts[i] == autori[l]) {
+                                presente = true;
+                                numAutori[l]++;
+                            }
+                        }
+                        if (!presente) {
+                            autori[autori.length] = auts[i];
+                            numAutori[autori.length - 1] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        if (n != 0) {
+            t = t / n;
+            rigaAdd(pdf,10);
+            pdf.setFont("helvetica", "bold");
+            pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
+            pdf.setFont("helvetica", "normal");
+            rigaAdd(pdf,10);
+            pdf.text("Ogni canzone trovata:", 20, riga);
+            for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
+                rigaAdd(pdf,10);
+                let sstr = arrayCanzoniPerPersona[index][0] + " di " + arrayCanzoniPerPersona[index][1] + " in " + arrayTempoPerPersona[index] + "s";
+                pdf.text(sstr, 25, riga);
+            }
+            rigaAdd(pdf,10);
+            pdf.text("Autori trovati:", 20, riga);
+            for (let index = 0; index < autori.length; index++) {
+                rigaAdd(pdf,10);
+                let sstr = autori[index] + " trovato " + numAutori[index];
+                if (numAutori[index] == 1) sstr += " volta"
+                else sstr += " volte";
+                pdf.text(sstr, 25, riga);
+
+            }
+        }
+    }
+    rigaAdd(pdf,10);
+    // Aggiungere più contenuti...
+    pdf.text("...", 15, riga);
+
+    // Salvataggio del file
+    pdf.save(nome_partita + "_report_partita.pdf");
+}
+function centerX(text, pdf) {
+    const pageWidth = pdf.internal.pageSize.width;
+    const textWidth = pdf.getTextWidth(text); // Larghezza del testo
+    return (pageWidth - textWidth) / 2
+}
+function centerX25(text, pdf) {
+    const pageWidth = pdf.internal.pageSize.width;
+    const textWidth = pdf.getTextWidth(text); // Larghezza del testo
+    return (pageWidth - textWidth) / 4
+}
+function centerX75(text, pdf) {
+    const pageWidth = pdf.internal.pageSize.width;
+    const textWidth = pdf.getTextWidth(text); // Larghezza del testo
+    return (pageWidth - textWidth) * 3 / 4
+}
+
+
+
 handleRedirect();
