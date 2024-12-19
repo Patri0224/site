@@ -1071,7 +1071,7 @@ function rigaAdd(pdf, num) { // Gestione di testi su più righe
         riga = margin; // Resetta la posizione Y
     }
 }
-function generaPDF() {
+async function generaPDF() {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF();
     let nome_partita = prompt("Inserisci il nemo della partita:");
