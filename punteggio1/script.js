@@ -740,7 +740,7 @@ function reload() {
 function addSelectedPoints(team) {
     if (current_track[punto] != null) {
         if (current_track[punto][0] == 1)
-            fetchCurrentTrack();
+            fetchCurrentTrack(2);
     }
     document.getElementById("currentSong").innerHTML = "";
     let totalPoints = 0;
@@ -827,7 +827,7 @@ function listaCanzoni() {
 
 function getCanzone() {
     tempoTemp = getCurrentTimeInSeconds();
-    fetchCurrentTrack();
+    fetchCurrentTrack(3);
 }
 
 
@@ -979,11 +979,11 @@ const handleRedirect = () => {
 };
 
 // Step 3: Fetch the currently playing track
-const fetchCurrentTrack = async () => {
-
+const fetchCurrentTrack = async (num) => {
+let tempPunto=punto;
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
-        current_track[punto] = ogg;
+        current_track[tempPunto] = ogg;
         return;
     }
 
@@ -998,15 +998,15 @@ const fetchCurrentTrack = async () => {
             ogg1[0] = data.item.name;
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
-            current_track[punto] = ogg1;
-            document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
+            current_track[tempPunto] = ogg1;
+           if(num==3) document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
-            current_track[punto] = ogg;
+            current_track[tempPunto] = ogg;
         }
     } catch (error) {
         console.error('Error fetching current track:', error);
-        current_track[punto] = ogg;
+        current_track[tempPunto] = ogg;
     }
 };
 
