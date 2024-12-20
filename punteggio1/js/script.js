@@ -235,8 +235,8 @@ function addSelectedPoints(team) {
         totalPoints += 1;
         if (checkbox3.checked) totalPoints += 1;
     }
-
-    addPoints(team, totalPoints);
+    if (totalPoints != 0)
+        addPoints(team, totalPoints);
 
     // Deseleziona le checkbox dopo aver aggiunto i punti
     checkbox1.checked = false;
