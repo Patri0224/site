@@ -252,11 +252,17 @@ async function generaPDF() {
         if (song == null) {
 
         } else if (song[0] != 1) {
-
+            console.log(arr1);
+            console.log(arr2);
             const arr11 = punteggio1.split(";");
-            const arr21 = punteggio2.split(";");
+            const arr22 = punteggio2.split(";");
+
+            console.log(punteggio1);
+            console.log(punteggio2);
+            console.log(arr11);
+            console.log(arr22);
             let p1 = arr11[index + 1].split("|")[1];
-            let p2 = arr21[index + 1].split("|")[1];
+            let p2 = arr22[index + 1].split("|")[1];
             let persona = "errore";
             if (p1 != 0) {
                 persona = persone[p1];
