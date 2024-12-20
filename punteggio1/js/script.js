@@ -261,7 +261,3 @@ function deselectCheckboxs() {
     document.getElementById('team2-checkbox2').checked = false;
     document.getElementById('team2-checkbox3').checked = false;
 }
-function getCanzone() {
-    tempoTemp = getCurrentTimeInSeconds();
-    fetchCurrentTrack(3);
-}

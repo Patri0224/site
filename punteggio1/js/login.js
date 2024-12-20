@@ -91,3 +91,11 @@ function songsFromString(str) {
     }
     return oggg;
 }
+
+
+
+
+function getCanzone() {
+    tempoTemp = getCurrentTimeInSeconds();
+    fetchCurrentTrack(3);
+}
