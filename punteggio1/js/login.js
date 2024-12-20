@@ -92,3 +92,4 @@ function songsFromString(str) {
     }
     return oggg;
 }
+handleRedirect();
