@@ -246,13 +246,7 @@ async function generaPDF() {
     pdf.setFont("helvetica", "bold");
     pdf.text("Lista canzoni: ", 15, riga);
     pdf.setFont("helvetica", "normal");
-    for (let index = 0; index < current_track.length; index++) {
-        const song = current_track[index];
-        const t = tempi[index];
-        if (song == null) {
-
-        } else if (song[0] != 1) {
-            console.log(arr1);
+    console.log(arr1);
             console.log(arr2);
             const arr11 = punteggio1.split(";");
             const arr22 = punteggio2.split(";");
@@ -261,6 +255,13 @@ async function generaPDF() {
             console.log(punteggio2);
             console.log(arr11);
             console.log(arr22);
+    for (let index = 0; index < current_track.length; index++) {
+        const song = current_track[index];
+        const t = tempi[index];
+        if (song == null) {
+
+        } else if (song[0] != 1) {
+            
             let p1 = arr11[index + 1].split("|")[1];
             let p2 = arr22[index + 1].split("|")[1];
             let persona = "errore";
