@@ -46,7 +46,6 @@ const fetchCurrentTrack = async (num) => {
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
         current_track[tempPunto] = ogg;
-        console.error('No token');
         return;
     }
 

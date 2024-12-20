@@ -253,8 +253,10 @@ async function generaPDF() {
 
         } else if (song[0] != 1) {
 
-            let p1 = arr1[index + 1].split("|")[1];
-            let p2 = arr2[index + 1].split("|")[1];
+            const arr11 = punteggio1.split(";");
+            const arr21 = punteggio2.split(";");
+            let p1 = arr11[index + 1].split("|")[1];
+            let p2 = arr21[index + 1].split("|")[1];
             let persona = "errore";
             if (p1 != 0) {
                 persona = persone[p1];
