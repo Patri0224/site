@@ -1368,7 +1368,12 @@ function centerX75(text, pdf) {
     const textWidth = pdf.getTextWidth(text); // Larghezza del testo
     return (pageWidth - textWidth) * 3 / 4
 }
-
-
+/*
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker registrato con successo.'))
+        .catch((error) => console.error('Registrazione Service Worker fallita:', error));
+}
+*/
 
 handleRedirect();
