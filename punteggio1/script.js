@@ -752,8 +752,8 @@ function addSelectedPoints(team) {
         totalPoints += 1;
         if (checkbox3.checked) totalPoints += 1;
     }
-
-    addPoints(team, totalPoints);
+    if (totalPoints != 0)
+        addPoints(team, totalPoints);
 
     // Deseleziona le checkbox dopo aver aggiunto i punti
     checkbox1.checked = false;
@@ -980,7 +980,7 @@ const handleRedirect = () => {
 
 // Step 3: Fetch the currently playing track
 const fetchCurrentTrack = async (num) => {
-let tempPunto=punto;
+    let tempPunto = punto;
     const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
     if (!accessToken) {
         current_track[tempPunto] = ogg;
@@ -999,7 +999,7 @@ let tempPunto=punto;
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
             current_track[tempPunto] = ogg1;
-           if(num==3) document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
+            if (num == 3) document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
             console.error('No track playing or API error:', response);
             current_track[tempPunto] = ogg;
@@ -1260,7 +1260,7 @@ async function generaPDF() {
             t = t / n;
             rigaAdd(pdf, 10);
             pdf.setLineWidth(0.5); // Spessore della linea
-            pdf.line(10, riga, wid/2, riga);
+            pdf.line(10, riga, wid / 2, riga);
             rigaAdd(pdf, 10);
             pdf.setFont("helvetica", "bold");
             pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
