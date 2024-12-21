@@ -1181,7 +1181,11 @@ async function generaPDF() {
             prev2 = var2;
         }
     } catch (errore) {
+        rigaAdd(pdf, 10);
         console.log(errore);
+        pdf.setTextColor(100, 0, 0);
+        pdf.text(errore, 15, riga);
+        pdf.setTextColor(0, 0, 0);
     }
     // Ordinamento dell'array
     let sortedArray = Object.entries(array);
@@ -1221,68 +1225,76 @@ async function generaPDF() {
     rigaAdd(pdf, 10);
     rigaAdd(pdf, 10);
     // Sezione: Canzoni indovinate
-    for (let indexx = 1; indexx < numPersone; indexx++) {
-        let arrayCanzoniPerPersona = [];
-        let arrayTempoPerPersona = [];
-        let autori = [];
-        let numAutori = [];
-        let n = 0;
-        let t = 0;
-        for (let index = 1; index < arr1.length; index++) {
-            let item = current_track[index - 1] || ogg;
-            let tempo = tempi[index - 1];
-            let p1 = arr1[index].split("|")[1];
-            let p2 = arr2[index].split("|")[1];
-            if (p1 == indexx || p2 == indexx) {
-                t += tempo;
-                n++;
-                if (item[0] != 1) {
-                    arrayCanzoniPerPersona.push(item);
-                    arrayTempoPerPersona.push(tempo);
-                    let auts = item[1].split(", ");
-                    for (let i = 0; i < auts.length; i++) {
-                        let presente = false;
-                        for (let l = 0; l < autori.length; l++) {
-                            if (auts[i] == autori[l]) {
-                                presente = true;
-                                numAutori[l]++;
+    try {
+        for (let indexx = 1; indexx < numPersone; indexx++) {
+            let arrayCanzoniPerPersona = [];
+            let arrayTempoPerPersona = [];
+            let autori = [];
+            let numAutori = [];
+            let n = 0;
+            let t = 0;
+            for (let index = 1; index < arr1.length; index++) {
+                let item = current_track[index - 1] || ogg;
+                let tempo = tempi[index - 1];
+                let p1 = arr1[index].split("|")[1];
+                let p2 = arr2[index].split("|")[1];
+                if (p1 == indexx || p2 == indexx) {
+                    t += tempo;
+                    n++;
+                    if (item[0] != 1) {
+                        arrayCanzoniPerPersona.push(item);
+                        arrayTempoPerPersona.push(tempo);
+                        let auts = item[1].split(", ");
+                        for (let i = 0; i < auts.length; i++) {
+                            let presente = false;
+                            for (let l = 0; l < autori.length; l++) {
+                                if (auts[i] == autori[l]) {
+                                    presente = true;
+                                    numAutori[l]++;
+                                }
                             }
-                        }
-                        if (!presente) {
-                            autori[autori.length] = auts[i];
-                            numAutori[autori.length - 1] = 1;
+                            if (!presente) {
+                                autori[autori.length] = auts[i];
+                                numAutori[autori.length - 1] = 1;
+                            }
                         }
                     }
                 }
             }
-        }
-        if (n != 0) {
-            t = t / n;
-            rigaAdd(pdf, 10);
-            pdf.setLineWidth(0.5); // Spessore della linea
-            pdf.line(10, riga, wid / 2, riga);
-            rigaAdd(pdf, 10);
-            pdf.setFont("helvetica", "bold");
-            pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
-            pdf.setFont("helvetica", "normal");
-            rigaAdd(pdf, 10);
-            pdf.text("Ogni canzone trovata:", 20, riga);
-            for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
+            if (n != 0) {
+                t = t / n;
                 rigaAdd(pdf, 10);
-                let sstr = arrayCanzoniPerPersona[index][0] + " di " + arrayCanzoniPerPersona[index][1] + " in " + arrayTempoPerPersona[index] + "s";
-                pdf.text(sstr, 25, riga);
-            }
-            rigaAdd(pdf, 10);
-            pdf.text("Autori trovati:", 20, riga);
-            for (let index = 0; index < autori.length; index++) {
+                pdf.setLineWidth(0.5); // Spessore della linea
+                pdf.line(10, riga, wid / 2, riga);
                 rigaAdd(pdf, 10);
-                let sstr = autori[index] + " trovato " + numAutori[index];
-                if (numAutori[index] == 1) sstr += " volta"
-                else sstr += " volte";
-                pdf.text(sstr, 25, riga);
+                pdf.setFont("helvetica", "bold");
+                pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
+                pdf.setFont("helvetica", "normal");
+                rigaAdd(pdf, 10);
+                pdf.text("Ogni canzone trovata:", 20, riga);
+                for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
+                    rigaAdd(pdf, 10);
+                    let sstr = arrayCanzoniPerPersona[index][0] + " di " + arrayCanzoniPerPersona[index][1] + " in " + arrayTempoPerPersona[index] + "s";
+                    pdf.text(sstr, 25, riga);
+                }
+                rigaAdd(pdf, 10);
+                pdf.text("Autori trovati:", 20, riga);
+                for (let index = 0; index < autori.length; index++) {
+                    rigaAdd(pdf, 10);
+                    let sstr = autori[index] + " trovato " + numAutori[index];
+                    if (numAutori[index] == 1) sstr += " volta"
+                    else sstr += " volte";
+                    pdf.text(sstr, 25, riga);
 
+                }
             }
         }
+    } catch (errore) {
+        rigaAdd(pdf, 10);
+        console.log(errore);
+        pdf.setTextColor(100, 0, 0);
+        pdf.text(errore, 15, riga);
+        pdf.setTextColor(0, 0, 0);
     }
     rigaAdd(pdf, 10);
     pdf.setLineWidth(0.5); // Spessore della linea
@@ -1291,44 +1303,52 @@ async function generaPDF() {
     pdf.setFont("helvetica", "bold");
     pdf.text("Lista canzoni: ", 15, riga);
     pdf.setFont("helvetica", "normal");
-    for (let index = 0; index < current_track.length; index++) {
-        const song = current_track[index];
-        const t = tempi[index];
-        if (song == null) {
+    try {
+        for (let index = 0; index < current_track.length; index++) {
+            const song = current_track[index];
+            const t = tempi[index];
+            if (song == null) {
 
-        } else if (song[0] != 1) {
+            } else if (song[0] != 1) {
 
-            let p1 = arr1[index + 1].split("|")[1];
-            let p2 = arr2[index + 1].split("|")[1];
-            let persona = "errore";
-            if (p1 != 0) {
-                persona = persone[p1];
-            } else if (p2 != 0) {
-                persona = persone[p2];
+                let p1 = arr1[index + 1].split("|")[1];
+                let p2 = arr2[index + 1].split("|")[1];
+                let persona = "errore";
+                if (p1 != 0) {
+                    persona = persone[p1];
+                } else if (p2 != 0) {
+                    persona = persone[p2];
+                }
+                rigaAdd(pdf, 11);
+                pdf.text(song[0], 20, riga);
+                rigaAdd(pdf, 8);
+                const t1 = "indovinata da: " + persona + " a " + t + "s.";
+                pdf.text(t1, 20, riga);
+                const text = "Link a Spotify";
+                const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
+
+                rigaAdd(pdf, 8);
+                // Aggiunge il testo visibile
+                const x = 20;
+                pdf.text(text, x, riga);
+
+                // Aggiunge il link cliccabile sulla stessa posizione
+                const textWidth = pdf.getTextWidth(text);
+                pdf.link(x, riga - 5, textWidth, 3, { url: url });
+                rigaAdd(pdf, 6);
+                pdf.setLineWidth(0.3); // Spessore della linea
+                pdf.setDrawColor(100, 100, 100);
+                pdf.line(x, riga, pdf.getTextWidth(t1) + x, riga);
+                pdf.setDrawColor(0, 0, 0);
+
             }
-            rigaAdd(pdf, 11);
-            pdf.text(song[0], 20, riga);
-            rigaAdd(pdf, 8);
-            const t1 = "indovinata da: " + persona + " a " + t + "s.";
-            pdf.text(t1, 20, riga);
-            const text = "Link a Spotify";
-            const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
-
-            rigaAdd(pdf, 8);
-            // Aggiunge il testo visibile
-            const x = 20;
-            pdf.text(text, x, riga);
-
-            // Aggiunge il link cliccabile sulla stessa posizione
-            const textWidth = pdf.getTextWidth(text);
-            pdf.link(x, riga - 5, textWidth, 3, { url: url });
-            rigaAdd(pdf, 6);
-            pdf.setLineWidth(0.3); // Spessore della linea
-            pdf.setDrawColor(100, 100, 100);
-            pdf.line(x, riga, pdf.getTextWidth(t1) + x, riga);
-            pdf.setDrawColor(0, 0, 0);
-
         }
+    } catch (errore) {
+        rigaAdd(pdf, 10);
+        console.log(errore);
+        pdf.setTextColor(100, 0, 0);
+        pdf.text(errore, 15, riga);
+        pdf.setTextColor(0, 0, 0);
     }
     // Salvataggio del file
     pdf.save(nome_partita + "_report_partita.pdf");
