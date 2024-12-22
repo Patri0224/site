@@ -1323,26 +1323,16 @@ async function generaPDF() {
                     persona = persone[p2];
                 }
                 rigaAdd(pdf, 11);
-                pdf.text(song[0], 20, riga);
-                rigaAdd(pdf, 8);
-                const t1 = "indovinata da: " + persona + " a " + t + "s.";
-                pdf.text(t1, 20, riga);
-                const text = "Link a Spotify";
+                const t1 = ". Indovinata da: " + persona + " a " + t + "s.";
+                pdf.text(song[0] + t1, 20, riga);
                 const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
-
-                rigaAdd(pdf, 8);
-                // Aggiunge il testo visibile
-                const x = 20;
-                pdf.text(text, x, riga);
-
-                // Aggiunge il link cliccabile sulla stessa posizione
-                const textWidth = pdf.getTextWidth(text);
-                pdf.link(x, riga - 5, textWidth, 3, { url: url });
-                rigaAdd(pdf, 6);
-                pdf.setLineWidth(0.3); // Spessore della linea
-                pdf.setDrawColor(100, 100, 100);
-                pdf.line(x, riga, pdf.getTextWidth(t1) + x, riga);
-                pdf.setDrawColor(0, 0, 0);
+                const textWidth = pdf.getTextWidth(song[0]);
+                pdf.link(20, riga - 5, textWidth, 3, { url: url });
+                /* rigaAdd(pdf, 6);
+                 pdf.setLineWidth(0.3); // Spessore della linea
+                 pdf.setDrawColor(100, 100, 100);
+                 pdf.line(x, riga, pdf.getTextWidth(t1) + x, riga);
+                 pdf.setDrawColor(0, 0, 0);*/
 
             }
         }
