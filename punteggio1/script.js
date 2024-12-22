@@ -1327,11 +1327,20 @@ async function generaPDF() {
                     persona = persone[p2];
                 }
                 rigaAdd(pdf, 15);
-                const t1 = ". Indovinata da: " + persona + " a " + t + "s.";
-                pdf.text(song[0] + t1, 20, riga);
-                const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
+                const t1 = "  (" + persona + " a " + t + "s)";
+                pdf.text(song[0] + " di " + song[1] + t1, 20, riga);
                 const textWidth = pdf.getTextWidth(song[0]);
-                pdf.link(20, riga - 5, textWidth, 3, { url: url });
+
+                // Altezza del font corrente
+                const fontSize = pdf.internal.getFontSize(); // In punti
+                const textHeight = (fontSize / 72) * 25.4; // Converti in mm (standard PDF)
+
+                // Link
+                const linkX = 20; // Posizione orizzontale del testo
+                const linkY = riga - textHeight + 1; // Posizione verticale (con aggiustamenti)
+                pdf.link(linkX, linkY, textWidth, textHeight, { url: `https://open.spotify.com/track/${song[2]}` });
+                pdf.rect(linkX, linkY, textWidth, textHeight, 'S'); // Solo per test
+
                 /* rigaAdd(pdf, 6);
                  pdf.setLineWidth(0.3); // Spessore della linea
                  pdf.setDrawColor(100, 100, 100);
