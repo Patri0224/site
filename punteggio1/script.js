@@ -1228,6 +1228,7 @@ async function generaPDF() {
     pdf.setLineWidth(0.5); // Spessore della linea
     pdf.line(10, riga, wid - 10, riga);
     // Sezione: Canzoni indovinate
+    let primaRiga = 0;
     try {
         for (let indexx = 1; indexx < numPersone; indexx++) {
             let arrayCanzoniPerPersona = [];
@@ -1266,9 +1267,12 @@ async function generaPDF() {
             }
             if (n != 0) {
                 t = t / n;
-                rigaAdd(pdf, 10);
-                pdf.setLineWidth(0.3); // Spessore della linea
-                pdf.line(10, riga, wid / 2, riga);
+                if (primaRiga == 0) {
+                    rigaAdd(pdf, 10);
+                    pdf.setLineWidth(0.3); // Spessore della linea
+                    pdf.line(10, riga, wid / 2, riga);
+                    primaRiga = 1;
+                }
                 rigaAdd(pdf, 10);
                 pdf.setFont("helvetica", "bold");
                 pdf.text("Canzoni indovinate da: " + persone[indexx], 15, riga);
@@ -1322,7 +1326,7 @@ async function generaPDF() {
                 } else if (p2 != 0) {
                     persona = persone[p2];
                 }
-                rigaAdd(pdf, 11);
+                rigaAdd(pdf, 15);
                 const t1 = ". Indovinata da: " + persona + " a " + t + "s.";
                 pdf.text(song[0] + t1, 20, riga);
                 const url = "https://open.spotify.com/track/" + song[2]; // Sostituisci con il tuo link
