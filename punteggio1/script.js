@@ -1267,7 +1267,7 @@ async function generaPDF() {
             }
             if (n != 0) {
                 t = t / n;
-                if (primaRiga == 0) {
+                if (primaRiga == 1) {
                     rigaAdd(pdf, 10);
                     pdf.setLineWidth(0.3); // Spessore della linea
                     pdf.line(10, riga, wid / 2, riga);
@@ -1339,7 +1339,6 @@ async function generaPDF() {
                 const linkX = 20; // Posizione orizzontale del testo
                 const linkY = riga - textHeight + 1; // Posizione verticale (con aggiustamenti)
                 pdf.link(linkX, linkY, textWidth, textHeight, { url: `https://open.spotify.com/track/${song[2]}` });
-                pdf.rect(linkX, linkY, textWidth, textHeight, 'S'); // Solo per test
 
                 /* rigaAdd(pdf, 6);
                  pdf.setLineWidth(0.3); // Spessore della linea
