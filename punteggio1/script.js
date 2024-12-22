@@ -1271,6 +1271,7 @@ async function generaPDF() {
                     rigaAdd(pdf, 10);
                     pdf.setLineWidth(0.3); // Spessore della linea
                     pdf.line(10, riga, wid / 2, riga);
+                } else {
                     primaRiga = 1;
                 }
                 rigaAdd(pdf, 10);
