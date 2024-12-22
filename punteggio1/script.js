@@ -1224,6 +1224,9 @@ async function generaPDF() {
 
     rigaAdd(pdf, 10);
     rigaAdd(pdf, 10);
+    rigaAdd(pdf, 10);
+    pdf.setLineWidth(0.5); // Spessore della linea
+    pdf.line(10, riga, wid - 10, riga);
     // Sezione: Canzoni indovinate
     try {
         for (let indexx = 1; indexx < numPersone; indexx++) {
@@ -1264,7 +1267,7 @@ async function generaPDF() {
             if (n != 0) {
                 t = t / n;
                 rigaAdd(pdf, 10);
-                pdf.setLineWidth(0.5); // Spessore della linea
+                pdf.setLineWidth(0.3); // Spessore della linea
                 pdf.line(10, riga, wid / 2, riga);
                 rigaAdd(pdf, 10);
                 pdf.setFont("helvetica", "bold");
@@ -1274,14 +1277,14 @@ async function generaPDF() {
                 pdf.text("Ogni canzone trovata:", 20, riga);
                 for (let index = 0; index < arrayCanzoniPerPersona.length; index++) {
                     rigaAdd(pdf, 10);
-                    let sstr = arrayCanzoniPerPersona[index][0] + " di " + arrayCanzoniPerPersona[index][1] + " in " + arrayTempoPerPersona[index] + "s";
+                    let sstr = "- " + arrayCanzoniPerPersona[index][0] + " di " + arrayCanzoniPerPersona[index][1] + " in " + arrayTempoPerPersona[index] + "s";
                     pdf.text(sstr, 25, riga);
                 }
                 rigaAdd(pdf, 10);
                 pdf.text("Autori trovati:", 20, riga);
                 for (let index = 0; index < autori.length; index++) {
                     rigaAdd(pdf, 10);
-                    let sstr = autori[index] + " trovato " + numAutori[index];
+                    let sstr = "- " + autori[index] + " trovato " + numAutori[index];
                     if (numAutori[index] == 1) sstr += " volta"
                     else sstr += " volte";
                     pdf.text(sstr, 25, riga);
