@@ -1,19 +1,69 @@
-<!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagina principale</title>
+    <title>Press Down Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .menu-dropdown a {
+            display: block;
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+        }
+
+        .menu-dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .menu-container:hover .menu-dropdown {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Benvenuto!</h1>
-    <p>Per visualizzare il punteggio, clicca sul link qui sotto:</p>
-    <a href="punteggio/punteggio.html">Vai alla pagina del punteggio obsoleta</a><br>
-    <a href="punteggio1/punteggio.html">Vai alla pagina del punteggio</a><br>
-    <a href="spada/index.html">spada</a><br>
-    <p><a href="fra.html">per fra</a></p>
+    <div class="menu-container">
+        <button class="menu-button">Personali</button>
+        <div class="menu-dropdown">
+            <a href="personal/punteggio/punteggio.html">Vai alla pagina del punteggio obsoleta</a>
+            <a href="personal/punteggio1/punteggio.html">Vai alla pagina del punteggio</a>
+            <a href="personal/spada/index.html">spada</a>
+            <a href="personal/fra.html">per fra</a>
+        </div>
+    </div>
+    <div class="menu-container">
+        <button class="menu-button">Universitari</button>
+        <div class="menu-dropdown">
+            <a href="uni/inndex.html">indexUni</a>
+        </div>
+    </div>
 </body>
 
 </html>
