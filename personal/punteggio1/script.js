@@ -1,6 +1,6 @@
 //variabili globali
-const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16:"Lisa", 17:"Mirco", 18:"Andre1", 19:"giada",20:"mati2"}
-let numPersone = 21;
+const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16:"Lisa", 17:"Mirco", 18:"Depa", 19:"Giada", 20:".",21:"Mati M"}
+let numPersone = 22;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
