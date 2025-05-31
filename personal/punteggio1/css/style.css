@@ -422,7 +422,7 @@ footer #fra {
     justify-content: flex-start; /* Allinea il contenuto orizzontalmente */
     color: white; /* Colore del testo */
     cursor: pointer; /* Icona della mano */
-    flex: 0 0 25%; /* Due colonne: ogni elemento occupa il 48% */
+    flex: 0 0 29%; /* Due colonne: ogni elemento occupa il 48% */
     margin: 8px 1%; /* Spaziatura uniforme */
     background-color: #333; /* Sfondo del label */
     border-radius: 4px; /* Angoli arrotondati */
