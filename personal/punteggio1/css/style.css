@@ -407,11 +407,11 @@ footer #fra {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 70%;
-    height: 70%;
+    width: 80%;
+    height: 80%;
     padding: 10%;
     padding-top: 5%;
-    transform: translate(-50%, -54%);
+    transform: translate(-50%, -60%);
     flex-wrap: wrap;
     background-color: #1a1a1a;
 }
@@ -422,7 +422,7 @@ footer #fra {
     justify-content: flex-start; /* Allinea il contenuto orizzontalmente */
     color: white; /* Colore del testo */
     cursor: pointer; /* Icona della mano */
-    flex: 0 0 44%; /* Due colonne: ogni elemento occupa il 48% */
+    flex: 0 0 33%; /* Due colonne: ogni elemento occupa il 48% */
     margin: 8px 1%; /* Spaziatura uniforme */
     background-color: #333; /* Sfondo del label */
     border-radius: 4px; /* Angoli arrotondati */
