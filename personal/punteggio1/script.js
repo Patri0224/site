@@ -1,6 +1,6 @@
 //variabili globali
-const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16:"Lisa", 17:"Mirco", 18:"Depa", 19:"Giada", 20:"Irene",21:"Mati M"}
-let numPersone = 22;
+const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16:"Lisa", 17:"Mirco", 18:"Depa", 19:"Giada", 20:"Irene",21:"Mati D",22:"Clara"}
+let numPersone = 23;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
@@ -463,7 +463,14 @@ function showGraf() {
         14: 0,
         15: 0,
         16: 0,
-        17: 0
+        17: 0,
+        18: 0,
+        19: 0,
+        20: 0,
+        21: 0,
+        22: 0,
+        23: 0,
+        24: 0
     };
     var array1 = {
         0: 0,
@@ -483,7 +490,14 @@ function showGraf() {
         14: 0,
         15: 0,
         16: 0,
-        17: 0
+        17: 0,
+        18: 0,
+        19: 0,
+        20: 0,
+        21: 0,
+        22: 0,
+        23: 0,
+        24: 0
     };
 
     const arr1 = punteggio1.split(";");
