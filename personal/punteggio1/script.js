@@ -608,12 +608,19 @@ function showMenu(op) {
 function changeSquadra1() {
     let str = `<h3>Squadra 1</h3>`;
     for (let key in persone) {
-        let color = "squadra";
         if (key != 0) {
-            if (squadra1.includes(key)) color = "squadra1";
-            else if (squadra2.includes(key)) color = "squadra2";
-            str += `<label class="${color}"><input type="checkbox" class="t1" value="${key}"><p>${persone[key]}</p></label>`;
-
+            let color = "squadra";
+            let checked = "";
+            if (squadra1.includes(key)) {
+                color = "squadra1";
+                checked = "checked";  // checkbox selezionato
+            } else if (squadra2.includes(key)) {
+                color = "squadra2";
+            }
+            str += `<label class="${color}">
+                        <input type="checkbox" class="t1" value="${key}" ${checked}>
+                        <p>${persone[key]}</p>
+                    </label>`;
         }
     }
     str += `<button onclick="Set1()">Set</button>`;
@@ -624,18 +631,26 @@ function changeSquadra1() {
 function changeSquadra2() {
     let str = `<h3>Squadra 2</h3>`;
     for (let key in persone) {
-        let color = "squadra";
         if (key != 0) {
-            if (squadra1.includes(key)) color = "squadra1";
-            else if (squadra2.includes(key)) color = "squadra2";
-            str += `<label class="${color}"><input type="checkbox" class="t2" value="${key}"><p>${persone[key]}</p></label>`;
-
+            let color = "squadra";
+            let checked = "";
+            if (squadra2.includes(key)) {
+                color = "squadra2";
+                checked = "checked";  // checkbox selezionato
+            } else if (squadra1.includes(key)) {
+                color = "squadra1";
+            }
+            str += `<label class="${color}">
+                        <input type="checkbox" class="t2" value="${key}" ${checked}>
+                        <p>${persone[key]}</p>
+                    </label>`;
         }
     }
     str += `<button onclick="Set2()">Set</button>`;
     document.getElementById("Sq2").innerHTML = str;
     document.getElementById("Sq2").style.display = "flex";
 }
+
 function Set1() {
     const selectedCheckboxes = document.querySelectorAll('.t1:checked');
     const selectedValues = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
