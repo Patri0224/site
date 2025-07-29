@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Game</title>
+    <link href="bootstrap.css" rel="stylesheet">
+    <style>
+        p {
+            margin: 0px;
+            padding-left: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ctn-info" class="container-fluid">
+        <div class="container-fluid justify-content-center col-md-6 text-center">
+            <h1>tris</h1>
+            <p>description</p>
+        </div>
+        <div class="container-fluid ">
+            <div class="row justify-content-between">
+                <input type="text" id="player1" placeholder="Player 1" class="col-sm-4">
+                <input type="text" id="player2" placeholder="Player 2" class="col-sm-4">
+            </div>
+            <div class="row justify-content-between">
+                <p class="col-sm-4">Punteggio Player 1:</p>
+                <p class="col-sm-4">Punteggio Player 2:</p>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <button id="start" onclick="startGame()">Start</button>
+        </div>
+    </div>
+    <div id="game" class="container-fluid">
+        <div class="row">
+            <div class="col-4" id="0" onclick="play(this)">0:11</div>
+            <div class="col-4" id="1" onclick="play(this)">1:12</div>
+            <div class="col-4" id="2" onclick="play(this)">2:13</div>
+        </div>
+        <div class="row">
+            <div class="col-4" id="3" onclick="play(this)">3:21</div>
+            <div class="col-4" id="4" onclick="play(this)">4:22</div>
+            <div class="col-4" id="5" onclick="play(this)">5:23</div>
+        </div>
+        <div class="row">
+            <div class="col-4" id="6" onclick="play(this)">6:31</div>
+            <div class="col-4" id="7" onclick="play(this)">7:32</div>
+            <div class="col-4" id="8" onclick="play(this)">8:33</div>
+        </div>
+
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <button id="reset" onclick="resetGame()" class="col-3">Reset</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

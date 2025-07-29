@@ -568,3 +568,9 @@ input[type="file"] {
     margin: 0%;
     margin-left: 5%;
 }
+.squadra1{
+    background-color: #0000ff;
+}
+.squadra2{
+    background-color: #ff0000;
+}

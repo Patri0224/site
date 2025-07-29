@@ -1,7 +1,7 @@
 //variabili globali
-const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16:"Lisa", 17:"Mirko", 18:"Depa", 19:"Giada", 20:"Irene",21:"Mati D",22:"Clara", 23:"Samu", 24:"Billa" , 25:"Giuse", 26:"Paolo"}
+const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16: "Lisa", 17: "Mirko", 18: "Depa", 19: "Giada", 20: "Irene", 21: "Mati D", 22: "Clara", 23: "Samu", 24: "Billa", 25: "Giuse", 26: "Paolo" }
 //Ludovica, Giorgia c, selina
-let numPersone = 27;
+let numPersone = persone.length;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
@@ -24,7 +24,8 @@ ogg[1] = 1;
 ogg[2] = 1;
 let nwindow;
 const consoleDiv = document.getElementById("cici");
-
+const CLIENT_ID = '44a46de2fd8a4b38b962b7dcc81abccc';
+const REDIRECT_URI = 'https://studiopersonale.netlify.app/punteggio1/punteggio.html';
 // Salva i metodi originali della console
 const originalLog = console.log;
 const originalError = console.error;
@@ -436,6 +437,13 @@ function getSelectedValue2() {
     document.getElementById('2p-1').checked = true;
     return selected.value;
 }
+function creaArrayZero(dimensione) {
+    let obj = {};
+    for (let i = 0; i <= dimensione; i++) {
+        obj[i] = 0;
+    }
+    return obj;
+}
 //grafico per storia partita
 function showGraf() {
     if (document.getElementById("grafico").style.display == "block") {
@@ -446,68 +454,10 @@ function showGraf() {
     console.log(punteggio1);
     console.log(punteggio2);
     console.log(tempi);
-    var array = {
-        0: 0,
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0,
-        6: 0,
-        7: 0,
-        8: 0,
-        9: 0,
-        10: 0,
-        11: 0,
-        12: 0,
-        13: 0,
-        14: 0,
-        15: 0,
-        16: 0,
-        17: 0,
-        18: 0,
-        19: 0,
-        20: 0,
-        21: 0,
-        22: 0,
-        23: 0,
-        24: 0,
-        25: 0,
-26:0,
-27:0,
-28:0
-    };
-    var array1 = {
-        0: 0,
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0,
-        6: 0,
-        7: 0,
-        8: 0,
-        9: 0,
-        10: 0,
-        11: 0,
-        12: 0,
-        13: 0,
-        14: 0,
-        15: 0,
-        16: 0,
-        17: 0,
-        18: 0,
-        19: 0,
-        20: 0,
-        21: 0,
-        22: 0,
-        23: 0,
-        24: 0, 
-        25: 0,
-26:0,
-27:0,
-28:0
-    };
+
+
+    let array = creaArrayZero(numPersone + 4);
+    let array1 = creaArrayZero(numPersone + 4);
 
     const arr1 = punteggio1.split(";");
     const arr2 = punteggio2.split(";");
@@ -658,8 +608,12 @@ function showMenu(op) {
 function changeSquadra1() {
     let str = `<h3>Squadra 1</h3>`;
     for (let key in persone) {
-        if (key != 0)
+        if (key != 0) {
+            if (squadra1.includes(key)) color = "squadra1";
+            else if (squadra2.includes(key)) color = "squadra2";
             str += `<label><input type="checkbox" class="t1" value="${key}"><p>${persone[key]}</p></label>`;
+
+        }
     }
     str += `<button onclick="Set1()">Set</button>`;
     document.getElementById("Sq1").innerHTML = str;
@@ -669,8 +623,12 @@ function changeSquadra1() {
 function changeSquadra2() {
     let str = `<h3>Squadra 2</h3>`;
     for (let key in persone) {
-        if (key != 0)
+        if (key != 0) {
+            if (squadra1.includes(key)) color = "squadra1";
+            else if (squadra2.includes(key)) color = "squadra2";
             str += `<label><input type="checkbox" class="t2" value="${key}"><p>${persone[key]}</p></label>`;
+
+        }
     }
     str += `<button onclick="Set2()">Set</button>`;
     document.getElementById("Sq2").innerHTML = str;
@@ -963,24 +921,36 @@ function canzoniPerPersona(person) {
 
 
 
-// Step 1: Login to Spotify
-const login = () => {
-    localStorage.removeItem('access_token');
-    sessionStorage.removeItem('access_token');
-    window.location.hash = ''; // Rimuove il token nell'URL
-    // Dichiarazione delle variabili necessarie
-    const AUTH_URL = 'https://accounts.spotify.com/authorize';  // URL di autorizzazione Spotify
-    const CLIENT_ID = 'd3efac0125d1444e9b68f2fb1784a6db';  // Sostituisci con il tuo Client ID di Spotify
-    const REDIRECT_URI = 'https://studiopersonale.netlify.app/punteggio1/punteggio.html';  // Il tuo URI di redirect
 
-    const SCOPES = 'user-read-currently-playing user-read-playback-state';  // Permessi necessari per l'accesso a Spotify
 
-    // Costruisci l'URL di autorizzazione con l'opzione 'prompt=login'
-    const url = `${AUTH_URL}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${encodeURIComponent(SCOPES)}&prompt=login`;
+// Genera un code verifier e challenge
+async function generatePKCECodes() {
+    const verifier = generateRandomString(64);
+    const challenge = await sha256Challenge(verifier);
+    localStorage.setItem('code_verifier', verifier);
+    return challenge;
+}
 
-    // Reindirizza l'utente a Spotify per il login
-    window.location.href = url;
-};
+function generateRandomString(length) {
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    return btoa(String.fromCharCode(...array)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function sha256Challenge(verifier) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(hash)));
+    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+async function login() {
+    const challenge = await generatePKCECodes();
+    const scope = 'user-read-currently-playing user-read-playback-state';
+    const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&code_challenge_method=S256&code_challenge=${challenge}`;
+    window.location.href = authUrl;
+}
 const logout = () => {
     // Rimuovi il token di accesso dal localStorage o sessionStorage
     localStorage.removeItem('access_token');
@@ -992,31 +962,36 @@ const logout = () => {
 
 };
 // Step 2: Handle redirect and get token
-const handleRedirect = () => {
-    const hash = window.location.hash;
-    if (hash) {
-        const params = new URLSearchParams(hash.substring(1));
-        accessToken = params.get('access_token');
-        console.log('Access Token:', accessToken);
-    }
-};
+async function handleRedirect() {
+    const code = new URLSearchParams(window.location.search).get('code');
+    if (!code) return;
+
+    const verifier = localStorage.getItem('code_verifier');
+
+    const response = await fetch('/.netlify/functions/token', {
+        method: 'POST',
+        body: JSON.stringify({
+            code: code,
+            verifier: verifier,
+            redirect_uri: REDIRECT_URI
+        }),
+    });
+
+    const data = await response.json();
+    localStorage.setItem('access_token', data.access_token);
+    window.history.replaceState({}, document.title, REDIRECT_URI); // pulisce URL
+}
 
 // Step 3: Fetch the currently playing track
-const fetchCurrentTrack = async (num) => {
-    let tempPunto = punto;
-    const API_ENDPOINT = 'https://api.spotify.com/v1/me/player/currently-playing';
-    if (!accessToken) {
-        current_track[tempPunto] = ogg;
-        return;
-    }
-
+async function fetchCurrentTrack() {
+    const token = localStorage.getItem('access_token');
     try {
-        const response = await fetch(API_ENDPOINT, {
-            headers: { Authorization: `Bearer ${accessToken}` },
+        const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+            headers: { Authorization: `Bearer ${token}` }
         });
 
         if (response.status === 200) {
-            const data = await response.json();
+            const data = await res.json();
             let ogg1 = [3];
             ogg1[0] = data.item.name;
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
@@ -1031,7 +1006,7 @@ const fetchCurrentTrack = async (num) => {
         console.error('Error fetching current track:', error);
         current_track[tempPunto] = ogg;
     }
-};
+}
 
 function songsToString(oggg) {
     var str = "";
