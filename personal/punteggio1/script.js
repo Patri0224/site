@@ -986,6 +986,7 @@ async function handleRedirect() {
 
 // Step 3: Fetch the currently playing track
 async function fetchCurrentTrack() {
+    let tempPunto = punto;
     const token = localStorage.getItem('access_token');
     try {
         const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
