@@ -608,10 +608,11 @@ function showMenu(op) {
 function changeSquadra1() {
     let str = `<h3>Squadra 1</h3>`;
     for (let key in persone) {
+        let color = "";
         if (key != 0) {
             if (squadra1.includes(key)) color = "squadra1";
             else if (squadra2.includes(key)) color = "squadra2";
-            str += `<label><input type="checkbox" class="t1" value="${key}"><p>${persone[key]}</p></label>`;
+            str += `<label class="${color}"><input type="checkbox" class="t1" value="${key}"><p>${persone[key]}</p></label>`;
 
         }
     }
@@ -623,10 +624,11 @@ function changeSquadra1() {
 function changeSquadra2() {
     let str = `<h3>Squadra 2</h3>`;
     for (let key in persone) {
+        let color = "";
         if (key != 0) {
             if (squadra1.includes(key)) color = "squadra1";
             else if (squadra2.includes(key)) color = "squadra2";
-            str += `<label><input type="checkbox" class="t2" value="${key}"><p>${persone[key]}</p></label>`;
+            str += `<label class="${color}"><input type="checkbox" class="t2" value="${key}"><p>${persone[key]}</p></label>`;
 
         }
     }
