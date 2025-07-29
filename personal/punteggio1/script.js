@@ -985,7 +985,7 @@ async function handleRedirect() {
 }
 
 // Step 3: Fetch the currently playing track
-async function fetchCurrentTrack() {
+async function fetchCurrentTrack(num) {
     let tempPunto = punto;
     const token = localStorage.getItem('access_token');
     try {
