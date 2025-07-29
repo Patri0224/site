@@ -403,15 +403,11 @@ footer #fra {
 
 .SelectorSq {
     display: none;
-    z-index: 6;
+    z-index: 31;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: 80%;
-    padding: 10%;
-    padding-top: 5%;
-    transform: translate(-50%, -58%);
+    width: 96%;
+    height: 96%;
+    padding: 2%;
     flex-wrap: wrap;
     background-color: #1a1a1a;
 }

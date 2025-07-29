@@ -1,7 +1,40 @@
 //variabili globali
-const persone = { 0: "", 1: "Alice", 2: "Andre", 3: "Busti", 4: "Dani", 5: "Fede", 6: "Fra", 7: "Friggi", 8: "Giorgia", 9: "Giulia", 10: "Marco", 11: "Mati", 12: "Pat", 13: "Totta", 14: "Viola", 15: "Margo", 16: "Lisa", 17: "Mirko", 18: "Depa", 19: "Giada", 20: "Irene", 21: "Mati D", 22: "Clara", 23: "Samu", 24: "Billa", 25: "Giuse", 26: "Paolo" }
-//Ludovica, Giorgia c, selina
-let numPersone = persone.length;
+const persone = {
+    0: "",
+    1: "Alice",
+    2: "Andrea",
+    3: "Billa",
+    4: "Busti",
+    5: "Clara",
+    6: "Dani",
+    7: "Depa",
+    8: "Fede",
+    9: "Fra",
+    10: "Friggi",
+    11: "Giorgia",
+    12: "Giorgia C",
+    13: "Giuse",
+    14: "Giulia",
+    15: "Giada",
+    16: "Irene",
+    17: "Lisa",
+    18: "Ludovica",
+    19: "Marco",
+    20: "Margo",
+    21: "Mati",
+    22: "Mati (depa)",
+    23: "Mirko",
+    24: "Pat",
+    25: "Paolo",
+    26: "Samu",
+    27: "Selina",
+    28: "Totta",
+    29: "Viola"
+};
+
+
+//
+let numPersone = Object.keys(persone).length;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 var punteggio1 = "0|-1";
@@ -438,14 +471,15 @@ function getSelectedValue2() {
     return selected.value;
 }
 function creaArrayZero(dimensione) {
-    let obj = {};
+    let arr = [];
     for (let i = 0; i <= dimensione; i++) {
-        obj[i] = 0;
+        arr[i] = 0;
     }
-    return obj;
+    return arr;
 }
 //grafico per storia partita
 function showGraf() {
+    console.log(numPersone);
     if (document.getElementById("grafico").style.display == "block") {
         document.getElementById("grafico").style.display = "none";
         return;
@@ -458,7 +492,7 @@ function showGraf() {
 
     let array = creaArrayZero(numPersone + 4);
     let array1 = creaArrayZero(numPersone + 4);
-
+    console.log(array);
     const arr1 = punteggio1.split(";");
     const arr2 = punteggio2.split(";");
     let str = `<div id="primaRiga" class='riga'><p>Grafico punteggi</p></div> `;
@@ -466,6 +500,11 @@ function showGraf() {
     // Aggiornamento dell'array e generazione della stringa
     let prev1 = 0;
     let prev2 = 0;
+    //tempi
+    let arrayTempMediaSomma = creaArrayZero(numPersone + 4);
+    let arrayTempMediaNumero = creaArrayZero(numPersone + 4);
+    let arrayTempMin = creaArrayZero(numPersone + 4);
+    let arrayTempMax = creaArrayZero(numPersone + 4);
     try {
         for (let index = 0; index < arr1.length; index++) {
 
@@ -503,11 +542,33 @@ function showGraf() {
                 else str += `<div id="canzone${index}" class='riga' style="display:none"><p class="text2">not found at ${tempo}</p> </div>`;
 
             }
+            let persona = parseInt(p1);
+            if (persona == 0) persona = parseInt(p2);
+            if (tempo != null && tempo != "") {
+                arrayTempMediaSomma[persona] += parseInt(tempo);
+                arrayTempMediaNumero[persona]++;
+                if (arrayTempMin[persona] == 0 || parseInt(tempo) < arrayTempMin[persona]) {
+                    arrayTempMin[persona] = parseInt(tempo);
+                }
+                if (arrayTempMax[persona] == 0 || parseInt(tempo) > arrayTempMax[persona]) {
+                    arrayTempMax[persona] = parseInt(tempo);
+                }
+
+            }
         }
     } catch (errore) {
         str += "errore" + errore;
         console.log(errore);
     }
+    for (let i = 0; i < arrayTempMediaSomma.length; i++) {
+        if (arrayTempMediaNumero[i] > 0) {
+            arrayTempMediaSomma[i] = Math.round(arrayTempMediaSomma[i] / arrayTempMediaNumero[i]);
+        } else {
+            arrayTempMediaSomma[i] = 0;
+        }
+    }
+    console.log(squadra1);
+    console.log(squadra2);
     try {
         // Ordinamento dell'array
         let sortedArray = Object.entries(array);
@@ -606,15 +667,17 @@ function showMenu(op) {
 }
 //Usati per gestire le squadre
 function changeSquadra1() {
-    let str = `<h3>Squadra 1</h3>`;
+    let str = `<h3 style="color: #bbbbff;">Squadra 1</h3>`;
+    let s1 = squadra1.split(";");
+    let s2 = squadra2.split(";");
     for (let key in persone) {
         if (key != 0) {
             let color = "squadra";
             let checked = "";
-            if (squadra1.includes(key)) {
+            if (s1.includes(key)) {
                 color = "squadra1";
                 checked = "checked";  // checkbox selezionato
-            } else if (squadra2.includes(key)) {
+            } else if (s2.includes(key)) {
                 color = "squadra2";
             }
             str += `<label class="${color}">
@@ -629,15 +692,17 @@ function changeSquadra1() {
 }
 
 function changeSquadra2() {
-    let str = `<h3>Squadra 2</h3>`;
+    let str = `<h3 style="color: #ffbbbb;">Squadra 2</h3>`;
+    let s1 = squadra1.split(";");
+    let s2 = squadra2.split(";");
     for (let key in persone) {
         if (key != 0) {
             let color = "squadra";
             let checked = "";
-            if (squadra2.includes(key)) {
+            if (s2.includes(key)) {
                 color = "squadra2";
                 checked = "checked";  // checkbox selezionato
-            } else if (squadra1.includes(key)) {
+            } else if (s1.includes(key)) {
                 color = "squadra1";
             }
             str += `<label class="${color}">
@@ -700,7 +765,6 @@ function settaSquadre() {
 
 function setTitoloChecked(op) {
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
-    tempoTemp = getCurrentTimeInSeconds();
 
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
@@ -757,6 +821,7 @@ function addSelectedPoints(team) {
     checkbox1.checked = false;
     checkbox2.checked = false;
     checkbox3.checked = false;
+    tempoTemp = getCurrentTimeInSeconds();
 }
 
 function getCurrentTimeInSeconds() {
@@ -824,7 +889,6 @@ function listaCanzoni() {
 }
 
 function getCanzone() {
-    tempoTemp = getCurrentTimeInSeconds();
     fetchCurrentTrack(3);
 }
 
