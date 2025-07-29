@@ -608,7 +608,7 @@ function showMenu(op) {
 function changeSquadra1() {
     let str = `<h3>Squadra 1</h3>`;
     for (let key in persone) {
-        let color = "";
+        let color = "squadra";
         if (key != 0) {
             if (squadra1.includes(key)) color = "squadra1";
             else if (squadra2.includes(key)) color = "squadra2";
@@ -624,7 +624,7 @@ function changeSquadra1() {
 function changeSquadra2() {
     let str = `<h3>Squadra 2</h3>`;
     for (let key in persone) {
-        let color = "";
+        let color = "squadra";
         if (key != 0) {
             if (squadra1.includes(key)) color = "squadra1";
             else if (squadra2.includes(key)) color = "squadra2";

@@ -424,7 +424,6 @@ footer #fra {
     cursor: pointer; /* Icona della mano */
     flex: 0 0 28%; /* Due colonne: ogni elemento occupa il 48% */
     margin: 8px 1%; /* Spaziatura uniforme */
-    background-color: #333; /* Sfondo del label */
     border-radius: 4px; /* Angoli arrotondati */
     text-align: center; /* Testo centrato */
     transition: background-color 0.3s ease; /* Effetto al passaggio del mouse */
@@ -568,9 +567,13 @@ input[type="file"] {
     margin: 0%;
     margin-left: 5%;
 }
+
 .squadra1{
     background-color: #0000ff;
 }
 .squadra2{
     background-color: #ff0000;
+}
+.squadra {
+    background-color: rgb(51, 51, 51);
 }
