@@ -25,7 +25,7 @@ ogg[2] = 1;
 let nwindow;
 const consoleDiv = document.getElementById("cici");
 const CLIENT_ID = '44a46de2fd8a4b38b962b7dcc81abccc';
-const REDIRECT_URI = 'https://studiopersonale.netlify.app/punteggio1/punteggio.htm';
+const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/punteggio.htm';
 // Salva i metodi originali della console
 const originalLog = console.log;
 const originalError = console.error;
