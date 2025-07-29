@@ -991,9 +991,9 @@ async function fetchCurrentTrack() {
         const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
             headers: { Authorization: `Bearer ${token}` }
         });
-
-        if (response.status === 200) {
-            const data = await res.json();
+        const data = await res.json();
+        console.log('Token Response:', data);
+        if (res.status === 200) {
             let ogg1 = [3];
             ogg1[0] = data.item.name;
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
