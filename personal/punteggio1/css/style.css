@@ -433,7 +433,7 @@ footer #fra {
 
 .SelectorSq label:hover,
 .SelectorSq label:focus {
-    background-color: #555;
+    background-color: #554;
     /* Highlight on hover or focus */
 }
 .SelectorSq label p{
