@@ -1344,4 +1344,3 @@ if ('serviceWorker' in navigator) {
 }
 */
 
-handleRedirect();
