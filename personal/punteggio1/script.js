@@ -32,10 +32,10 @@ const originalError = console.error;
 
 // Funzione per aggiungere testo al div
 function appendToDiv(message, type = "log") {
-    const logElement = document.createElement("div");
+    /*const logElement = document.createElement("div");
     logElement.textContent = `[${type.toUpperCase()}] ${message}`;
     logElement.style.color = type === "error" ? "red" : "lightgray";
-    consoleDiv.appendChild(logElement);
+    consoleDiv.appendChild(logElement);*/
 }
 
 // Sovrascrive console.log
