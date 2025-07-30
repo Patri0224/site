@@ -132,7 +132,7 @@ function updateBackground() {
     const imm1 = document.getElementById('triangle-image');
     const imm2 = document.getElementById('triangle-image2');
     const imm3 = document.getElementById('triangle-image3');
-   
+
 
     let scoreDiff = score1 - score2;
     if (scoreDiff > maxSpostamento) scoreDiff = maxSpostamento;
@@ -431,11 +431,15 @@ window.addEventListener('load', function () {
     const punt = localStorage.getItem("punt");
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
-    if (imageTeam1) document.getElementById('1').src = imageTeam1;
 
     if (nameTeam2) document.getElementById('name-team2').textContent = nameTeam2;
     if (scoreTeam2) document.getElementById('score-team2').textContent = scoreTeam2;
-    if (imageTeam2) document.getElementById('2').src = imageTeam2;
+    try {
+        if (imageTeam1) document.getElementById('1').src = imageTeam1;
+        if (imageTeam2) document.getElementById('2').src = imageTeam2;
+    } catch (error) {
+        //do nothing, immagini non valide
+    }
     if (h1) punteggio1 = h1;
     if (h2) punteggio2 = h2;
     if (m1) squadra1 = m1;
@@ -1069,6 +1073,13 @@ async function handleRedirect() {
 async function fetchCurrentTrack(num) {
     let tempPunto = punto;
     const token = localStorage.getItem('access_token');
+
+    // Controllo se non c'è token o se sei offline
+    if (!token || !navigator.onLine) {
+        console.warn('Token mancante o offline. Spotify disattivato.');
+        current_track[tempPunto] = ogg;
+        return;
+    }
     try {
         const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
             headers: { Authorization: `Bearer ${token}` }
