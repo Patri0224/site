@@ -314,9 +314,10 @@ function preset() {
         current_track = [];
         tempi = [];
         punto = 0;
-        squadra1 = "2;9;11;13";
-        squadra2 = "1;6;10;14";
+        squadra1 = "2;14;21;28";
+        squadra2 = "1;6;9;19";
         fra = 0;
+        tempoTemp = getCurrentTimeInSeconds();
 
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
@@ -488,11 +489,11 @@ function showGraf() {
     console.log(punteggio1);
     console.log(punteggio2);
     console.log(tempi);
-
+    console.log(squadra1);
+    console.log(squadra2);
 
     let array = creaArrayZero(numPersone + 4);
     let array1 = creaArrayZero(numPersone + 4);
-    console.log(array);
     const arr1 = punteggio1.split(";");
     const arr2 = punteggio2.split(";");
     let str = `<div id="primaRiga" class='riga'><p>Grafico punteggi</p></div> `;
@@ -567,8 +568,10 @@ function showGraf() {
             arrayTempMediaSomma[i] = 0;
         }
     }
-    console.log(squadra1);
-    console.log(squadra2);
+    console.log(arrayTempMediaSomma);
+    console.log(arrayTempMin);
+    console.log(arrayTempMax);
+
     try {
         // Ordinamento dell'array
         let sortedArray = Object.entries(array);
@@ -579,7 +582,7 @@ function showGraf() {
             const key = sortedArray[i][0]; // La chiave dell'elemento
             const value = sortedArray[i][1];
             if (key != 0 && value > 0) { // Non aggiungere la chiave "0" poiché non corrisponde a una persona
-                str += `<p class="text1" onclick="canzoniPerPersona(${key})">${persone[key]}: ${value}</p>`;
+                str += `<p class="text1" onclick="canzoniPerPersona(${key})">${persone[key]}: ${value} con ${arrayTempMediaSomma[key]}s/c (${arrayTempMin[key]}-${arrayTempMax[key]})</p>`;
             }
         }
         str += "</div>";
@@ -779,10 +782,9 @@ function setTitoloChecked(op) {
         document.getElementById("team" + 1 + "-checkbox3").checked = false;
     }
 }
-//Fra
-function Fra() {
-    fra++;
-    document.getElementById("fra").innerHTML = "Fra: " + fra;
+//timer per calcolare il tempo di risposta
+function startTimer() {
+    tempoTemp = getCurrentTimeInSeconds();
 }
 //Reload pagina
 function reload() {
