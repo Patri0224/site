@@ -132,11 +132,7 @@ function updateBackground() {
     const imm1 = document.getElementById('triangle-image');
     const imm2 = document.getElementById('triangle-image2');
     const imm3 = document.getElementById('triangle-image3');
-    if (score1 == '0' && score2 == '0') {
-
-    } else {
-
-    }
+   
 
     let scoreDiff = score1 - score2;
     if (scoreDiff > maxSpostamento) scoreDiff = maxSpostamento;
