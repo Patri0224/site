@@ -767,8 +767,11 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
-tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
-       
+    tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
+    if (current_track[punto] != null) {
+        if (current_track[punto][0] == 1)
+            fetchCurrentTrack(2);
+    }
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
@@ -802,10 +805,7 @@ function reload() {
 
 // Funzione per aggiungere punti in base alle checkbox selezionate
 function addSelectedPoints(team) {
-    if (current_track[punto] != null) {
-        if (current_track[punto][0] == 1)
-            fetchCurrentTrack(2);
-    }
+
     document.getElementById("currentSong").innerHTML = "";
     let totalPoints = 0;
     const checkbox1 = document.getElementById(team + '-checkbox1');
@@ -817,8 +817,10 @@ function addSelectedPoints(team) {
         if (checkbox3.checked) totalPoints += 1;
     }
     if (totalPoints != 0) {
-        
         addPoints(team, totalPoints);
+    } else {
+        current_track[punto] = ogg;
+
     }
 
     // Deseleziona le checkbox dopo aver aggiunto i punti
@@ -876,16 +878,16 @@ function listaCanzoni() {
                 }
                 str += `<div class="rig">
                             <div class="rigg">
-                                <p>${song[0]}</p>
+                                <a href="https://open.spotify.com/track/${song[2]}" target="_blank"><p>${song[0]}</p></a>
                             </div>
                             <div class="rigg">
-                                <p class="desc">indovinata da:${persona} a ${t} <a href="https://open.spotify.com/track/${song[2]}" target="_blank">Link</a></p>
+                                <p class="desc">indovinata da:${persona} a ${t} s. Link</p>
                             </div>
                         </div>`
             }
         }
     } catch (errore) {
-        str += "errore" + errore;
+        console.error("Errore durante la generazione della lista delle canzoni:", errore);
     }
 
     document.getElementById("canzoni").innerHTML = str;

@@ -1,7 +1,7 @@
 /* Stile generale */
 body {
     font-family: Arial, sans-serif;
-    background: linear-gradient(to top, #ff0000, #2b00ff);
+    background: linear-gradient(to left, #a00000, #0000a0);
     color: #ffffff;
     display: flex;
     justify-content: center;
@@ -30,7 +30,7 @@ body {
     clip-path: polygon(0% 0%, 50% 0%, 50% 110%, 0% 110%);
     z-index: -20;
     overflow: hidden;
-    background-color: #001eff7d;
+    background-color: #001eff50;
     transition: clip-path 0.7s ease-in-out;
 }
 
@@ -47,7 +47,7 @@ body {
     height: 100%;
     clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
     z-index: -20;
-    background-color: #ff00007a;
+    background-color: #ff000050;
     transition: clip-path 0.7s ease-in-out;
 }
 
@@ -417,13 +417,14 @@ footer #startTimer {
     align-items: center; /* Allinea checkbox e testo verticalmente */
     justify-content: flex-start; /* Allinea il contenuto orizzontalmente */
     color: white; /* Colore del testo */
+    font-size: small;
     cursor: pointer; /* Icona della mano */
     flex: 0 0 28%; /* Due colonne: ogni elemento occupa il 48% */
     margin: 8px 1%; /* Spaziatura uniforme */
     border-radius: 4px; /* Angoli arrotondati */
     text-align: center; /* Testo centrato */
     transition: background-color 0.3s ease; /* Effetto al passaggio del mouse */
-    gap: 8px; /* Spaziatura tra il checkbox e il testo */
+    gap: 3px; /* Spaziatura tra il checkbox e il testo */
     padding: 4px; /* Aggiunge spazio interno */
 }
 
@@ -435,7 +436,7 @@ footer #startTimer {
 .SelectorSq label p{
     margin: 0px;
     padding: 0px;
-    margin-top: 4px;
+    margin-top: 1px;
 }
 .SelectorSq button{
     margin: 5px;
@@ -456,7 +457,7 @@ footer #startTimer {
     left: 0%;
     top: 0%;
     margin-top: 0%;
-    width: 85%;
+    width: 100%;
     height: 95%;
     padding: 0%;
     justify-content: left;
@@ -494,8 +495,8 @@ footer #startTimer {
 
 #menu button,
 #menu .dv {
-    background-color: #0a008f;
-    color: #dbf8ff;
+    background-color: #56547d;
+    color: #ffffff;
     font-size: 1em;
     cursor: pointer;
     border: none;
@@ -514,7 +515,7 @@ footer #startTimer {
 }
 
 #menu button:hover {
-    background-color: #0014a9;
+    background-color: #3948ba;
 }
 
 .rigg p {
