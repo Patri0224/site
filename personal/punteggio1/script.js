@@ -767,7 +767,6 @@ function settaSquadre() {
 
 
 function setTitoloChecked(op) {
-    tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
 
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
@@ -816,8 +815,12 @@ function addSelectedPoints(team) {
         totalPoints += 1;
         if (checkbox3.checked) totalPoints += 1;
     }
-    if (totalPoints != 0)
+    if (totalPoints != 0) {
+        tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
+        if (current_track[punto] != null && current_track[punto][0] != 1)
+            tempi[punto] = current_track[punto][3];
         addPoints(team, totalPoints);
+    }
 
     // Deseleziona le checkbox dopo aver aggiunto i punti
     checkbox1.checked = false;
@@ -1076,10 +1079,11 @@ async function fetchCurrentTrack(num) {
         const data = await res.json();
         console.log('Token Response:', data);
         if (res.status === 200) {
-            let ogg1 = [3];
+            let ogg1 = [4];
             ogg1[0] = data.item.name;
             ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
             ogg1[2] = data.item.id;
+            ogg1[3] = data.progress_ms / 1000; // Convert milliseconds to seconds
             current_track[tempPunto] = ogg1;
             if (num == 3) document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
         } else {
@@ -1094,11 +1098,15 @@ async function fetchCurrentTrack(num) {
 
 function songsToString(oggg) {
     var str = "";
-    for (let index = 0; index < oggg.length; index++) {
-        str += oggg[index][0] + "||" + oggg[index][1] + "||" + oggg[index][2];
-        if (index < oggg.length - 1) {
-            str += "///";
+    try {
+        for (let index = 0; index < oggg.length; index++) {
+            str += oggg[index][0] + "||" + oggg[index][1] + "||" + oggg[index][2];
+            if (index < oggg.length - 1) {
+                str += "///";
+            }
         }
+    } catch (errore) {
+        str = null;
     }
     return str;
 }
