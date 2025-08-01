@@ -778,7 +778,7 @@ function Set2() {
     settaSquadre();
 }
 function settaSquadre() {
-    let str = `<label for="1p-1"><input type="radio" id="1p-1" name="pTeam1" value="0" checked>Nessuno</label>`;
+    let str = `<label for="1p-1"><input onclick="deselectCheckboxs()" type="radio" id="1p-1" name="pTeam1" value="0" checked>Nessuno</label>`;
 
     if (squadra1.length != 0) {
         let sq = squadra1.split(";");
@@ -788,7 +788,7 @@ function settaSquadre() {
     }
     document.getElementById("partecipanti1").innerHTML = str;
 
-    str = `<label for="2p-1"><input type="radio" id="2p-1" name="pTeam2" value="0" checked>Nessuno</label>`;
+    str = `<label for="2p-1"><input onclick="deselectCheckboxs()" type="radio" id="2p-1" name="pTeam2" value="0" checked>Nessuno</label>`;
 
     if (squadra2.length != 0) {
         sq = squadra2.split(";");
@@ -808,17 +808,12 @@ function setTitoloChecked(op) {
         if (current_track[punto][0] == 1)
             fetchCurrentTrack(2);
     }
+    deselectCheckboxs();
     document.getElementById("team" + op + "-checkbox1").checked = true;
     if (op == 1) {
         document.getElementById("2p-1").checked = true;
-        document.getElementById("team" + 2 + "-checkbox1").checked = false;
-        document.getElementById("team" + 2 + "-checkbox2").checked = false;
-        document.getElementById("team" + 2 + "-checkbox3").checked = false;
     } else if (op == 2) {
         document.getElementById("1p-1").checked = true;
-        document.getElementById("team" + 1 + "-checkbox1").checked = false;
-        document.getElementById("team" + 1 + "-checkbox2").checked = false;
-        document.getElementById("team" + 1 + "-checkbox3").checked = false;
     }
 }
 //timer per calcolare il tempo di risposta
