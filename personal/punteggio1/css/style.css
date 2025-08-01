@@ -101,12 +101,12 @@ body {
 .score {
     font-size: 2.6em;
     margin: 0px;
-    color: #b4d8ff;
+    color: #ffffff;
     text-shadow:
-        -1px -1px 0 #003b7a,
-        1px -1px 0 #003b7a,
-        -1px 1px 0 #003b7a,
-        1px 1px 0 #003b7a;
+        -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+        -1px 1px 0 #000000,
+        1px 1px 0 #000000;
 }
 
 /* Stile dei pulsanti di aggiunta punti*/
@@ -137,8 +137,8 @@ body {
 }
 
 .add1 {
-    background-color: #1fbc00;
-    color: #fff;
+    background-color: #FACC15;
+    color: #000000;
 }
 
 .add2 {
@@ -152,7 +152,7 @@ body {
 }
 
 .add-selected {
-    background-color: #fbff00;
+    background-color: #FACC15;
     color: #333;
 }
 
@@ -193,10 +193,11 @@ footer {
     /* Centra i pulsanti orizzontalmente */
     gap: 20px;
     /* Aggiunge spazio tra i pulsanti */
+    border-top:#5f6164 1px solid;
 }
 
 footer button {
-    background-color: #10B981;
+    background-color: #36a882;
     color: #fff;
     padding: 5px 10px;
     font-size: 1em;
@@ -220,13 +221,13 @@ footer #mm {
 }
 
 footer #m1 {
-    float: right;
+    float: left;
     width: fit-content;
     margin: 1%;
 }
 
 footer #startTimer {
-    float: right;
+    float: center;
     width: fit-content;
     margin: 1%;
 }

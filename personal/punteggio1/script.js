@@ -679,9 +679,9 @@ function indietroPunteggio() {
 }
 function controlloIndietro() {
     if (punteggio1.length > 4 && punteggio2.length > 4) {
-        document.getElementById("ind").style.backgroundColor = "blue";
+        document.getElementById("ind").style.backgroundColor = "#227bd9ff";
     } else {
-        document.getElementById("ind").style.backgroundColor = "red";
+        document.getElementById("ind").style.backgroundColor = "#EF4444";
     }
 }
 function showError() {
