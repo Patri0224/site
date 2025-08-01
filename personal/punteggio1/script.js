@@ -41,7 +41,6 @@ var punteggio1 = "0|0";
 var punteggio2 = "0|0";
 var squadra1 = "";
 var squadra2 = "";
-var fra = 0;
 const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
 const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
 const spessoreBarra = 2;//in percentuale
@@ -165,12 +164,12 @@ function updateBackground() {
 function controlImgBackground() {
     let img1 = document.getElementById('1');
     let img2 = document.getElementById('2');
-    if (img1.src == null || img1.src == "" || img1.src.includes("/null")) {
+    if (img1.src == null || img1.src == "" || img1.src.includes("null")) {
         img1.style.display = "none";
     } else {
         img1.style.display = "block";
     }
-    if (img2.src == null || img2.src == "" || img2.src.includes("/null")) {
+    if (img2.src == null || img2.src == "" || img2.src.includes("null")) {
         img2.style.display = "none";
     } else {
         img2.style.display = "block";
@@ -250,7 +249,6 @@ function saveData() {
     const h2 = punteggio2;
     const m1 = squadra1;
     const m2 = squadra2;
-    const fraa = fra;
     const punt = punto;
     const songs = songsToString(current_track);
     const temps = tempi.join(";");
@@ -271,7 +269,6 @@ function saveData() {
             history: h2,
             member: m2
         },
-        fra: fraa,
         songs: songs,
         temps: temps,
         punt: punt
@@ -318,7 +315,6 @@ function loadData(event) {
             punteggio2 = data.team2.history;
             squadra1 = data.team1.member;
             squadra2 = data.team2.member;
-            fra = data.fra;
             punto = data.punt;
             current_track = songsFromString(data.songs);
             tempi = data.temps.split(";");
@@ -353,7 +349,6 @@ function preset() {
         punto = 0;
         squadra1 = "2;14;21;28";
         squadra2 = "1;6;9;19";
-        fra = 0;
         tempoTemp = getCurrentTimeInSeconds();
 
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
@@ -366,7 +361,6 @@ function preset() {
         localStorage.setItem("h2", punteggio2);
         localStorage.setItem("m1", squadra1);
         localStorage.setItem("m2", squadra2);
-        localStorage.setItem("fra", fra);
         localStorage.setItem("punt", punto);
         localStorage.setItem("songs", current_track);
         localStorage.setItem("temps", tempi);
@@ -406,7 +400,6 @@ function reset() {
         punto = 0;
         squadra1 = "";
         squadra2 = "";
-        fra = 0;
 
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
@@ -418,7 +411,6 @@ function reset() {
         localStorage.setItem("h2", punteggio2);
         localStorage.setItem("m1", squadra1);
         localStorage.setItem("m2", squadra2);
-        localStorage.setItem("fra", fra);
         localStorage.setItem("punt", punto);
         localStorage.setItem("songs", current_track);
         localStorage.setItem("temps", tempi);
@@ -452,7 +444,6 @@ window.addEventListener('beforeunload', function () {
     localStorage.setItem("h2", punteggio2);
     localStorage.setItem("m1", squadra1);
     localStorage.setItem("m2", squadra2);
-    localStorage.setItem("fra", fra);
     localStorage.setItem("punt", punto);
     localStorage.setItem("songs", songsToString(current_track));
     localStorage.setItem("temps", tempi.join(";"));
@@ -468,7 +459,6 @@ window.addEventListener('load', function () {
     const h2 = localStorage.getItem("h2");
     const m1 = localStorage.getItem("m1");
     const m2 = localStorage.getItem("m2");
-    const fraa = localStorage.getItem("fra");
     const songs = localStorage.getItem("songs");
     const temps = localStorage.getItem("temps");
     const punt = localStorage.getItem("punt");
@@ -487,7 +477,6 @@ window.addEventListener('load', function () {
     if (h2) punteggio2 = h2;
     if (m1) squadra1 = m1;
     if (m2) squadra2 = m2;
-    if (fraa) fra = fraa;
     if (songs) current_track = songsFromString(songs);
     if (temps) tempi = temps.split(";");
     if (punt) punto = parseInt(punt);
@@ -711,6 +700,10 @@ function showMenu(op) {
         document.getElementById("grafico").style.display = "none";
     }
 }
+
+
+
+
 //Usati per gestire le squadre
 function changeSquadra1() {
     let str = `<h3 style="color: #bbbbff;">Squadra 1</h3>`;

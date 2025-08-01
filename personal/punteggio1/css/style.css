@@ -409,7 +409,7 @@ footer #startTimer {
     height: 96%;
     padding: 2%;
     flex-wrap: wrap;
-    background-color: #111827;
+    background-color: #1F2937;
 }
 
 .SelectorSq label {
@@ -419,13 +419,13 @@ footer #startTimer {
     color: white; /* Colore del testo */
     font-size: small;
     cursor: pointer; /* Icona della mano */
-    flex: 0 0 28%; /* Due colonne: ogni elemento occupa il 48% */
+    flex: 0 0 22%; /* Due colonne: ogni elemento occupa il 48% */
     margin: 8px 1%; /* Spaziatura uniforme */
     border-radius: 4px; /* Angoli arrotondati */
     text-align: center; /* Testo centrato */
     transition: background-color 0.3s ease; /* Effetto al passaggio del mouse */
-    gap: 3px; /* Spaziatura tra il checkbox e il testo */
-    padding: 4px; /* Aggiunge spazio interno */
+    gap: 1px; /* Spaziatura tra il checkbox e il testo */
+    padding: 1px; /* Aggiunge spazio interno */
 }
 
 .SelectorSq label:hover,
@@ -572,5 +572,5 @@ input[type="file"] {
     background-color: #ff0000;
 }
 .squadra {
-    background-color: rgb(51, 51, 51);
+    background-color: #5f6164;
 }
