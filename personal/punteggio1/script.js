@@ -1085,12 +1085,6 @@ async function fetchCurrentTrack(num) {
             headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
-        const contentType = res.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-            console.log("Track:", data);
-        } else {
-            console.warn("Risposta non-JSON:", data);
-        }
         console.log('Token Response:', data);
         if (res.status === 200) {
             let ogg1 = [4];
