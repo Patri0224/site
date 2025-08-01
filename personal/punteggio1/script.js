@@ -82,6 +82,21 @@ console.error = function (...args) {
     originalError.apply(console, args); // Mantiene il comportamento originale
     appendToDiv(args.join(" "), "error"); // Aggiunge al div
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function changeTeamName(team) {
     const teamElement = document.getElementById('name-' + team);
     const newName = prompt("Inserisci il nuovo nome della squadra:");
@@ -170,6 +185,7 @@ function changeBackground1() {
         const reader = new FileReader();
         reader.onload = function (event) {
             document.getElementById("1").src = event.target.result;
+            document.getElementById("1").style.display = "block";
             controlImgBackground();
         }
         reader.readAsDataURL(file);
@@ -188,6 +204,7 @@ function changeBackground2() {
         const reader = new FileReader();
         reader.onload = function (event) {
             document.getElementById("2").src = event.target.result;
+            document.getElementById("2").style.display = "block";
             controlImgBackground();
         }
         reader.readAsDataURL(file);
@@ -198,6 +215,26 @@ function changeBackground2() {
     updateBackground();
     showMenu(2);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //salvataggio delle partite in file
 function saveData() {
     // Ottieni i dati delle squadre
@@ -272,9 +309,11 @@ function loadData(event) {
             document.getElementById('name-team1').textContent = data.team1.name;
             document.getElementById('score-team1').textContent = data.team1.score;
             document.getElementById('1').src = data.team1.image;
+            document.getElementById('1').style.display = "block";
             document.getElementById('name-team2').textContent = data.team2.name;
             document.getElementById('score-team2').textContent = data.team2.score;
             document.getElementById('2').src = data.team2.image;
+            document.getElementById('2').style.display = "block";
             punteggio1 = data.team1.history;
             punteggio2 = data.team2.history;
             squadra1 = data.team1.member;
@@ -302,9 +341,11 @@ function preset() {
         document.getElementById('name-team1').textContent = "Andrilde";
         document.getElementById('score-team1').textContent = "0";
         document.getElementById('1').src = null;
+        document.getElementById('1').style.display = "none";
         document.getElementById('name-team2').textContent = "Frarco";
         document.getElementById('score-team2').textContent = "0";
         document.getElementById('2').src = null;
+        document.getElementById('2').style.display = "none";
         punteggio1 = "0|0";
         punteggio2 = "0|0";
         current_track = [];
@@ -353,9 +394,11 @@ function reset() {
         document.getElementById('name-team1').textContent = "Team 1";
         document.getElementById('score-team1').textContent = "0";
         document.getElementById('1').src = null;
+        document.getElementById('1').style.display = "none";
         document.getElementById('name-team2').textContent = "Team 2";
         document.getElementById('score-team2').textContent = "0";
         document.getElementById('2').src = null;
+        document.getElementById('2').style.display = "none";
         punteggio1 = "0|0";
         punteggio2 = "0|0";
         current_track = [];
