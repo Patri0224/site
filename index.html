@@ -1,69 +1,119 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Press Down Menu</title>
+    <title>Menu a Discesa</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .menu-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .menu-container {
             position: relative;
-            display: inline-block;
         }
 
         .menu-button {
             background-color: #3498db;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border: none;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-button:hover {
+            background-color: #2980b9;
         }
 
         .menu-dropdown {
             display: none;
             position: absolute;
-            background-color: white;
-            min-width: 160px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            z-index: 1;
+            top: 110%;
+            left: 0;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            min-width: 220px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            overflow: hidden;
         }
 
         .menu-dropdown a {
             display: block;
-            color: black;
-            padding: 10px;
+            padding: 12px 16px;
+            color: #333;
             text-decoration: none;
+            transition: background-color 0.2s;
         }
 
         .menu-dropdown a:hover {
-            background-color: #f1f1f1;
+            background-color: #f0f0f0;
         }
 
-        .menu-container:hover .menu-dropdown {
+        .menu-container.open .menu-dropdown {
             display: block;
         }
     </style>
 </head>
 
 <body>
-    <div class="menu-container">
-        <button class="menu-button">Personali</button>
-        <div class="menu-dropdown">
-            <a href="personal/punteggio/punteggio.html">Vai alla pagina del punteggio obsoleta</a>
-            <a href="personal/punteggio1/punteggio.html">Vai alla pagina del punteggio</a>
-            <a href="personal/spada/index.html">spada</a>
-            <a href="personal/fra.html">per fra</a>
+    <div class="menu-wrapper">
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu(this)">Personali</button>
+            <div class="menu-dropdown">
+                <a href="personal/punteggio/punteggio.html">Vai alla pagina del punteggio obsoleta</a>
+                <a href="personal/punteggio1/punteggio.html">Vai alla pagina del punteggio</a>
+                <a href="personal/spada/index.html">Spada</a>
+                <a href="personal/fra.html">Per Fra</a>
+            </div>
+        </div>
+        <div class="menu-container">
+            <button class="menu-button" onclick="toggleMenu(this)">Universitari</button>
+            <div class="menu-dropdown">
+                <a href="uni/inndex.html">Index Uni</a>
+            </div>
         </div>
     </div>
-    <div class="menu-container">
-        <button class="menu-button">Universitari</button>
-        <div class="menu-dropdown">
-            <a href="uni/inndex.html">indexUni</a>
-        </div>
-    </div>
+
+    <script>
+        function toggleMenu(button) {
+            const container = button.parentElement;
+            const wasOpen = container.classList.contains('open');
+
+            // Chiude tutti gli altri menu
+            document.querySelectorAll('.menu-container').forEach(el => el.classList.remove('open'));
+
+            // Apre o richiude quello selezionato
+            if (!wasOpen) {
+                container.classList.add('open');
+            }
+        }
+
+        // Chiude il menu cliccando fuori
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.menu-container')) {
+                document.querySelectorAll('.menu-container').forEach(el => el.classList.remove('open'));
+            }
+        });
+    </script>
 </body>
 
 </html>
