@@ -456,6 +456,58 @@ footer #startTimer {
     margin-left: 3%;
     text-align: center;
 }
+#lista-partite {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 2%;
+    background-color: #1F2937;
+    color: white;
+    z-index: 30;
+    position: relative;
+    width: 96%;
+    height: auto;
+    border-radius: 6px;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+/* Ogni voce della lista */
+#lista-partite li {
+    list-style: none;
+    flex: 0 0 46%;
+    background-color: #2D3748;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: small;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover/focus */
+#lista-partite li:hover,
+#lista-partite li:focus {
+    background-color: #554;
+}
+
+/* Titolo opzionale */
+#lista-partite h3 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+/* Nessuna partita */
+#lista-partite p {
+    width: 100%;
+    text-align: center;
+    color: #ccc;
+}
+
+
+
 #menu {
     display: none;
     z-index: 5;

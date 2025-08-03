@@ -16,7 +16,7 @@
         <div id="triangle-image2"><img id="2" src="" alt="Background Image"></div>
         <div id="triangle-image3"></div>
     </div>
-    
+
     <div id="menu">
         <div class="rig">
             <div class="rigg">
@@ -93,6 +93,17 @@
         </div>
         <div class="rig">
             <div class="rigg">
+                <p>Backup su database</p>
+            </div>
+            <div class="rigg"><button onclick="asyncsaveMatch()">Save</button>
+                <p class="desc">Salvare la partita sul database</p>
+            </div>
+            <div class="rigg"><button onclick="mostraListaPartite()">Load</button>
+                <p class="desc">Caricare la partita dal database</p>
+            </div>
+        </div>
+        <div class="rig">
+            <div class="rigg">
                 <button onclick="generaPDF()">PDF</button>
                 <p class="desc">Genera il pdf della partita</p>
             </div>
@@ -104,13 +115,13 @@
             </div>
         </div>
     </div>
-    
+
     <div id="grafico"></div>
     <div id="canzoni"></div>
     <div id="cici"></div>
     <div id="Sq1" class="SelectorSq"></div>
     <div id="Sq2" class="SelectorSq"></div>
-
+    <div id="lista-partite"></div>
     <!-- Contenitore principale del punteggio -->
     <div class="scoreboard">
         <!-- Squadra 1 -->
