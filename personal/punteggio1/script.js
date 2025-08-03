@@ -171,7 +171,7 @@ async function caricaPartitaDaDB(idPartita) {
     tempi = data.tempi ? data.tempi.split(";") : [];
 
     // Se vuoi aggiornare anche l'intestazione con il nome della partita:
-    
+
 }
 
 async function mostraListaPartite() {
@@ -1586,4 +1586,4 @@ if ('serviceWorker' in navigator) {
         .catch((error) => console.error('Registrazione Service Worker fallita:', error));
 }
 */
-
+handleRedirect();
