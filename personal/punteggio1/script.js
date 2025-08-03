@@ -474,6 +474,7 @@ function preset() {
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
+        accessToken = null; // Resetta il token globale
 
         // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
@@ -525,6 +526,7 @@ function reset() {
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
+        accessToken = null; // Resetta il token globale
 
         // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
@@ -555,6 +557,8 @@ function salvaStatoTemporaneo() {
     localStorage.setItem("punt", punto);
     localStorage.setItem("songs", songsToString(current_track));
     localStorage.setItem("temps", tempi.join(";"));
+    localStorage.setItem("access_token", accessToken); // Salva il token di accesso
+
 }
 
 // ✅ Più affidabile di beforeunload su iOS
@@ -581,7 +585,7 @@ window.addEventListener('load', function () {
     const songs = localStorage.getItem("songs");
     const temps = localStorage.getItem("temps");
     const punt = localStorage.getItem("punt");
-
+    accessToken = localStorage.getItem("access_token"); // Ripristina il token di accesso
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
     if (nameTeam2) document.getElementById('name-team2').textContent = nameTeam2;
@@ -1198,6 +1202,7 @@ const logout = () => {
     // Rimuovi il token di accesso dal localStorage o sessionStorage
     localStorage.removeItem('access_token');
     sessionStorage.removeItem('access_token');
+    accessToken = null; // Resetta il token globale
     document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/punteggio1/';
     // Rimuovi il token dalla barra degli indirizzi
     window.location.hash = '';
@@ -1222,6 +1227,7 @@ async function handleRedirect() {
 
     const data = await response.json();
     localStorage.setItem('access_token', data.access_token);
+    accessToken = data.access_token;
     window.history.replaceState({}, document.title, REDIRECT_URI); // pulisce URL
 }
 
@@ -1229,7 +1235,8 @@ async function handleRedirect() {
 async function fetchCurrentTrack(num) {
     let tempPunto = punto;
     const token = localStorage.getItem('access_token');
-
+    if (!token)
+        token = accessToken; // Usa il token globale se non è nel localStorage
     // Controllo se non c'è token o se sei offline
     if (!token || !navigator.onLine) {
         console.warn('Token mancante o offline. Spotify disattivato.');
