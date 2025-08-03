@@ -60,29 +60,40 @@ const consoleDiv = document.getElementById("cici");
 const CLIENT_ID = '44a46de2fd8a4b38b962b7dcc81abccc';
 const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/punteggio.htm';
 
-// Salva i metodi originali della console
-const originalLog = console.log;
-const originalError = console.error;
+(function () {
+    const outputDiv = document.getElementById('console-output');
 
-// Funzione per aggiungere testo al div
-function appendToDiv(message, type = "log") {
-    /*const logElement = document.createElement("div");
-    logElement.textContent = `[${type.toUpperCase()}] ${message}`;
-    logElement.style.color = type === "error" ? "red" : "lightgray";
-    consoleDiv.appendChild(logElement);*/
-}
+    function appendToConsoleDiv(type, args) {
+        const message = Array.from(args).map(arg => 
+            typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+        ).join(' ');
 
-// Sovrascrive console.log
-console.log = function (...args) {
-    originalLog.apply(console, args); // Mantiene il comportamento originale
-    appendToDiv(args.join(" "), "log"); // Aggiunge al div
-};
+        const line = `[${type.toUpperCase()}] ${message}`;
+        const p = document.createElement('div');
+        p.textContent = line;
+        outputDiv.appendChild(p);
+    }
 
-// Sovrascrive console.error
-console.error = function (...args) {
-    originalError.apply(console, args); // Mantiene il comportamento originale
-    appendToDiv(args.join(" "), "error"); // Aggiunge al div
-};
+    const originalLog = console.log;
+    const originalWarn = console.warn;
+    const originalError = console.error;
+
+    console.log = function (...args) {
+        appendToConsoleDiv('log', args);
+        originalLog.apply(console, args);
+    };
+
+    console.warn = function (...args) {
+        appendToConsoleDiv('warn', args);
+        originalWarn.apply(console, args);
+    };
+
+    console.error = function (...args) {
+        appendToConsoleDiv('error', args);
+        originalError.apply(console, args);
+    };
+})();
+
 
 
 function mostraListaPartite() {
