@@ -32,8 +32,7 @@ const persone = {
     29: "Viola"
 };
 
-import { neon } from '@netlify/neon';
-const sql = neon(); // automatically uses env NETLIFY_DATABASE_URL
+ // automatically uses env NETLIFY_DATABASE_URL
 //
 let numPersone = Object.keys(persone).length;
 var premuto = false;//per conferma indietro

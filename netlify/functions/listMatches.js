@@ -1,5 +1,5 @@
-import { sql } from "@netlify/neon";
-
+import { neon } from '@netlify/neon';
+const sql = neon();
 export async function handler(event, context) {
   try {
     const partite = await sql`
