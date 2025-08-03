@@ -30,6 +30,7 @@ export async function handler(event, context) {
     const songs = current_track; // presumo già stringa o convertita lato client
 
     if (idPartita === 0) {
+      console.log('Inserting new match');
       const [post] = await sql`
         INSERT INTO public.partita (
           punteggio_1, punteggio_2,
@@ -53,6 +54,8 @@ export async function handler(event, context) {
         body: JSON.stringify({ id: post.id })
       };
     } else {
+
+      console.log('Updating match');
       await sql`
         UPDATE public.partita SET
           punteggio_1 = ${h1},

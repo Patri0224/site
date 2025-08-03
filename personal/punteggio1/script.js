@@ -166,7 +166,7 @@ function salvaPartita() {
         return;
     }
     const body = {
-        idPartita: idCorrente || 0, // se 0 => nuova
+        idPartita: idCorrente, // se 0 => nuova
         team1Name: document.getElementById('name-team1').textContent,
         team1Score: document.getElementById('score-team1').textContent,
         team2Name: document.getElementById('name-team2').textContent,
