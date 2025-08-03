@@ -31,7 +31,7 @@ export async function handler(event, context) {
 
     if (idPartita === 0) {
       const [post] = await sql`
-        INSERT INTO posts (
+        INSERT INTO public.partita (
           punteggio_1, punteggio_2,
           squadra1, squadra2,
           punto, current_track,
@@ -54,7 +54,7 @@ export async function handler(event, context) {
       };
     } else {
       await sql`
-        UPDATE posts SET
+        UPDATE public.partita SET
           punteggio_1 = ${h1},
           punteggio_2 = ${h2},
           squadra1 = ${m1},

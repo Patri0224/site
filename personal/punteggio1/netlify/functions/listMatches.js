@@ -5,7 +5,7 @@ export async function handler(event, context) {
   try {
     const partite = await sql`
       SELECT id, nome_partita
-      FROM posts
+      FROM public.partita
       ORDER BY id DESC
     `;
 

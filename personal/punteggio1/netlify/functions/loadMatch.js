@@ -12,7 +12,7 @@ export async function handler(event, context) {
       };
     }
 
-    const [data] = await sql`SELECT * FROM posts WHERE id = ${idPartita}`;
+    const [data] = await sql`SELECT * FROM public.partita WHERE id = ${idPartita}`;
 
     if (!data) {
       return {
