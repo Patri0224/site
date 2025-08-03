@@ -1673,5 +1673,4 @@ if ('serviceWorker' in navigator) {
 */
 window.addEventListener('DOMContentLoaded', () => {
     handleRedirect();
-    caricaListaPartite();
 });
