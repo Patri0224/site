@@ -1273,7 +1273,7 @@ async function fetchCurrentTrack(num) {
     let tempPunto = punto;
     let token = localStorage.getItem('access_token') || accessToken;
     console.log('fetchCurrentTrack - token:', token);
-    if (!token || token === null || token === 'undefined' || token === '' || token === 0) {
+    if (!token || token === null || token === 'undefined' || token === '' || token === 0 || token === 'null') {
         console.warn('Token mancante, Spotify disabilitato');
         current_track[tempPunto] = ogg; // fallback locale
         return;
