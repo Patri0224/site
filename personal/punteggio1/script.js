@@ -32,7 +32,7 @@ const persone = {
     29: "Viola"
 };
 
- // automatically uses env NETLIFY_DATABASE_URL
+// automatically uses env NETLIFY_DATABASE_URL
 //
 let numPersone = Object.keys(persone).length;
 var premuto = false;//per conferma indietro
@@ -85,7 +85,11 @@ console.error = function (...args) {
 };
 
 
-function mostraListaPartite(){
+function mostraListaPartite() {
+    if (!navigator.onLine) {
+        alert("Nessuna connessione Internet");
+        return;
+    }
     const lista = document.getElementById('lista-partite');
     if (lista.style.display === 'none' || lista.style.display === '') {
         caricaListaPartite();
@@ -96,6 +100,10 @@ function mostraListaPartite(){
 }
 //database partite
 function caricaListaPartite() {
+    if (!navigator.onLine) {
+        alert("Nessuna connessione Internet");
+        return;
+    }
     fetch('/.netlify/functions/listMatches')
         .then(res => res.json())
         .then(partite => {
@@ -113,6 +121,10 @@ function caricaListaPartite() {
 }
 
 function caricaPartita(idPartitas) {
+    if (!navigator.onLine) {
+        alert("Nessuna connessione Internet");
+        return;
+    }
     fetch(`/.netlify/functions/loadMatch?id=${idPartitas}`)
         .then(res => res.json())
         .then(data => {
@@ -138,6 +150,10 @@ function caricaPartita(idPartitas) {
 }
 
 function salvaPartita() {
+    if (!navigator.onLine) {
+        alert("Nessuna connessione Internet");
+        return;
+    }
     const body = {
         idPartita: idCorrente || 0, // se 0 => nuova
         team1Name: document.getElementById('name-team1').textContent,
