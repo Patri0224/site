@@ -457,7 +457,7 @@ footer #startTimer {
     text-align: center;
 }
 #lista-partite {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     gap: 8px;
     padding: 2%;

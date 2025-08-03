@@ -171,9 +171,7 @@ async function caricaPartitaDaDB(idPartita) {
     tempi = data.tempi ? data.tempi.split(";") : [];
 
     // Se vuoi aggiornare anche l'intestazione con il nome della partita:
-    if (data.nome_partita) {
-        document.getElementById('titolo-partita')?.textContent = data.nome_partita;
-    }
+    
 }
 
 async function mostraListaPartite() {
@@ -202,6 +200,7 @@ async function mostraListaPartite() {
     });
 
     listaContainer.appendChild(ul);
+    listaContainer.style.display = 'flex'; // Mostra la lista
 }
 
 
