@@ -654,7 +654,7 @@ function showGraf() {
     console.log(squadra2);
     console.log(punto);
     console.log(accessToken);
-    console.log()
+    console.log(idCorrente)
 
     let array = creaArrayZero(numPersone + 4);
     let array1 = creaArrayZero(numPersone + 4);
