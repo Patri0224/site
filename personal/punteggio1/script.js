@@ -56,7 +56,7 @@ ogg[0] = 1;
 ogg[1] = 1;
 ogg[2] = 1;
 let nwindow;
-let idPartita = 0;
+let idCorrente = 0;
 const consoleDiv = document.getElementById("cici");
 const CLIENT_ID = '44a46de2fd8a4b38b962b7dcc81abccc';
 const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/punteggio.htm';
@@ -88,120 +88,78 @@ console.error = function (...args) {
 
 
 //database partite
-async function asyncsaveMatch() {
-
-    const team1Name = document.getElementById('name-team1').textContent;
-    const team1Score = document.getElementById('score-team1').textContent;
-    const team2Name = document.getElementById('name-team2').textContent;
-    const team2Score = document.getElementById('score-team2').textContent;
-    const h1 = punteggio1;
-    const h2 = punteggio2;
-    const m1 = squadra1;
-    const m2 = squadra2;
-    const punt = punto;
-    const songs = songsToString(current_track);
-    const temps = tempi.join(";");
-
-    if (idPartita == 0) {
-        const newName = prompt("Inserisci il nome del file:");
-        if (newName == null) return;
-
-        const [post] = await sql`
-  INSERT INTO posts (
-    punteggio_1, punteggio_2,
-    squadra1, squadra2,
-    punto, current_track,
-    tempi, nome_partita,
-    nomes1, nomes2,
-    puntis1, puntis2
-  ) VALUES (
-    ${team1Score}, ${team2Score},
-    ${m1}, ${m2},
-    ${punt}, ${songs},
-    ${temps}, ${newName},
-    ${team1Name}, ${team2Name},
-    ${parseInt(team1Score)}, ${parseInt(team2Score)}
-  )
-RETURNING id
-        `;
-
-        // ⬇️ Salva l'id assegnato dal DB
-        idPartita = post.id;
-
-
-    } else {
-        await sql`
-        UPDATE posts SET
-            punteggio_1 = ${team1Score},
-            punteggio_2 = ${team2Score},
-            squadra1 = ${m1},
-            squadra2 = ${m2},
-            punto = ${punt},
-            current_track = ${songs},
-            tempi = ${temps},
-            nome_partita = nome_partita,
-            nomes1 = ${team1Name},
-            nomes2 = ${team2Name},
-            puntis1 = ${parseInt(team1Score)},
-            puntis2 = ${parseInt(team2Score)}
-        WHERE id = ${idPartita}
-    `;
-    }
-}
-async function caricaPartitaDaDB(idPartita) {
-    const [data] = await sql`SELECT * FROM posts WHERE id = ${idPartita}`;
-    if (!data) {
-        alert("Partita non trovata.");
-        return;
-    }
-
-    // Aggiorna la pagina con i dati letti dal DB
-    document.getElementById('name-team1').textContent = data.nomes1;
-    document.getElementById('score-team1').textContent = data.puntis1;
-    document.getElementById('name-team2').textContent = data.nomes2;
-    document.getElementById('score-team2').textContent = data.puntis2;
-
-    // Variabili globali (suppongo siano definite globalmente)
-    punteggio1 = data.punteggio_1;
-    punteggio2 = data.punteggio_2;
-    squadra1 = data.squadra1;
-    squadra2 = data.squadra2;
-    punto = data.punto;
-    current_track = songsFromString(data.current_track);
-    tempi = data.tempi ? data.tempi.split(";") : [];
-
-    // Se vuoi aggiornare anche l'intestazione con il nome della partita:
-
+function caricaListaPartite() {
+    fetch('/.netlify/functions/listMatches')
+        .then(res => res.json())
+        .then(partite => {
+            const lista = document.getElementById('lista-partite');
+            lista.innerHTML = '';
+            partite.forEach(partita => {
+                const el = document.createElement('div');
+                el.textContent = `Partita: ${partita.nome_partita} (ID ${partita.id})`;
+                el.style.cursor = 'pointer';
+                el.onclick = () => caricaPartita(partita.id);
+                lista.appendChild(el);
+            });
+        })
+        .catch(err => console.error('Errore lista partite:', err));
 }
 
-async function mostraListaPartite() {
-    const partite = await sql`
-        SELECT id, nome_partita
-        FROM posts
-        ORDER BY id DESC
-    `;
+function caricaPartita(idPartitas) {
+    fetch(`/.netlify/functions/loadMatch?id=${idPartitas}`)
+        .then(res => res.json())
+        .then(data => {
+            // Assumendo tu abbia funzioni già fatte che trasformano:
+            document.getElementById('name-team1').textContent = data.nomes1;
+            document.getElementById('score-team1').textContent = data.puntis1;
+            document.getElementById('name-team2').textContent = data.nomes2;
+            document.getElementById('score-team2').textContent = data.puntis2;
 
-    const listaContainer = document.getElementById('lista-partite');
-    listaContainer.innerHTML = ''; // pulisce contenuto precedente
+            punteggio1 = data.punteggio_1;
+            punteggio2 = data.punteggio_2;
+            squadra1 = data.squadra1;
+            squadra2 = data.squadra2;
+            punto = data.punto;
+            current_track = songsFromString(data.current_track); // tua funzione
+            tempi = data.tempi.split(';');
 
-    if (partite.length === 0) {
-        listaContainer.innerHTML = '<p>Nessuna partita trovata.</p>';
-        return;
-    }
-
-    const ul = document.createElement('ul');
-
-    partite.forEach(partita => {
-        const li = document.createElement('li');
-        li.textContent = partita.nome_partita || '(Senza nome)';
-        li.style.cursor = 'pointer';
-        li.onclick = () => caricaPartitaDaDB(partita.id);
-        ul.appendChild(li);
-    });
-
-    listaContainer.appendChild(ul);
-    listaContainer.style.display = 'flex'; // Mostra la lista
+            // puoi anche salvare idPartita corrente in una variabile globale
+            idCorrente = data.id;
+        })
+        .catch(err => console.error('Errore nel caricamento:', err));
 }
+
+function salvaPartita() {
+    const body = {
+        idPartita: idCorrente || 0, // se 0 => nuova
+        team1Name: document.getElementById('name-team1').textContent,
+        team1Score: document.getElementById('score-team1').textContent,
+        team2Name: document.getElementById('name-team2').textContent,
+        team2Score: document.getElementById('score-team2').textContent,
+        punteggio1,
+        punteggio2,
+        squadra1,
+        squadra2,
+        punto,
+        current_track: songsToString(current_track), // tua funzione
+        tempi,
+        nomePartita: prompt('Nome partita:', 'Senza nome') || 'Senza nome'
+    };
+
+    fetch('/.netlify/functions/saveMatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    })
+        .then(res => res.json())
+        .then(resp => {
+            console.log('Partita salvata con ID:', resp.id);
+            idCorrente = resp.id;
+            caricaListaPartite(); // aggiorna lista
+        })
+        .catch(err => console.error('Errore salvataggio:', err));
+}
+
 
 
 
@@ -1586,4 +1544,7 @@ if ('serviceWorker' in navigator) {
         .catch((error) => console.error('Registrazione Service Worker fallita:', error));
 }
 */
-handleRedirect();
+window.addEventListener('DOMContentLoaded', () => {
+    handleRedirect();
+    caricaListaPartite();
+});
