@@ -68,7 +68,7 @@ const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/pu
             typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
         ).join(' ');
 
-        const line = `[${type.toUpperCase()}] ${message}`;
+        const line = `[${type.toUpperCase()}] ${message}\n.`;
         const p = document.createElement('div');
         p.textContent = line;
         outputDiv.appendChild(p);
@@ -1178,150 +1178,159 @@ function canzoniPerPersona(person) {
 // Genera un code verifier e challenge
 // 1. Genera code verifier e challenge PKCE
 async function generatePKCECodes() {
-  const verifier = generateRandomString(64);
-  const challenge = await sha256Challenge(verifier);
-  localStorage.setItem('code_verifier', verifier); // salva subito
-  return challenge;
+    const verifier = generateRandomString(64);
+    const challenge = await sha256Challenge(verifier);
+    localStorage.setItem('code_verifier', verifier); // salva subito
+    return challenge;
 }
 
 function generateRandomString(length) {
-  const array = new Uint8Array(length);
-  window.crypto.getRandomValues(array);
-  // btoa richiede stringa, quindi converto byte per byte
-  return btoa(String.fromCharCode(...array))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=+$/, '');
+    const array = new Uint8Array(length);
+    window.crypto.getRandomValues(array);
+    // btoa richiede stringa, quindi converto byte per byte
+    return btoa(String.fromCharCode(...array))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
 }
 
 async function sha256Challenge(verifier) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(verifier);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  const base64 = btoa(String.fromCharCode(...new Uint8Array(hash)));
-  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(hash)));
+    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 // 2. Avvia login con redirect a Spotify
 async function login() {
-  const challenge = await generatePKCECodes();
-  const scope = 'user-read-currently-playing user-read-playback-state';
-  const authUrl =
-    `https://accounts.spotify.com/authorize?` +
-    `response_type=code&client_id=${CLIENT_ID}` +
-    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
-    `&scope=${encodeURIComponent(scope)}` +
-    `&code_challenge_method=S256&code_challenge=${challenge}`;
-  window.location.href = authUrl;
+    const challenge = await generatePKCECodes();
+    const scope = 'user-read-currently-playing user-read-playback-state';
+    const authUrl =
+        `https://accounts.spotify.com/authorize?` +
+        `response_type=code&client_id=${CLIENT_ID}` +
+        `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+        `&scope=${encodeURIComponent(scope)}` +
+        `&code_challenge_method=S256&code_challenge=${challenge}`;
+    window.location.href = authUrl;
 }
 
 // 3. Gestisce il redirect con il codice e scambia token
 async function handleRedirect() {
-  const code = new URLSearchParams(window.location.search).get('code');
-  if (!code) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const state = urlParams.get('state');
 
-  const verifier = localStorage.getItem('code_verifier');
-  console.log('handleRedirect - code:', code);
-  console.log('handleRedirect - verifier:', verifier);
+    if (!code) return; // niente da fare
 
-  if (!verifier) {
-    console.error('PKCE code_verifier mancante in localStorage!');
-    return;
-  }
-
-  try {
-    const response = await fetch('/.netlify/functions/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        code: code,
-        verifier: verifier,
-        redirect_uri: REDIRECT_URI
-      })
-    });
-
-    if (!response.ok) {
-      const text = await response.text();
-      console.error('Errore fetch token:', response.status, text);
-      return;
+    // Se abbiamo già il token nel localStorage, evita di rifare la chiamata
+    if (localStorage.getItem('access_token')) {
+        window.history.replaceState({}, document.title, REDIRECT_URI);
+        return;
     }
 
-    const data = await response.json();
-    console.log('Token ottenuto:', data);
+    const verifier = localStorage.getItem('code_verifier');
+    console.log('handleRedirect - code:', code);
+    console.log('handleRedirect - verifier:', verifier);
 
-    localStorage.setItem('access_token', data.access_token);
-    accessToken = data.access_token;
+    if (!verifier) {
+        console.error('PKCE code_verifier mancante in localStorage!');
+        return;
+    }
 
-    // Pulisce URL togliendo codice dalla barra indirizzi
-    window.history.replaceState({}, document.title, REDIRECT_URI);
-  } catch (error) {
-    console.error('Eccezione durante fetch token:', error);
-  }
+    try {
+        const response = await fetch('/.netlify/functions/token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                code: code,
+                verifier: verifier,
+                redirect_uri: REDIRECT_URI
+            })
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            console.error('Errore fetch token:', response.status, text);
+            return;
+        }
+
+        const data = await response.json();
+        console.log('Token ottenuto:', data);
+
+        localStorage.setItem('access_token', data.access_token);
+        accessToken = data.access_token;
+
+        // Pulisce URL togliendo codice dalla barra indirizzi
+        window.history.replaceState({}, document.title, REDIRECT_URI);
+    } catch (error) {
+        console.error('Eccezione durante fetch token:', error);
+    }
 }
 
 // 4. Funzione per fetch canzone corrente da Spotify
 async function fetchCurrentTrack(num) {
-  let tempPunto = punto;
-  let token = localStorage.getItem('access_token') || accessToken;
+    let tempPunto = punto;
+    let token = localStorage.getItem('access_token') || accessToken;
 
-  if (!token) {
-    console.warn('Token mancante, Spotify disabilitato');
-    current_track[tempPunto] = ogg; // fallback locale
-    return;
-  }
-
-  if (!navigator.onLine) {
-    console.warn('Offline, Spotify disabilitato');
-    current_track[tempPunto] = ogg;
-    return;
-  }
-
-  try {
-    const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (res.status === 204) {
-      console.log('Nessuna traccia in riproduzione');
-      current_track[tempPunto] = ogg;
-      return;
+    if (!token) {
+        console.warn('Token mancante, Spotify disabilitato');
+        current_track[tempPunto] = ogg; // fallback locale
+        return;
     }
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error('Errore API Spotify:', res.status, text);
-      current_track[tempPunto] = ogg;
-      return;
+    if (!navigator.onLine) {
+        console.warn('Offline, Spotify disabilitato');
+        current_track[tempPunto] = ogg;
+        return;
     }
 
-    const data = await res.json();
-    console.log('Track data:', data);
+    try {
+        const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-    const ogg1 = [
-      data.item.name,
-      data.item.artists.map(artist => artist.name).join(', '),
-      data.item.id,
-      data.progress_ms / 1000 // secondi
-    ];
+        if (res.status === 204) {
+            console.log('Nessuna traccia in riproduzione');
+            current_track[tempPunto] = ogg;
+            return;
+        }
 
-    current_track[tempPunto] = ogg1;
-    if (num === 3) {
-      document.getElementById("currentSong").textContent = `${data.item.name} of ${ogg1[1]}`;
+        if (!res.ok) {
+            const text = await res.text();
+            console.error('Errore API Spotify:', res.status, text);
+            current_track[tempPunto] = ogg;
+            return;
+        }
+
+        const data = await res.json();
+        console.log('Track data:', data);
+
+        const ogg1 = [
+            data.item.name,
+            data.item.artists.map(artist => artist.name).join(', '),
+            data.item.id,
+            data.progress_ms / 1000 // secondi
+        ];
+
+        current_track[tempPunto] = ogg1;
+        if (num === 3) {
+            document.getElementById("currentSong").textContent = `${data.item.name} of ${ogg1[1]}`;
+        }
+    } catch (error) {
+        console.error('Eccezione fetchCurrentTrack:', error);
+        current_track[tempPunto] = ogg;
     }
-  } catch (error) {
-    console.error('Eccezione fetchCurrentTrack:', error);
-    current_track[tempPunto] = ogg;
-  }
 }
 
 // 5. Logout pulito
 function logout() {
-  localStorage.removeItem('access_token');
-  sessionStorage.removeItem('access_token');
-  accessToken = null;
-  window.history.replaceState({}, document.title, "/");
-  // opzionale: logout spotify aprendo pagina
-  window.open('https://www.spotify.com/logout/', '_blank');
+    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
+    accessToken = null;
+    window.history.replaceState({}, document.title, "/");
+    // opzionale: logout spotify aprendo pagina
+    window.open('https://www.spotify.com/logout/', '_blank');
 }
 
 
