@@ -85,7 +85,15 @@ console.error = function (...args) {
 };
 
 
-
+function mostraListaPartite(){
+    const lista = document.getElementById('lista-partite');
+    if (lista.style.display === 'none' || lista.style.display === '') {
+        caricaListaPartite();
+        lista.style.display = 'flex';
+    } else {
+        lista.style.display = 'none';
+    }
+}
 //database partite
 function caricaListaPartite() {
     fetch('/.netlify/functions/listMatches')
