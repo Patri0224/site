@@ -60,6 +60,8 @@ const consoleDiv = document.getElementById("cici");
 const CLIENT_ID = '44a46de2fd8a4b38b962b7dcc81abccc';
 const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/punteggio.htm';
 
+
+
 (function () {
     const outputDiv = document.getElementById('cici');
 
@@ -195,9 +197,24 @@ function salvaPartita() {
         .catch(err => console.error('Errore salvataggio:', err));
 }
 
-
-
-
+/*
+   SSSSSSSSSSSSSSS FFFFFFFFFFFFFFFFFFFFFF     OOOOOOOOO     NNNNNNNN        NNNNNNNNDDDDDDDDDDDDD             OOOOOOOOO     
+ SS:::::::::::::::SF::::::::::::::::::::F   OO:::::::::OO   N:::::::N       N::::::ND::::::::::::DDD        OO:::::::::OO   
+S:::::SSSSSS::::::SF::::::::::::::::::::F OO:::::::::::::OO N::::::::N      N::::::ND:::::::::::::::DD    OO:::::::::::::OO 
+S:::::S     SSSSSSSFF::::::FFFFFFFFF::::FO:::::::OOO:::::::ON:::::::::N     N::::::NDDD:::::DDDDD:::::D  O:::::::OOO:::::::O
+S:::::S              F:::::F       FFFFFFO::::::O   O::::::ON::::::::::N    N::::::N  D:::::D    D:::::D O::::::O   O::::::O
+S:::::S              F:::::F             O:::::O     O:::::ON:::::::::::N   N::::::N  D:::::D     D:::::DO:::::O     O:::::O
+ S::::SSSS           F::::::FFFFFFFFFF   O:::::O     O:::::ON:::::::N::::N  N::::::N  D:::::D     D:::::DO:::::O     O:::::O
+  SS::::::SSSSS      F:::::::::::::::F   O:::::O     O:::::ON::::::N N::::N N::::::N  D:::::D     D:::::DO:::::O     O:::::O
+    SSS::::::::SS    F:::::::::::::::F   O:::::O     O:::::ON::::::N  N::::N:::::::N  D:::::D     D:::::DO:::::O     O:::::O
+       SSSSSS::::S   F::::::FFFFFFFFFF   O:::::O     O:::::ON::::::N   N:::::::::::N  D:::::D     D:::::DO:::::O     O:::::O
+            S:::::S  F:::::F             O:::::O     O:::::ON::::::N    N::::::::::N  D:::::D     D:::::DO:::::O     O:::::O
+            S:::::S  F:::::F             O::::::O   O::::::ON::::::N     N:::::::::N  D:::::D    D:::::D O::::::O   O::::::O
+SSSSSSS     S:::::SFF:::::::FF           O:::::::OOO:::::::ON::::::N      N::::::::NDDD:::::DDDDD:::::D  O:::::::OOO:::::::O
+S::::::SSSSSS:::::SF::::::::FF            OO:::::::::::::OO N::::::N       N:::::::ND:::::::::::::::DD    OO:::::::::::::OO 
+S:::::::::::::::SS F::::::::FF              OO:::::::::OO   N::::::N        N::::::ND::::::::::::DDD        OO:::::::::OO   
+ SSSSSSSSSSSSSSS   FFFFFFFFFFF                OOOOOOOOO     NNNNNNNN         NNNNNNNDDDDDDDDDDDDD             OOOOOOOOO
+*/
 
 
 
@@ -321,26 +338,27 @@ function changeBackground2() {
     updateBackground();
     showMenu(2);
 }
+/*
+
+   SSSSSSSSSSSSSSS                AAA         VVVVVVVV           VVVVVVVVEEEEEEEEEEEEEEEEEEEEEE
+ SS:::::::::::::::S              A:::A        V::::::V           V::::::VE::::::::::::::::::::E
+S:::::SSSSSS::::::S             A:::::A       V::::::V           V::::::VE::::::::::::::::::::E
+S:::::S     SSSSSSS            A:::::::A      V::::::V           V::::::VEE::::::EEEEEEEEE::::E
+S:::::S                       A:::::::::A      V:::::V           V:::::V   E:::::E       EEEEEE
+S:::::S                      A:::::A:::::A      V:::::V         V:::::V    E:::::E             
+ S::::SSSS                  A:::::A A:::::A      V:::::V       V:::::V     E::::::EEEEEEEEEE   
+  SS::::::SSSSS            A:::::A   A:::::A      V:::::V     V:::::V      E:::::::::::::::E   
+    SSS::::::::SS         A:::::A     A:::::A      V:::::V   V:::::V       E:::::::::::::::E   
+       SSSSSS::::S       A:::::AAAAAAAAA:::::A      V:::::V V:::::V        E::::::EEEEEEEEEE   
+            S:::::S     A:::::::::::::::::::::A      V:::::V:::::V         E:::::E             
+            S:::::S    A:::::AAAAAAAAAAAAA:::::A      V:::::::::V          E:::::E       EEEEEE
+SSSSSSS     S:::::S   A:::::A             A:::::A      V:::::::V         EE::::::EEEEEEEE:::::E
+S::::::SSSSSS:::::S  A:::::A               A:::::A      V:::::V          E::::::::::::::::::::E
+S:::::::::::::::SS  A:::::A                 A:::::A      V:::V           E::::::::::::::::::::E
+ SSSSSSSSSSSSSSS   AAAAAAA                   AAAAAAA      VVV            EEEEEEEEEEEEEEEEEEEEEE
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 //salvataggio delle partite in file
 function saveData() {
     // Ottieni i dati delle squadre
@@ -639,6 +657,24 @@ function creaArrayZero(dimensione) {
     }
     return arr;
 }
+/*
+        GGGGGGGGGGGGGRRRRRRRRRRRRRRRRR                  AAA               FFFFFFFFFFFFFFFFFFFFFF
+     GGG::::::::::::GR::::::::::::::::R                A:::A              F::::::::::::::::::::F
+   GG:::::::::::::::GR::::::RRRRRR:::::R              A:::::A             F::::::::::::::::::::F
+  G:::::GGGGGGGG::::GRR:::::R     R:::::R            A:::::::A            FF::::::FFFFFFFFF::::F
+ G:::::G       GGGGGG  R::::R     R:::::R           A:::::::::A             F:::::F       FFFFFF
+G:::::G                R::::R     R:::::R          A:::::A:::::A            F:::::F             
+G:::::G                R::::RRRRRR:::::R          A:::::A A:::::A           F::::::FFFFFFFFFF   
+G:::::G    GGGGGGGGGG  R:::::::::::::RR          A:::::A   A:::::A          F:::::::::::::::F   
+G:::::G    G::::::::G  R::::RRRRRR:::::R        A:::::A     A:::::A         F:::::::::::::::F   
+G:::::G    GGGGG::::G  R::::R     R:::::R      A:::::AAAAAAAAA:::::A        F::::::FFFFFFFFFF   
+G:::::G        G::::G  R::::R     R:::::R     A:::::::::::::::::::::A       F:::::F             
+ G:::::G       G::::G  R::::R     R:::::R    A:::::AAAAAAAAAAAAA:::::A      F:::::F             
+  G:::::GGGGGGGG::::GRR:::::R     R:::::R   A:::::A             A:::::A   FF:::::::FF           
+   GG:::::::::::::::GR::::::R     R:::::R  A:::::A               A:::::A  F::::::::FF           
+     GGG::::::GGG:::GR::::::R     R:::::R A:::::A                 A:::::A F::::::::FF           
+        GGGGGG   GGGGRRRRRRRR     RRRRRRRAAAAAAA                   AAAAAAAFFFFFFFFFFF         
+*/
 //grafico per storia partita
 function showGraf() {
     console.log(numPersone);
@@ -836,6 +872,24 @@ function showMenu(op) {
 
 
 
+/*
+TTTTTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEE               AAA               MMMMMMMM               MMMMMMMM
+T:::::::::::::::::::::TE::::::::::::::::::::E              A:::A              M:::::::M             M:::::::M
+T:::::::::::::::::::::TE::::::::::::::::::::E             A:::::A             M::::::::M           M::::::::M
+T:::::TT:::::::TT:::::TEE::::::EEEEEEEEE::::E            A:::::::A            M:::::::::M         M:::::::::M
+TTTTTT  T:::::T  TTTTTT  E:::::E       EEEEEE           A:::::::::A           M::::::::::M       M::::::::::M
+        T:::::T          E:::::E                       A:::::A:::::A          M:::::::::::M     M:::::::::::M
+        T:::::T          E::::::EEEEEEEEEE            A:::::A A:::::A         M:::::::M::::M   M::::M:::::::M
+        T:::::T          E:::::::::::::::E           A:::::A   A:::::A        M::::::M M::::M M::::M M::::::M
+        T:::::T          E:::::::::::::::E          A:::::A     A:::::A       M::::::M  M::::M::::M  M::::::M
+        T:::::T          E::::::EEEEEEEEEE         A:::::AAAAAAAAA:::::A      M::::::M   M:::::::M   M::::::M
+        T:::::T          E:::::E                  A:::::::::::::::::::::A     M::::::M    M:::::M    M::::::M
+        T:::::T          E:::::E       EEEEEE    A:::::AAAAAAAAAAAAA:::::A    M::::::M     MMMMM     M::::::M
+      TT:::::::TT      EE::::::EEEEEEEE:::::E   A:::::A             A:::::A   M::::::M               M::::::M
+      T:::::::::T      E::::::::::::::::::::E  A:::::A               A:::::A  M::::::M               M::::::M
+      T:::::::::T      E::::::::::::::::::::E A:::::A                 A:::::A M::::::M               M::::::M
+      TTTTTTTTTTT      EEEEEEEEEEEEEEEEEEEEEEAAAAAAA                   AAAAAAAMMMMMMMM               MMMMMMMM
+*/
 
 //Usati per gestire le squadre
 function changeSquadra1() {
@@ -932,8 +986,24 @@ function settaSquadre() {
     document.getElementById("partecipanti2").innerHTML = str;
 }
 
-
-
+/*
+               AAA               LLLLLLLLLLL             TTTTTTTTTTTTTTTTTTTTTTTRRRRRRRRRRRRRRRRR        OOOOOOOOO     
+              A:::A              L:::::::::L             T:::::::::::::::::::::TR::::::::::::::::R     OO:::::::::OO   
+             A:::::A             L:::::::::L             T:::::::::::::::::::::TR::::::RRRRRR:::::R  OO:::::::::::::OO 
+            A:::::::A            LL:::::::LL             T:::::TT:::::::TT:::::TRR:::::R     R:::::RO:::::::OOO:::::::O
+           A:::::::::A             L:::::L               TTTTTT  T:::::T  TTTTTT  R::::R     R:::::RO::::::O   O::::::O
+          A:::::A:::::A            L:::::L                       T:::::T          R::::R     R:::::RO:::::O     O:::::O
+         A:::::A A:::::A           L:::::L                       T:::::T          R::::RRRRRR:::::R O:::::O     O:::::O
+        A:::::A   A:::::A          L:::::L                       T:::::T          R:::::::::::::RR  O:::::O     O:::::O
+       A:::::A     A:::::A         L:::::L                       T:::::T          R::::RRRRRR:::::R O:::::O     O:::::O
+      A:::::AAAAAAAAA:::::A        L:::::L                       T:::::T          R::::R     R:::::RO:::::O     O:::::O
+     A:::::::::::::::::::::A       L:::::L                       T:::::T          R::::R     R:::::RO:::::O     O:::::O
+    A:::::AAAAAAAAAAAAA:::::A      L:::::L         LLLLLL        T:::::T          R::::R     R:::::RO::::::O   O::::::O
+   A:::::A             A:::::A   LL:::::::LLLLLLLLL:::::L      TT:::::::TT      RR:::::R     R:::::RO:::::::OOO:::::::O
+  A:::::A               A:::::A  L::::::::::::::::::::::L      T:::::::::T      R::::::R     R:::::R OO:::::::::::::OO 
+ A:::::A                 A:::::A L::::::::::::::::::::::L      T:::::::::T      R::::::R     R:::::R   OO:::::::::OO   
+AAAAAAA                   AAAAAAALLLLLLLLLLLLLLLLLLLLLLLL      TTTTTTTTTTT      RRRRRRRR     RRRRRRR     OOOOOOOOO
+*/ 
 
 function setTitoloChecked(op) {
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
@@ -1156,25 +1226,24 @@ function canzoniPerPersona(person) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+   SSSSSSSSSSSSSSS PPPPPPPPPPPPPPPPP        OOOOOOOOO     TTTTTTTTTTTTTTTTTTTTTTTYYYYYYY       YYYYYYY
+ SS:::::::::::::::SP::::::::::::::::P     OO:::::::::OO   T:::::::::::::::::::::TY:::::Y       Y:::::Y
+S:::::SSSSSS::::::SP::::::PPPPPP:::::P  OO:::::::::::::OO T:::::::::::::::::::::TY:::::Y       Y:::::Y
+S:::::S     SSSSSSSPP:::::P     P:::::PO:::::::OOO:::::::OT:::::TT:::::::TT:::::TY::::::Y     Y::::::Y
+S:::::S              P::::P     P:::::PO::::::O   O::::::OTTTTTT  T:::::T  TTTTTTYYY:::::Y   Y:::::YYY
+S:::::S              P::::P     P:::::PO:::::O     O:::::O        T:::::T           Y:::::Y Y:::::Y   
+ S::::SSSS           P::::PPPPPP:::::P O:::::O     O:::::O        T:::::T            Y:::::Y:::::Y    
+  SS::::::SSSSS      P:::::::::::::PP  O:::::O     O:::::O        T:::::T             Y:::::::::Y     
+    SSS::::::::SS    P::::PPPPPPPPP    O:::::O     O:::::O        T:::::T              Y:::::::Y      
+       SSSSSS::::S   P::::P            O:::::O     O:::::O        T:::::T               Y:::::Y       
+            S:::::S  P::::P            O:::::O     O:::::O        T:::::T               Y:::::Y       
+            S:::::S  P::::P            O::::::O   O::::::O        T:::::T               Y:::::Y       
+SSSSSSS     S:::::SPP::::::PP          O:::::::OOO:::::::O      TT:::::::TT             Y:::::Y       
+S::::::SSSSSS:::::SP::::::::P           OO:::::::::::::OO       T:::::::::T          YYYY:::::YYYY    
+S:::::::::::::::SS P::::::::P             OO:::::::::OO         T:::::::::T          Y:::::::::::Y    
+ SSSSSSSSSSSSSSS   PPPPPPPPPP               OOOOOOOOO           TTTTTTTTTTT          YYYYYYYYYYYYY
+*/
 // Genera un code verifier e challenge
 // 1. Genera code verifier e challenge PKCE
 async function generatePKCECodes() {
@@ -1358,19 +1427,24 @@ function songsFromString(str) {
     return oggg;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+PPPPPPPPPPPPPPPPP   DDDDDDDDDDDDD        FFFFFFFFFFFFFFFFFFFFFF
+P::::::::::::::::P  D::::::::::::DDD     F::::::::::::::::::::F
+P::::::PPPPPP:::::P D:::::::::::::::DD   F::::::::::::::::::::F
+PP:::::P     P:::::PDDD:::::DDDDD:::::D  FF::::::FFFFFFFFF::::F
+  P::::P     P:::::P  D:::::D    D:::::D   F:::::F       FFFFFF
+  P::::P     P:::::P  D:::::D     D:::::D  F:::::F             
+  P::::PPPPPP:::::P   D:::::D     D:::::D  F::::::FFFFFFFFFF   
+  P:::::::::::::PP    D:::::D     D:::::D  F:::::::::::::::F   
+  P::::PPPPPPPPP      D:::::D     D:::::D  F:::::::::::::::F   
+  P::::P              D:::::D     D:::::D  F::::::FFFFFFFFFF   
+  P::::P              D:::::D     D:::::D  F:::::F             
+  P::::P              D:::::D    D:::::D   F:::::F             
+PP::::::PP          DDD:::::DDDDD:::::D  FF:::::::FF           
+P::::::::P          D:::::::::::::::DD   F::::::::FF           
+P::::::::P          D::::::::::::DDD     F::::::::FF           
+PPPPPPPPPP          DDDDDDDDDDDDD        FFFFFFFFFFF
+*/
 function squadraAppartenenza(num) {
     let as1 = squadra1.split(";")
     for (let index = 0; index < as1.length; index++) {
