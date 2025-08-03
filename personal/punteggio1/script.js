@@ -806,69 +806,7 @@ function showGraf() {
     document.getElementById("grafico").style.display = "block";
     showMenu(2);
 }
-function mostraCanzone(index) {
-    let obj = document.getElementById("canzone" + index);
-    if (obj.style.display == "none") {
-        obj.style.display = "block";
-    }
-    else {
-        obj.style.display = "none";
-    }
-}
-//gestione ctrl-z
-function indietroPunteggio() {
-    if (premuto == true) {
-        if (punteggio1.length > 4 && punteggio2.length > 4) {
-            premuto = false;
-            let valori = punteggio1.split(";");
-            valori.pop();
-            let a = valori[valori.length - 1];
-            punteggio1 = valori.join(";");
-            valori = punteggio2.split(";");
-            valori.pop();
-            let b = valori[valori.length - 1];
-            punteggio2 = valori.join(";");
-            document.getElementById('score-team1').textContent = a.split("|")[0];
-            document.getElementById('score-team2').textContent = b.split("|")[0];
-            current_track.pop();
-            tempi.pop();
-            punto = punto - 1;
-            updateBackground();
-            controlloIndietro();
-        }
-    } else {
-        premuto = true;
-        document.getElementById("ind").style.backgroundColor = "green";
-        setTimeout(() => {
-            premuto = false;
-            controlloIndietro();
-        }, 2000);
-    }
-}
-function controlloIndietro() {
-    if (punteggio1.length > 4 && punteggio2.length > 4) {
-        document.getElementById("ind").style.backgroundColor = "#227bd9ff";
-    } else {
-        document.getElementById("ind").style.backgroundColor = "#EF4444";
-    }
-}
-function showError() {
-    document.getElementById("cici").style.display = "block";
-}
-//per mostrare il menu
-function showMenu(op) {
-    document.getElementById("canzoni").style.display = "none";
-    document.getElementById("cici").style.display = "none";
-    document.getElementById("lista-partite").style.display = "none";
-    if (op == 2) {
-        document.getElementById("menu").style.display = "none";
-    } else if (document.getElementById("menu").style.display == "block") {
-        document.getElementById("menu").style.display = "none";
-    } else {
-        document.getElementById("menu").style.display = "block";
-        document.getElementById("grafico").style.display = "none";
-    }
-}
+
 
 
 
@@ -987,24 +925,87 @@ function settaSquadre() {
 }
 
 /*
-               AAA               LLLLLLLLLLL             TTTTTTTTTTTTTTTTTTTTTTTRRRRRRRRRRRRRRRRR        OOOOOOOOO     
-              A:::A              L:::::::::L             T:::::::::::::::::::::TR::::::::::::::::R     OO:::::::::OO   
-             A:::::A             L:::::::::L             T:::::::::::::::::::::TR::::::RRRRRR:::::R  OO:::::::::::::OO 
-            A:::::::A            LL:::::::LL             T:::::TT:::::::TT:::::TRR:::::R     R:::::RO:::::::OOO:::::::O
-           A:::::::::A             L:::::L               TTTTTT  T:::::T  TTTTTT  R::::R     R:::::RO::::::O   O::::::O
-          A:::::A:::::A            L:::::L                       T:::::T          R::::R     R:::::RO:::::O     O:::::O
-         A:::::A A:::::A           L:::::L                       T:::::T          R::::RRRRRR:::::R O:::::O     O:::::O
-        A:::::A   A:::::A          L:::::L                       T:::::T          R:::::::::::::RR  O:::::O     O:::::O
-       A:::::A     A:::::A         L:::::L                       T:::::T          R::::RRRRRR:::::R O:::::O     O:::::O
-      A:::::AAAAAAAAA:::::A        L:::::L                       T:::::T          R::::R     R:::::RO:::::O     O:::::O
-     A:::::::::::::::::::::A       L:::::L                       T:::::T          R::::R     R:::::RO:::::O     O:::::O
-    A:::::AAAAAAAAAAAAA:::::A      L:::::L         LLLLLL        T:::::T          R::::R     R:::::RO::::::O   O::::::O
-   A:::::A             A:::::A   LL:::::::LLLLLLLLL:::::L      TT:::::::TT      RR:::::R     R:::::RO:::::::OOO:::::::O
-  A:::::A               A:::::A  L::::::::::::::::::::::L      T:::::::::T      R::::::R     R:::::R OO:::::::::::::OO 
- A:::::A                 A:::::A L::::::::::::::::::::::L      T:::::::::T      R::::::R     R:::::R   OO:::::::::OO   
-AAAAAAA                   AAAAAAALLLLLLLLLLLLLLLLLLLLLLLL      TTTTTTTTTTT      RRRRRRRR     RRRRRRR     OOOOOOOOO
-*/ 
+MMMMMMMM               MMMMMMMMEEEEEEEEEEEEEEEEEEEEEENNNNNNNN        NNNNNNNNUUUUUUUU     UUUUUUUU
+M:::::::M             M:::::::ME::::::::::::::::::::EN:::::::N       N::::::NU::::::U     U::::::U
+M::::::::M           M::::::::ME::::::::::::::::::::EN::::::::N      N::::::NU::::::U     U::::::U
+M:::::::::M         M:::::::::MEE::::::EEEEEEEEE::::EN:::::::::N     N::::::NUU:::::U     U:::::UU
+M::::::::::M       M::::::::::M  E:::::E       EEEEEEN::::::::::N    N::::::N U:::::U     U:::::U 
+M:::::::::::M     M:::::::::::M  E:::::E             N:::::::::::N   N::::::N U:::::D     D:::::U 
+M:::::::M::::M   M::::M:::::::M  E::::::EEEEEEEEEE   N:::::::N::::N  N::::::N U:::::D     D:::::U 
+M::::::M M::::M M::::M M::::::M  E:::::::::::::::E   N::::::N N::::N N::::::N U:::::D     D:::::U 
+M::::::M  M::::M::::M  M::::::M  E:::::::::::::::E   N::::::N  N::::N:::::::N U:::::D     D:::::U 
+M::::::M   M:::::::M   M::::::M  E::::::EEEEEEEEEE   N::::::N   N:::::::::::N U:::::D     D:::::U 
+M::::::M    M:::::M    M::::::M  E:::::E             N::::::N    N::::::::::N U:::::D     D:::::U 
+M::::::M     MMMMM     M::::::M  E:::::E       EEEEEEN::::::N     N:::::::::N U::::::U   U::::::U 
+M::::::M               M::::::MEE::::::EEEEEEEE:::::EN::::::N      N::::::::N U:::::::UUU:::::::U 
+M::::::M               M::::::ME::::::::::::::::::::EN::::::N       N:::::::N  UU:::::::::::::UU  
+M::::::M               M::::::ME::::::::::::::::::::EN::::::N        N::::::N    UU:::::::::UU    
+MMMMMMMM               MMMMMMMMEEEEEEEEEEEEEEEEEEEEEENNNNNNNN         NNNNNNN      UUUUUUUUU
 
+*/ 
+function mostraCanzone(index) {
+    let obj = document.getElementById("canzone" + index);
+    if (obj.style.display == "none") {
+        obj.style.display = "block";
+    }
+    else {
+        obj.style.display = "none";
+    }
+}
+//gestione ctrl-z
+function indietroPunteggio() {
+    if (premuto == true) {
+        if (punteggio1.length > 4 && punteggio2.length > 4) {
+            premuto = false;
+            let valori = punteggio1.split(";");
+            valori.pop();
+            let a = valori[valori.length - 1];
+            punteggio1 = valori.join(";");
+            valori = punteggio2.split(";");
+            valori.pop();
+            let b = valori[valori.length - 1];
+            punteggio2 = valori.join(";");
+            document.getElementById('score-team1').textContent = a.split("|")[0];
+            document.getElementById('score-team2').textContent = b.split("|")[0];
+            current_track.pop();
+            tempi.pop();
+            punto = punto - 1;
+            updateBackground();
+            controlloIndietro();
+        }
+    } else {
+        premuto = true;
+        document.getElementById("ind").style.backgroundColor = "green";
+        setTimeout(() => {
+            premuto = false;
+            controlloIndietro();
+        }, 2000);
+    }
+}
+function controlloIndietro() {
+    if (punteggio1.length > 4 && punteggio2.length > 4) {
+        document.getElementById("ind").style.backgroundColor = "#227bd9ff";
+    } else {
+        document.getElementById("ind").style.backgroundColor = "#EF4444";
+    }
+}
+function showError() {
+    document.getElementById("cici").style.display = "block";
+}
+//per mostrare il menu
+function showMenu(op) {
+    document.getElementById("canzoni").style.display = "none";
+    document.getElementById("cici").style.display = "none";
+    document.getElementById("lista-partite").style.display = "none";
+    if (op == 2) {
+        document.getElementById("menu").style.display = "none";
+    } else if (document.getElementById("menu").style.display == "block") {
+        document.getElementById("menu").style.display = "none";
+    } else {
+        document.getElementById("menu").style.display = "block";
+        document.getElementById("grafico").style.display = "none";
+    }
+}
 function setTitoloChecked(op) {
     tempi[punto] = getCurrentTimeInSeconds() - tempoTemp;
     if (current_track[punto] != null) {
