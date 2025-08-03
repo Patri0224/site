@@ -475,6 +475,7 @@ function preset() {
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
         accessToken = null; // Resetta il token globale
+        idCorrente = 0; // Resetta l'ID della partita corrente
 
         // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
@@ -527,7 +528,7 @@ function reset() {
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
         accessToken = null; // Resetta il token globale
-
+        idCorrente = 0; // Resetta l'ID della partita corrente  
         // Rimuovi il token dalla barra degli indirizzi
         window.location.hash = '';
 
@@ -558,7 +559,7 @@ function salvaStatoTemporaneo() {
     localStorage.setItem("songs", songsToString(current_track));
     localStorage.setItem("temps", tempi.join(";"));
     localStorage.setItem("access_token", accessToken); // Salva il token di accesso
-
+    localStorage.setItem("idCorrente", idCorrente); // Salva l'ID della partita corrente
 }
 
 // ✅ Più affidabile di beforeunload su iOS
@@ -586,6 +587,7 @@ window.addEventListener('load', function () {
     const temps = localStorage.getItem("temps");
     const punt = localStorage.getItem("punt");
     accessToken = localStorage.getItem("access_token"); // Ripristina il token di accesso
+    idCorrente = localStorage.getItem("idCorrente") || 0; // Ripristina l'ID della partita corrente
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
     if (nameTeam2) document.getElementById('name-team2').textContent = nameTeam2;
@@ -650,6 +652,9 @@ function showGraf() {
     console.log(tempi);
     console.log(squadra1);
     console.log(squadra2);
+    console.log(punto);
+    console.log(accessToken);
+    console.log()
 
     let array = creaArrayZero(numPersone + 4);
     let array1 = creaArrayZero(numPersone + 4);
