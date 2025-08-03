@@ -64,7 +64,7 @@ const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/pu
     const outputDiv = document.getElementById('console-output');
 
     function appendToConsoleDiv(type, args) {
-        const message = Array.from(args).map(arg => 
+        const message = Array.from(args).map(arg =>
             typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
         ).join(' ');
 
@@ -93,7 +93,20 @@ const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/pu
         originalError.apply(console, args);
     };
 })();
-
+function appendToDiv(message) {
+    const container = document.getElementById("cici");
+    if (!container) return; // Se non c'è il div, esci
+    // Crea un nuovo elemento div per il messaggio
+    const messageDiv = document.createElement("div");
+    // Imposta il testo (puoi anche usare innerHTML se preferisci HTML formattato)
+    messageDiv.textContent = message;
+    // Applica qualche stile base (opzionale)
+    messageDiv.style.padding = "4px";
+    messageDiv.style.borderBottom = "1px solid #ccc";
+    messageDiv.style.fontFamily = "monospace";
+    // Aggiungi il nuovo div al contenitore
+    container.appendChild(messageDiv);
+}
 
 
 function mostraListaPartite() {
