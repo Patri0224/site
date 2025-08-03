@@ -22,10 +22,10 @@ export async function handler(event, context) {
     } = body;
 
     // Converti array in stringa
-    const h1 = punteggio1.join(";");
-    const h2 = punteggio2.join(";");
-    const m1 = squadra1.join(";");
-    const m2 = squadra2.join(";");
+    const h1 = punteggio1;
+    const h2 = punteggio2;
+    const m1 = squadra1;
+    const m2 = squadra2;
     const temps = tempi.join(";");
     const songs = current_track; // presumo già stringa o convertita lato client
 
