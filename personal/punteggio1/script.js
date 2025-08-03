@@ -145,6 +145,7 @@ function caricaPartita(idPartitas) {
             // puoi anche salvare idPartita corrente in una variabile globale
             idCorrente = data.id;
             document.getElementById('lista-partite').style.display = 'none'; // nascondi la lista dopo il caricamento
+            salvaStatoTemporaneo(); // salva lo stato corrente
         })
         .catch(err => console.error('Errore nel caricamento:', err));
 }
@@ -475,6 +476,7 @@ function preset() {
     controlImgBackground();
     controlloIndietro();
     showMenu(2);
+    salvaStatoTemporaneo();
     location.reload();
 }
 //reset pagina a opzioni default (anche dati temporanei)
@@ -525,11 +527,11 @@ function reset() {
     controlImgBackground();
     controlloIndietro();
     showMenu(2);
+    salvaStatoTemporaneo();
     location.reload();
 }
 //salvataggio dati in buffer temporanei in caso di reload pagina
-window.addEventListener('beforeunload', function () {
-    // Salva lo stato corrente, ad esempio il punteggio, nel localStorage
+function salvaStatoTemporaneo() {
     localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
     localStorage.setItem("st1", document.getElementById('score-team1').textContent);
     localStorage.setItem("it1", document.getElementById('1').src);
@@ -543,7 +545,18 @@ window.addEventListener('beforeunload', function () {
     localStorage.setItem("punt", punto);
     localStorage.setItem("songs", songsToString(current_track));
     localStorage.setItem("temps", tempi.join(";"));
+}
+
+// ✅ Più affidabile di beforeunload su iOS
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") salvaStatoTemporaneo();
 });
+window.addEventListener("pagehide", salvaStatoTemporaneo);
+
+// Facoltativo: mantieni anche beforeunload per desktop
+window.addEventListener("beforeunload", salvaStatoTemporaneo);
+
+// 🔄 Ripristino dei dati al load
 window.addEventListener('load', function () {
     const nameTeam1 = localStorage.getItem("nt1");
     const scoreTeam1 = localStorage.getItem("st1");
@@ -558,17 +571,19 @@ window.addEventListener('load', function () {
     const songs = localStorage.getItem("songs");
     const temps = localStorage.getItem("temps");
     const punt = localStorage.getItem("punt");
+
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
-
     if (nameTeam2) document.getElementById('name-team2').textContent = nameTeam2;
     if (scoreTeam2) document.getElementById('score-team2').textContent = scoreTeam2;
+
     try {
         if (imageTeam1) document.getElementById('1').src = imageTeam1;
         if (imageTeam2) document.getElementById('2').src = imageTeam2;
     } catch (error) {
-        //do nothing, immagini non valide
+        // immagini non valide
     }
+
     if (h1) punteggio1 = h1;
     if (h2) punteggio2 = h2;
     if (m1) squadra1 = m1;
@@ -576,11 +591,13 @@ window.addEventListener('load', function () {
     if (songs) current_track = songsFromString(songs);
     if (temps) tempi = temps.split(";");
     if (punt) punto = parseInt(punt);
+
     updateBackground();
     controlImgBackground();
     controlloIndietro();
     settaSquadre();
 });
+
 //aggiunta ultimo valore nella cronologia del punteggio
 function updateStringhe() {
     punto = parseInt(punto) + 1;
@@ -787,9 +804,6 @@ function showError() {
 function showMenu(op) {
     document.getElementById("canzoni").style.display = "none";
     document.getElementById("cici").style.display = "none";
-    document.getElementById("Sq1").style.display = "none";
-    document.getElementById("Sq2").style.display = "none";  
-    document.getElementById("grafico").style.display = "none";
     document.getElementById("lista-partite").style.display = "none";
     if (op == 2) {
         document.getElementById("menu").style.display = "none";
@@ -923,6 +937,7 @@ function startTimer() {
 //Reload pagina
 function reload() {
     if (pReload == true) {
+        salvaStatoTemporaneo();
         location.reload();
     } else {
         pReload = true;
