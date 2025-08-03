@@ -132,6 +132,7 @@ function caricaPartita(idPartitas) {
 
             // puoi anche salvare idPartita corrente in una variabile globale
             idCorrente = data.id;
+            document.getElementById('lista-partite').style.display = 'none'; // nascondi la lista dopo il caricamento
         })
         .catch(err => console.error('Errore nel caricamento:', err));
 }
