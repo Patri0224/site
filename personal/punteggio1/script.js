@@ -615,7 +615,7 @@ window.addEventListener('load', function () {
         if (imageTeam1) document.getElementById('1').src = imageTeam1;
         if (imageTeam2) document.getElementById('2').src = imageTeam2;
     } catch (error) {
-        // immagini non valide
+        console.error("Errore nel caricamento delle immagini:", error);
     }
 
     if (h1) punteggio1 = h1;
