@@ -787,6 +787,10 @@ function showError() {
 function showMenu(op) {
     document.getElementById("canzoni").style.display = "none";
     document.getElementById("cici").style.display = "none";
+    document.getElementById("Sq1").style.display = "none";
+    document.getElementById("Sq2").style.display = "none";  
+    document.getElementById("grafico").style.display = "none";
+    document.getElementById("lista-partite").style.display = "none";
     if (op == 2) {
         document.getElementById("menu").style.display = "none";
     } else if (document.getElementById("menu").style.display == "block") {
