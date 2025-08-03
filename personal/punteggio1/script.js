@@ -1176,101 +1176,154 @@ function canzoniPerPersona(person) {
 
 
 // Genera un code verifier e challenge
+// 1. Genera code verifier e challenge PKCE
 async function generatePKCECodes() {
-    const verifier = generateRandomString(64);
-    const challenge = await sha256Challenge(verifier);
-    localStorage.setItem('code_verifier', verifier);
-    return challenge;
+  const verifier = generateRandomString(64);
+  const challenge = await sha256Challenge(verifier);
+  localStorage.setItem('code_verifier', verifier); // salva subito
+  return challenge;
 }
 
 function generateRandomString(length) {
-    const array = new Uint8Array(length);
-    window.crypto.getRandomValues(array);
-    return btoa(String.fromCharCode(...array)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const array = new Uint8Array(length);
+  window.crypto.getRandomValues(array);
+  // btoa richiede stringa, quindi converto byte per byte
+  return btoa(String.fromCharCode(...array))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
 }
 
 async function sha256Challenge(verifier) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(verifier);
-    const hash = await crypto.subtle.digest('SHA-256', data);
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(hash)));
-    return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  const base64 = btoa(String.fromCharCode(...new Uint8Array(hash)));
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
+// 2. Avvia login con redirect a Spotify
 async function login() {
-    const challenge = await generatePKCECodes();
-    const scope = 'user-read-currently-playing user-read-playback-state';
-    const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&code_challenge_method=S256&code_challenge=${challenge}`;
-    window.location.href = authUrl;
+  const challenge = await generatePKCECodes();
+  const scope = 'user-read-currently-playing user-read-playback-state';
+  const authUrl =
+    `https://accounts.spotify.com/authorize?` +
+    `response_type=code&client_id=${CLIENT_ID}` +
+    `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
+    `&scope=${encodeURIComponent(scope)}` +
+    `&code_challenge_method=S256&code_challenge=${challenge}`;
+  window.location.href = authUrl;
 }
-const logout = () => {
-    // Rimuovi il token di accesso dal localStorage o sessionStorage
-    localStorage.removeItem('access_token');
-    sessionStorage.removeItem('access_token');
-    accessToken = null; // Resetta il token globale
-    document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/punteggio1/';
-    // Rimuovi il token dalla barra degli indirizzi
-    window.location.hash = '';
-    let newWindow = window.open('https://www.spotify.com/logout/', '_blank');
 
-};
-// Step 2: Handle redirect and get token
+// 3. Gestisce il redirect con il codice e scambia token
 async function handleRedirect() {
-    const code = new URLSearchParams(window.location.search).get('code');
-    if (!code) return;
+  const code = new URLSearchParams(window.location.search).get('code');
+  if (!code) return;
 
-    const verifier = localStorage.getItem('code_verifier');
+  const verifier = localStorage.getItem('code_verifier');
+  console.log('handleRedirect - code:', code);
+  console.log('handleRedirect - verifier:', verifier);
 
+  if (!verifier) {
+    console.error('PKCE code_verifier mancante in localStorage!');
+    return;
+  }
+
+  try {
     const response = await fetch('/.netlify/functions/token', {
-        method: 'POST',
-        body: JSON.stringify({
-            code: code,
-            verifier: verifier,
-            redirect_uri: REDIRECT_URI
-        }),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        code: code,
+        verifier: verifier,
+        redirect_uri: REDIRECT_URI
+      })
     });
 
+    if (!response.ok) {
+      const text = await response.text();
+      console.error('Errore fetch token:', response.status, text);
+      return;
+    }
+
     const data = await response.json();
+    console.log('Token ottenuto:', data);
+
     localStorage.setItem('access_token', data.access_token);
     accessToken = data.access_token;
-    window.history.replaceState({}, document.title, REDIRECT_URI); // pulisce URL
+
+    // Pulisce URL togliendo codice dalla barra indirizzi
+    window.history.replaceState({}, document.title, REDIRECT_URI);
+  } catch (error) {
+    console.error('Eccezione durante fetch token:', error);
+  }
 }
 
-// Step 3: Fetch the currently playing track
+// 4. Funzione per fetch canzone corrente da Spotify
 async function fetchCurrentTrack(num) {
-    let tempPunto = punto;
-    const token = localStorage.getItem('access_token');
-    if (!token)
-        token = accessToken; // Usa il token globale se non è nel localStorage
-    // Controllo se non c'è token o se sei offline
-    if (!token || !navigator.onLine) {
-        console.warn('Token mancante o offline. Spotify disattivato.');
-        current_track[tempPunto] = ogg;
-        return;
+  let tempPunto = punto;
+  let token = localStorage.getItem('access_token') || accessToken;
+
+  if (!token) {
+    console.warn('Token mancante, Spotify disabilitato');
+    current_track[tempPunto] = ogg; // fallback locale
+    return;
+  }
+
+  if (!navigator.onLine) {
+    console.warn('Offline, Spotify disabilitato');
+    current_track[tempPunto] = ogg;
+    return;
+  }
+
+  try {
+    const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+
+    if (res.status === 204) {
+      console.log('Nessuna traccia in riproduzione');
+      current_track[tempPunto] = ogg;
+      return;
     }
-    try {
-        const res = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-            headers: { Authorization: `Bearer ${token}` }
-        });
-        const data = await res.json();
-        console.log('Token Response:', data);
-        if (res.status === 200) {
-            let ogg1 = [4];
-            ogg1[0] = data.item.name;
-            ogg1[1] = data.item.artists.map(artist => artist.name).join(', ');
-            ogg1[2] = data.item.id;
-            ogg1[3] = data.progress_ms / 1000; // Convert milliseconds to seconds
-            current_track[tempPunto] = ogg1;
-            if (num == 3) document.getElementById("currentSong").innerHTML = data.item.name + " of " + ogg1[1];
-        } else {
-            console.error('No track playing or API error:', response);
-            current_track[tempPunto] = ogg;
-        }
-    } catch (error) {
-        console.error('Error fetching current track:', error);
-        current_track[tempPunto] = ogg;
+
+    if (!res.ok) {
+      const text = await res.text();
+      console.error('Errore API Spotify:', res.status, text);
+      current_track[tempPunto] = ogg;
+      return;
     }
+
+    const data = await res.json();
+    console.log('Track data:', data);
+
+    const ogg1 = [
+      data.item.name,
+      data.item.artists.map(artist => artist.name).join(', '),
+      data.item.id,
+      data.progress_ms / 1000 // secondi
+    ];
+
+    current_track[tempPunto] = ogg1;
+    if (num === 3) {
+      document.getElementById("currentSong").textContent = `${data.item.name} of ${ogg1[1]}`;
+    }
+  } catch (error) {
+    console.error('Eccezione fetchCurrentTrack:', error);
+    current_track[tempPunto] = ogg;
+  }
 }
+
+// 5. Logout pulito
+function logout() {
+  localStorage.removeItem('access_token');
+  sessionStorage.removeItem('access_token');
+  accessToken = null;
+  window.history.replaceState({}, document.title, "/");
+  // opzionale: logout spotify aprendo pagina
+  window.open('https://www.spotify.com/logout/', '_blank');
+}
+
 
 function songsToString(oggg) {
     var str = "";
