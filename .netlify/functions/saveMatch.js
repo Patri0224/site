@@ -29,7 +29,7 @@ export async function handler(event, context) {
     const temps = tempi.join(";");
     const songs = current_track; // presumo già stringa o convertita lato client
 
-    if (idPartita === 0) {
+    if (idPartita == 0) {
       console.log('Inserting new match');
       const [post] = await sql`
         INSERT INTO public.partita (
