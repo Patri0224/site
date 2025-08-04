@@ -1299,7 +1299,7 @@ async function handleRedirect() {
     if (!code) return; // niente da fare
 
     // Se abbiamo già il token nel localStorage, evita di rifare la chiamata
-    if (localStorage.getItem('access_token')!= null || localStorage.getItem('access_token') !== 'undefined' || localStorage.getItem('access_token') !== '') {
+    if (localStorage.getItem('access_token')== null || localStorage.getItem('access_token') == 'undefined' || localStorage.getItem('access_token') == '') {
         window.history.replaceState({}, document.title, REDIRECT_URI);
         return;
     }
