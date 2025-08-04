@@ -687,7 +687,6 @@ G:::::G        G::::G  R::::R     R:::::R     A:::::::::::::::::::::A       F:::
 */
 //grafico per storia partita
 function showGraf() {
-    console.log(numPersone);
     if (document.getElementById("grafico").style.display == "block") {
         document.getElementById("grafico").style.display = "none";
         return;

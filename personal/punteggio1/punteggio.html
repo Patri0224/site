@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Punteggio Squadre</title>
     <link rel="stylesheet" href="css/style.css">
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 </head>
 
@@ -38,22 +38,18 @@
             <div class="rigg">
                 <p>Immagini di sfondo</p>
             </div>
-            <div class="rigg"><button onclick="changeBackground1()">Imm 1</button>
-                <p class="desc">Immagini di sinistra</p>
-            </div>
-            <div class="rigg"><button onclick="changeBackground2()">Imm 2</button>
-                <p class="desc">Immagine di destra</p>
+            <div class="rigg">
+                <button onclick="changeBackground1()">Imm 1</button>
+                <button onclick="changeBackground2()">Imm 2</button>
             </div>
         </div>
         <div class="rig">
             <div class="rigg">
                 <p>Cambiare i componenti di una squadra</p>
             </div>
-            <div class="rigg"><button onclick="changeSquadra1()">Team 1</button>
-                <p class="desc">Per la squadra di sinistra</p>
-            </div>
-            <div class="rigg"><button onclick="changeSquadra2()">Team 2</button>
-                <p class="desc">Per la squadra di destra</p>
+            <div class="rigg">
+                <button onclick="changeSquadra1()">Team 1</button>
+                <button onclick="changeSquadra2()">Team 2</button>
             </div>
         </div>
         <div class="rig">
@@ -93,13 +89,13 @@
         </div>
         <div class="rig">
             <div class="rigg">
-                <p>Backup su database</p>
+                <p>Backup su Database</p>
             </div>
             <div class="rigg"><button onclick="salvaPartita()">Save</button>
                 <p class="desc">Salvare la partita sul database</p>
             </div>
             <div class="rigg"><button onclick="mostraListaPartite()">Load</button>
-                <p class="desc">Caricare la partita dal database</p>
+                <p class="desc">Caricare una partita dal database</p>
             </div>
         </div>
         <div class="rig">
