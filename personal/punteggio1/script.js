@@ -158,6 +158,11 @@ function caricaPartita(idPartitas) {
             idCorrente = data.id;
             document.getElementById('lista-partite').style.display = 'none'; // nascondi la lista dopo il caricamento
             salvaStatoTemporaneo(); // salva lo stato corrente
+            updateBackground();
+            controlImgBackground();
+            controlloIndietro();
+            showMenu(2);
+            location.reload();
         })
         .catch(err => console.error('Errore nel caricamento:', err));
 }
@@ -615,7 +620,7 @@ window.addEventListener('load', function () {
         if (imageTeam1) document.getElementById('1').src = imageTeam1;
         if (imageTeam2) document.getElementById('2').src = imageTeam2;
     } catch (error) {
-        console.error("Errore nel caricamento delle immagini:", error);
+        console.log("Errore nel caricamento delle immagini:", error);
     }
 
     if (h1) punteggio1 = h1;
@@ -942,7 +947,7 @@ M::::::M               M::::::ME::::::::::::::::::::EN::::::N       N:::::::N  U
 M::::::M               M::::::ME::::::::::::::::::::EN::::::N        N::::::N    UU:::::::::UU    
 MMMMMMMM               MMMMMMMMEEEEEEEEEEEEEEEEEEEEEENNNNNNNN         NNNNNNN      UUUUUUUUU
 
-*/ 
+*/
 function mostraCanzone(index) {
     let obj = document.getElementById("canzone" + index);
     if (obj.style.display == "none") {
@@ -1294,7 +1299,7 @@ async function handleRedirect() {
     if (!code) return; // niente da fare
 
     // Se abbiamo già il token nel localStorage, evita di rifare la chiamata
-    if (localStorage.getItem('access_token')) {
+    if (localStorage.getItem('access_token')!= null || localStorage.getItem('access_token') !== 'undefined' || localStorage.getItem('access_token') !== '') {
         window.history.replaceState({}, document.title, REDIRECT_URI);
         return;
     }
@@ -1746,6 +1751,5 @@ if ('serviceWorker' in navigator) {
         .catch((error) => console.error('Registrazione Service Worker fallita:', error));
 }
 */
-window.addEventListener('DOMContentLoaded', () => {
-    handleRedirect();
-});
+
+handleRedirect();
