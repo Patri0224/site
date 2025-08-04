@@ -37,14 +37,11 @@ const persone = {
 let numPersone = Object.keys(persone).length;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
+
 var punteggio1 = "0|0";
 var punteggio2 = "0|0";
 var squadra1 = "";
 var squadra2 = "";
-const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
-const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
-const spessoreBarra = 2;//in percentuale
-const maxSpostamento = 20;//range dello spostamento fino a una massima differenza tra i due punteggi
 let punto = 0;
 let current_track = [];
 let accessToken = null;
@@ -54,8 +51,16 @@ let ogg = [];
 ogg[0] = 1;
 ogg[1] = 1;
 ogg[2] = 1;
-let nwindow;
 let idCorrente = 0;
+
+const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
+const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
+const spessoreBarra = 2;//in percentuale
+const maxSpostamento = 20;//range dello spostamento fino a una massima differenza tra i due punteggi
+
+
+let nwindow;
+
 const consoleDiv = document.getElementById("cici");
 const CLIENT_ID = '44a46de2fd8a4b38b962b7dcc81abccc';
 const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/punteggio.htm';
@@ -687,15 +692,15 @@ function showGraf() {
         document.getElementById("grafico").style.display = "none";
         return;
     }
-    console.log(current_track);
-    console.log(punteggio1);
-    console.log(punteggio2);
-    console.log(tempi);
-    console.log(squadra1);
-    console.log(squadra2);
-    console.log(punto);
-    console.log(accessToken);
-    console.log(idCorrente)
+    console.log("current_track:", current_track);
+    console.log("punteggio1:", punteggio1);
+    console.log("punteggio2:", punteggio2);
+    console.log("tempi:", tempi);
+    console.log("squadra1:", squadra1);
+    console.log("squadra2:", squadra2);
+    console.log("punto:", punto);
+    console.log("accessToken:", accessToken);
+    console.log("idCorrente:", idCorrente);
 
     let array = creaArrayZero(numPersone + 4);
     let array1 = creaArrayZero(numPersone + 4);
@@ -773,9 +778,9 @@ function showGraf() {
             arrayTempMediaSomma[i] = 0;
         }
     }
-    console.log(arrayTempMediaSomma);
-    console.log(arrayTempMin);
-    console.log(arrayTempMax);
+    console.log("arrayTempMediaSomma:", arrayTempMediaSomma);
+    console.log("arrayTempMin:", arrayTempMin);
+    console.log("arrayTempMax:", arrayTempMax);
 
     try {
         // Ordinamento dell'array
