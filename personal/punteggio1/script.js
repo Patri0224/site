@@ -261,7 +261,6 @@ function caricaGiocatori() {
     })
         .then(res => res.json())
         .then(data => {
-            console.log("Giocatori caricati:", data);
             persone = { 0: "" }; // reset con lo 0 vuoto
             data.forEach(p => {
                 persone[p.id] = p.nome;
