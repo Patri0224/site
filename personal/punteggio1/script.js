@@ -258,7 +258,7 @@ function caricaGiocatori() {
     fetch('/.netlify/functions/getPlayer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gruppi: str })
+        body: str 
     })
         .then(res => res.json())
         .then(data => {

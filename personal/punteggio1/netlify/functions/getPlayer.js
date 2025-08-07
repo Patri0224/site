@@ -6,7 +6,7 @@ export async function handler(event, context) {
     const body = JSON.parse(event.body || '{}');
 
     // 🔧 Estrai 'gruppi' dal body
-    let gruppi = body.gruppi;
+    let gruppi = body;
     // 🔐 Validazione
 
    
