@@ -1100,16 +1100,12 @@ function giocatoriAggiuntivi() {
         checkbox.name = "giocatore" + i;
         checkbox.id = "giocatore" + i;
         checkbox.value = i;
-        console.log("personeScelte:", personeScelte);
-        console.log("i:", i, "String(i):", String(i));
-        console.log(typeof personeScelte[0]);
        
         const label = document.createElement("label");
         label.htmlFor = "giocatore" + i;
         label.appendChild(checkbox);
          if (personeScelte.includes(i)) {
             checkbox.checked = true;
-            console.log("Checkbox " + i + " is checked");
         }
         label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
         label.style.flex = " 0 0 98%";
