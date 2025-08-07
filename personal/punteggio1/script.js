@@ -1110,6 +1110,7 @@ function giocatoriAggiuntivi() {
         label.htmlFor = "giocatore" + i;
         label.appendChild(checkbox);
         label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
+        label.style.flex = " 0 0 98%";
         wrapper.appendChild(label);
         container.appendChild(wrapper);
     }

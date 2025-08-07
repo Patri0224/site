@@ -425,7 +425,7 @@ footer #startTimer {
     color: white; /* Colore del testo */
     font-size: small;
     cursor: pointer; /* Icona della mano */
-    flex: 0 0 22%; /* Due colonne: ogni elemento occupa il 48% */
+    flex: 0 0 22%; 
     margin: 8px 1%; /* Spaziatura uniforme */
     border-radius: 4px; /* Angoli arrotondati */
     text-align: center; /* Testo centrato */
