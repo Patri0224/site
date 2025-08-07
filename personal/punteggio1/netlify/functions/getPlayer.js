@@ -11,10 +11,8 @@ export async function handler(event, context) {
       : [];
 
     if (gruppi.length === 0) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Nessun gruppo valido specificato' })
-      };
+      gruppi = [1];
+      gruppi[0] = 1; // Imposta un gruppo di default se non fornito
     }
 
     const persone = await sql`
