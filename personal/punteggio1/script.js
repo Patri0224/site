@@ -101,25 +101,24 @@ const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/pu
     };
 })();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+DDDDDDDDDDDDD        BBBBBBBBBBBBBBBBB   
+D::::::::::::DDD     B::::::::::::::::B  
+D:::::::::::::::DD   B::::::BBBBBB:::::B 
+DDD:::::DDDDD:::::D  BB:::::B     B:::::B
+  D:::::D    D:::::D   B::::B     B:::::B
+  D:::::D     D:::::D  B::::B     B:::::B
+  D:::::D     D:::::D  B::::BBBBBB:::::B 
+  D:::::D     D:::::D  B:::::::::::::BB  
+  D:::::D     D:::::D  B::::BBBBBB:::::B 
+  D:::::D     D:::::D  B::::B     B:::::B
+  D:::::D     D:::::D  B::::B     B:::::B
+  D:::::D    D:::::D   B::::B     B:::::B
+DDD:::::DDDDD:::::D  BB:::::BBBBBB::::::B
+D:::::::::::::::DD   B:::::::::::::::::B 
+D::::::::::::DDD     B::::::::::::::::B  
+DDDDDDDDDDDDD        BBBBBBBBBBBBBBBBB
+*/
 function mostraListaPartite() {
     if (!navigator.onLine) {
         alert("Nessuna connessione Internet");
@@ -524,6 +523,7 @@ function loadData(event) {
     reader.readAsText(file);
     updateBackground();
     showMenu(2);
+    caricaGiocatori();
 }
 function preset() {
     const newName = prompt("inserisci qualcosa per attivare il preset");
@@ -577,6 +577,7 @@ function preset() {
     showMenu(2);
     salvaStatoTemporaneo();
     location.reload();
+    caricaGiocatori();
 }
 //reset pagina a opzioni default (anche dati temporanei)
 function reset() {
@@ -629,6 +630,7 @@ function reset() {
     showMenu(2);
     salvaStatoTemporaneo();
     location.reload();
+    caricaGiocatori();
 }
 //salvataggio dati in buffer temporanei in caso di reload pagina
 function salvaStatoTemporaneo() {
@@ -647,6 +649,7 @@ function salvaStatoTemporaneo() {
     localStorage.setItem("temps", tempi.join(";"));
     localStorage.setItem("access_token", accessToken); // Salva il token di accesso
     localStorage.setItem("idCorrente", idCorrente); // Salva l'ID della partita corrente
+    localStorage.setItem("persone", JSON.stringify(persone)); // Salva il tempo corrente
 }
 
 // ✅ Più affidabile di beforeunload su iOS
@@ -675,10 +678,12 @@ window.addEventListener('load', function () {
     const punt = localStorage.getItem("punt");
     accessToken = localStorage.getItem("access_token"); // Ripristina il token di accesso
     idCorrente = localStorage.getItem("idCorrente") || 0; // Ripristina l'ID della partita corrente
+    persone = JSON.parse(localStorage.getItem("persone")) || { 0: "" }; // Ripristina i giocatori
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
     if (nameTeam2) document.getElementById('name-team2').textContent = nameTeam2;
     if (scoreTeam2) document.getElementById('score-team2').textContent = scoreTeam2;
+
 
     try {
         if (imageTeam1) document.getElementById('1').src = imageTeam1;
@@ -699,6 +704,7 @@ window.addEventListener('load', function () {
     controlImgBackground();
     controlloIndietro();
     settaSquadre();
+    caricaGiocatori();
 });
 
 //aggiunta ultimo valore nella cronologia del punteggio
