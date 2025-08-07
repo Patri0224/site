@@ -1116,6 +1116,7 @@ function giocatoriAggiuntivi() {
     bottone.textContent = "Conferma selezione";
     bottone.onclick = () => {
         const selezionati = [];
+        selezionati.push(1);
         const checkboxes = container.querySelectorAll("input[type=checkbox]");
         checkboxes.forEach(cb => {
             if (cb.checked) {
