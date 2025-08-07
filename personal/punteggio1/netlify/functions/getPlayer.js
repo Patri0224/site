@@ -3,10 +3,9 @@ const sql = neon();
 
 export async function handler(event, context) {
   try {
-    const body = JSON.parse(event.body || '{}');
 
     // 🔧 Estrai 'gruppi' dal body
-    let gruppi = body;
+    let gruppi = event.body;
     // 🔐 Validazione
 
    
