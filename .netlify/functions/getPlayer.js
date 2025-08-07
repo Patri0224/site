@@ -11,16 +11,14 @@ export async function handler(event, context) {
       : [];
 
     if (gruppi.length === 0) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ error: 'Nessun gruppo valido specificato' })
-      };
+      gruppi = [1];
+      gruppi[0] = 1; // Imposta un gruppo di default se non fornito
     }
 
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
-      WHERE gruppo IN (${sql.array(gruppi, 'int')})
+      WHERE gruppo IN (${gruppi})
       ORDER BY id ASC
     `;
 
