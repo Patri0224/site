@@ -1105,11 +1105,8 @@ function giocatoriAggiuntivi() {
         if (personeScelte.includes(i)) {
             checkbox.checked = true;
         }
-        const descrizione = document.createElement("span");
-        descrizione.textContent = descrizione[i]; // ← cambia qui
-
+        checkbox.innerHTML = `<p>${descrizione[i]}</p>`;
         wrapper.appendChild(checkbox);
-        wrapper.appendChild(descrizione);
         container.appendChild(wrapper);
     }
 
