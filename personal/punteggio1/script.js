@@ -1101,12 +1101,16 @@ function giocatoriAggiuntivi() {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.name = "giocatore" + i;
+        checkbox.id = "giocatore" + i;
         checkbox.value = i;
         if (personeScelte.includes(i)) {
             checkbox.checked = true;
         }
-        checkbox.innerHTML = `${descrizione[i]}`;
-        wrapper.appendChild(checkbox);
+        checkbox.innerHTML = descrizione[i];
+        const label = document.createElement("label");
+        label.htmlFor = "giocatore" + i;
+        label.appendChild(checkbox);
+        wrapper.appendChild(label);
         container.appendChild(wrapper);
     }
 
