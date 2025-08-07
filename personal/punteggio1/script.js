@@ -1095,9 +1095,6 @@ function giocatoriAggiuntivi() {
     descrizione[6] = "Pallanuoto estesa"; // Giocatore 6
     // 1. Crea i checkbox da 2 a 6
     for (let i = 2; i <= 6; i++) {
-        const wrapper = document.createElement("label");
-        wrapper.style.display = "block";
-
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.name = "giocatore" + i;
@@ -1111,8 +1108,7 @@ function giocatoriAggiuntivi() {
         label.appendChild(checkbox);
         label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
         label.style.flex = " 0 0 98%";
-        wrapper.appendChild(label);
-        container.appendChild(wrapper);
+        container.appendChild(label);
     }
 
     // 2. Crea il bottone
