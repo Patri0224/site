@@ -1103,7 +1103,7 @@ function giocatoriAggiuntivi() {
         console.log("personeScelte:", personeScelte);
         console.log("i:", i, "String(i):", String(i));
         console.log(typeof personeScelte[0]);
-        if (personeScelte.includes(String(i))) {
+        if (personeScelte.includes(i)) {
             checkbox.checked = true;
             console.log("Checkbox " + i + " is checked");
         }
