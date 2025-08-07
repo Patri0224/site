@@ -5,16 +5,22 @@ export async function handler(event, context) {
   try {
     const body = JSON.parse(event.body || '{}');
 
-    // Validazione di sicurezza: assicurati che 'gruppi' sia un array di interi
-    const gruppi = Array.isArray(body.gruppi)
-      ? body.gruppi.map(Number).filter(n => Number.isInteger(n))
-      : [];
+    // 🔧 Estrai 'gruppi' dal body
+    let gruppi = body.gruppi;
 
-    if (gruppi.length === 0) {
-      gruppi = [1];
-      gruppi[0] = 1; // Imposta un gruppo di default se non fornito
+    // 🔐 Validazione
+    if (!Array.isArray(gruppi)) {
+      gruppi = [];
+    } else {
+      gruppi = gruppi.map(n => parseInt(n)).filter(n => !isNaN(n));
     }
 
+    // Se vuoto, metti comunque 1
+    if (gruppi.length === 0) {
+      gruppi = [1];
+    }
+
+    // 🧠 Query con IN (...) interpolato
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
