@@ -9,18 +9,12 @@ export async function handler(event, context) {
     let gruppi = body.gruppi;
     // 🔐 Validazione
 
-    for (let i = 0; i < gruppi.length; i++) {
-      gruppi[i] = parseInt(gruppi[i]);
-    }
-    // Se vuoto, metti comunque 1
-    if (gruppis.length === 0) {
-      gruppis = [1];
-    }
+   
     // 🧠 Query con IN (...) interpolato
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
-      WHERE gruppo IN (`+ sql.join(gruppis, ',') + `)
+      WHERE gruppo IN (${gruppi})
       ORDER BY id ASC
     `;
 

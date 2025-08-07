@@ -254,10 +254,11 @@ function caricaGiocatori() {
     if (!navigator.onLine) {
         return;
     }
+    let str=personeScelte.join(",");
     fetch('/.netlify/functions/getPlayer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gruppi: personeScelte })
+        body: JSON.stringify({ gruppi: str })
     })
         .then(res => res.json())
         .then(data => {
