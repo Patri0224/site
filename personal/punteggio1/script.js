@@ -845,7 +845,8 @@ function showGraf() {
     console.log("punto:", punto);
     console.log("accessToken:", accessToken);
     console.log("idCorrente:", idCorrente);
-
+    console.log("persone:", persone);
+    console.log("personeScelte:", personeScelte);
     let array = creaArrayZero(numPersone + 4);
     let array1 = creaArrayZero(numPersone + 4);
     const arr1 = punteggio1.split(";");
