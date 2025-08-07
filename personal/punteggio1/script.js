@@ -52,7 +52,8 @@ ogg[0] = 1;
 ogg[1] = 1;
 ogg[2] = 1;
 let idCorrente = 0;
-
+let personeScelte = [];
+personeScelte[0] = 1;
 const peso1 = 0.9;//tra 0 e 1: spostamento in alto della barra e immagini
 const peso2 = 0.7;//tra 0 e 1: spostamento in basso della barra e immagini
 const spessoreBarra = 2;//in percentuale
@@ -253,17 +254,21 @@ function caricaGiocatori() {
     if (!navigator.onLine) {
         return;
     }
-    fetch('/.netlify/functions/getPlayer')
+    fetch('/.netlify/functions/getPlayer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gruppi: personeScelte })
+    })
         .then(res => res.json())
         .then(data => {
             persone = { 0: "" }; // reset con lo 0 vuoto
             data.forEach(p => {
                 persone[p.id] = p.nome;
             });
+            numPersone = Object.keys(persone).length;
         })
         .catch(err => console.error('Errore caricamento giocatori:', err));
 
-    numPersone = Object.keys(persone).length;
 }
 /*
    SSSSSSSSSSSSSSS FFFFFFFFFFFFFFFFFFFFFF     OOOOOOOOO     NNNNNNNN        NNNNNNNNDDDDDDDDDDDDD             OOOOOOOOO     
@@ -543,6 +548,39 @@ function preset() {
         punto = 0;
         squadra1 = "2;14;21;28";
         squadra2 = "1;6;9;19";
+        personeScelte = [1];
+        persone = {
+            0: "",
+            1: "Alice",
+            2: "Andrea",
+            3: "Billa",
+            4: "Busti",
+            5: "Clara",
+            6: "Dani",
+            7: "Depa",
+            8: "Fede",
+            9: "Fra",
+            10: "Friggi",
+            11: "Giorgia",
+            12: "Giorgia C",
+            13: "Giuse",
+            14: "Giulia",
+            15: "Giada",
+            16: "Irene",
+            17: "Lisa",
+            18: "Ludovica",
+            19: "Marco",
+            20: "Margo",
+            21: "Mati",
+            22: "Mati (depa)",
+            23: "Mirko",
+            24: "Pat",
+            25: "Paolo",
+            26: "Samu",
+            27: "Selina",
+            28: "Totta",
+            29: "Viola"
+        };
         tempoTemp = getCurrentTimeInSeconds();
 
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
@@ -558,6 +596,8 @@ function preset() {
         localStorage.setItem("punt", punto);
         localStorage.setItem("songs", current_track);
         localStorage.setItem("temps", tempi);
+        localStorage.setItem("persone", JSON.stringify(persone)); // Salva le persone
+        localStorage.setItem("personeScelte", JSON.stringify(personeScelte)); // Salva le persone selezionate
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
@@ -598,7 +638,39 @@ function reset() {
         punto = 0;
         squadra1 = "";
         squadra2 = "";
-
+        personeScelte = [1];
+        persone = {
+            0: "",
+            1: "Alice",
+            2: "Andrea",
+            3: "Billa",
+            4: "Busti",
+            5: "Clara",
+            6: "Dani",
+            7: "Depa",
+            8: "Fede",
+            9: "Fra",
+            10: "Friggi",
+            11: "Giorgia",
+            12: "Giorgia C",
+            13: "Giuse",
+            14: "Giulia",
+            15: "Giada",
+            16: "Irene",
+            17: "Lisa",
+            18: "Ludovica",
+            19: "Marco",
+            20: "Margo",
+            21: "Mati",
+            22: "Mati (depa)",
+            23: "Mirko",
+            24: "Pat",
+            25: "Paolo",
+            26: "Samu",
+            27: "Selina",
+            28: "Totta",
+            29: "Viola"
+        };
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
         localStorage.setItem("it1", document.getElementById('1').src);
@@ -612,9 +684,14 @@ function reset() {
         localStorage.setItem("punt", punto);
         localStorage.setItem("songs", current_track);
         localStorage.setItem("temps", tempi);
+        localStorage.setItem("persone", JSON.stringify(persone)); // Salva le persone
+        localStorage.setItem("personeScelte", JSON.stringify(personeScelte)); // Salva le persone selezionate
+
         document.cookie = 'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
         localStorage.removeItem('access_token');
         sessionStorage.removeItem('access_token');
+
+
         accessToken = null; // Resetta il token globale
         idCorrente = 0; // Resetta l'ID della partita corrente  
         // Rimuovi il token dalla barra degli indirizzi
@@ -650,6 +727,7 @@ function salvaStatoTemporaneo() {
     localStorage.setItem("access_token", accessToken); // Salva il token di accesso
     localStorage.setItem("idCorrente", idCorrente); // Salva l'ID della partita corrente
     localStorage.setItem("persone", JSON.stringify(persone)); // Salva il tempo corrente
+    localStorage.setItem("personeScelte", JSON.stringify(personeScelte)); // Salva le persone selezionate
 }
 
 // ✅ Più affidabile di beforeunload su iOS
@@ -679,6 +757,7 @@ window.addEventListener('load', function () {
     accessToken = localStorage.getItem("access_token"); // Ripristina il token di accesso
     idCorrente = localStorage.getItem("idCorrente") || 0; // Ripristina l'ID della partita corrente
     persone = JSON.parse(localStorage.getItem("persone")) || { 0: "" }; // Ripristina i giocatori
+    personeScelte = JSON.parse(localStorage.getItem("personeScelte")) || [1]; // Ripristina le persone selezionate
     if (nameTeam1) document.getElementById('name-team1').textContent = nameTeam1;
     if (scoreTeam1) document.getElementById('score-team1').textContent = scoreTeam1;
     if (nameTeam2) document.getElementById('name-team2').textContent = nameTeam2;
@@ -997,6 +1076,49 @@ function settaSquadre() {
     }
     document.getElementById("partecipanti2").innerHTML = str;
 }
+
+function giocatoriAggiuntivi() {
+    const container = document.getElementById("Sq3");
+    container.innerHTML = ""; // svuota il div
+
+    // 1. Crea i checkbox da 2 a 6
+    for (let i = 2; i <= 6; i++) {
+        const wrapper = document.createElement("label");
+        wrapper.style.display = "block";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "giocatore" + i;
+        checkbox.value = i;
+
+        const descrizione = document.createElement("span");
+        descrizione.textContent = `Descrizione per il giocatore ${i}`; // ← cambia qui
+
+        wrapper.appendChild(checkbox);
+        wrapper.appendChild(descrizione);
+        container.appendChild(wrapper);
+    }
+
+    // 2. Crea il bottone
+    const bottone = document.createElement("button");
+    bottone.textContent = "Conferma selezione";
+    bottone.onclick = () => {
+        const selezionati = [];
+        const checkboxes = container.querySelectorAll("input[type=checkbox]");
+        checkboxes.forEach(cb => {
+            if (cb.checked) {
+                selezionati.push(Number(cb.value));
+            }
+        });
+        container.style.display = "none"; // nascondi il div
+        // Qui puoi usare l'array `selezionati` come vuoi
+    };
+
+    container.appendChild(bottone);
+    container.style.display = "block"; // mostra il div
+}
+
+
 
 /*
 MMMMMMMM               MMMMMMMMEEEEEEEEEEEEEEEEEEEEEENNNNNNNN        NNNNNNNNUUUUUUUU     UUUUUUUU
