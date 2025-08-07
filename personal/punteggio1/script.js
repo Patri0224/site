@@ -1121,6 +1121,7 @@ function giocatoriAggiuntivi() {
                 selezionati.push(Number(cb.value));
             }
         });
+        personeScelte = selezionati; // Aggiorna l'array globale
         container.style.display = "none"; // nascondi il div
         // Qui puoi usare l'array `selezionati` come vuoi
     };
