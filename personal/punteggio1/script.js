@@ -237,7 +237,7 @@ function aggiungiGiocatore() {
         return;
     }
 
-    fetch('/.netlify/functions/aggiungiGiocatore', {
+    fetch('/.netlify/functions/addPlayer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome: nome.trim() })
@@ -264,6 +264,7 @@ function caricaGiocatori() {
         })
         .catch(err => console.error('Errore caricamento giocatori:', err));
 
+    numPersone = Object.keys(persone).length;
 }
 /*
    SSSSSSSSSSSSSSS FFFFFFFFFFFFFFFFFFFFFF     OOOOOOOOO     NNNNNNNN        NNNNNNNNDDDDDDDDDDDDD             OOOOOOOOO     
