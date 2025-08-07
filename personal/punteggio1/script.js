@@ -550,6 +550,7 @@ function preset() {
         squadra1 = "2;14;21;28";
         squadra2 = "1;6;9;19";
         personeScelte = [1];
+        personeScelte[0] = 1;
         persone = {
             0: "",
             1: "Alice",
@@ -640,6 +641,7 @@ function reset() {
         squadra1 = "";
         squadra2 = "";
         personeScelte = [1];
+        personeScelte[0] = 1;
         persone = {
             0: "",
             1: "Alice",
