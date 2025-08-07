@@ -1100,7 +1100,7 @@ function giocatoriAggiuntivi() {
         checkbox.name = "giocatore" + i;
         checkbox.id = "giocatore" + i;
         checkbox.value = i;
-        if (personeScelte.includes(i)) {
+        if (personeScelte.includes(String(i))) {
             checkbox.checked = true;
         }
         const label = document.createElement("label");
@@ -1109,7 +1109,7 @@ function giocatoriAggiuntivi() {
         label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
         label.style.flex = " 0 0 98%";
         label.style.margin = "0.5%";
-        label.style.padding = "0.5%";   
+        label.style.padding = "0.5%";
         label.style.backgroundColor = "#283344ff";
         label.style.borderRadius = "5px";
         label.style.cursor = "pointer";
