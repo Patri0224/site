@@ -1104,10 +1104,10 @@ function giocatoriAggiuntivi() {
         const label = document.createElement("label");
         label.htmlFor = "giocatore" + i;
         label.appendChild(checkbox);
+        label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
          if (personeScelte.includes(i)) {
             checkbox.checked = true;
         }
-        label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
         label.style.flex = " 0 0 98%";
         label.style.margin = "0.5%";
         label.style.padding = "0.5%";
