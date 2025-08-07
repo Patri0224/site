@@ -31,7 +31,7 @@ const persone = {
     28: "Totta",
     29: "Viola"
 };
-
+//ogni nome nuovo deve essere aggiunto in fondo alla lista anche se non è più in ordine alfabetico per essere uguale al database
 // automatically uses env NETLIFY_DATABASE_URL
 //
 let numPersone = Object.keys(persone).length;
@@ -100,6 +100,24 @@ const REDIRECT_URI = 'https://studiopersonale.netlify.app/personal/punteggio1/pu
         originalError.apply(console, args);
     };
 })();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function mostraListaPartite() {
@@ -207,6 +225,46 @@ function salvaPartita() {
         .catch(err => console.error('Errore salvataggio:', err));
 }
 
+function aggiungiGiocatore() {
+    if (!navigator.onLine) {
+        alert("Nessuna connessione Internet");
+        return;
+    }
+
+    const nome = prompt("Inserisci il nome del giocatore:");
+    if (!nome || nome.trim() === "") {
+        alert("Nome non valido.");
+        return;
+    }
+
+    fetch('/.netlify/functions/aggiungiGiocatore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: nome.trim() })
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("Errore durante l'inserimento");
+            return res.json();
+        })
+        .then(() => caricaGiocatori())  // ⚠️ chiamata corretta (non subito eseguita!)
+        .catch(err => alert("Errore: " + err.message));
+}
+
+function caricaGiocatori() {
+    if (!navigator.onLine) {
+        return;
+    }
+    fetch('/.netlify/functions/getPlayer')
+        .then(res => res.json())
+        .then(data => {
+            persone = { 0: "" }; // reset con lo 0 vuoto
+            data.forEach(p => {
+                persone[p.id] = p.nome;
+            });
+        })
+        .catch(err => console.error('Errore caricamento giocatori:', err));
+
+}
 /*
    SSSSSSSSSSSSSSS FFFFFFFFFFFFFFFFFFFFFF     OOOOOOOOO     NNNNNNNN        NNNNNNNNDDDDDDDDDDDDD             OOOOOOOOO     
  SS:::::::::::::::SF::::::::::::::::::::F   OO:::::::::OO   N:::::::N       N::::::ND::::::::::::DDD        OO:::::::::OO   
@@ -1303,7 +1361,7 @@ async function handleRedirect() {
     if (!code) return; // niente da fare
 
     // Se abbiamo già il token nel localStorage, evita di rifare la chiamata
-    if (localStorage.getItem('access_token')== null || localStorage.getItem('access_token') == 'undefined' || localStorage.getItem('access_token') == '') {
+    if (localStorage.getItem('access_token') == null || localStorage.getItem('access_token') == 'undefined' || localStorage.getItem('access_token') == '') {
         window.history.replaceState({}, document.title, REDIRECT_URI);
         return;
     }
@@ -1757,3 +1815,4 @@ if ('serviceWorker' in navigator) {
 */
 
 handleRedirect();
+caricaGiocatori();
