@@ -23,7 +23,7 @@ export async function handler(event, context) {
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
-      WHERE gruppo IN (${str.replace('"', '')})
+      WHERE gruppo IN (`+sql.join(gruppi, ',')+`)
       ORDER BY id ASC
     `;
 
