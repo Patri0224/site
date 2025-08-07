@@ -1086,8 +1086,8 @@ function giocatoriAggiuntivi() {
     const container = document.getElementById("Sq3");
     container.innerHTML = ""; // svuota il div
     descrizione = [];
-    descrizione[0] = "Nessuno"; // Nessun giocatore selezionato
-    descrizione[1] = "Alice"; // Giocatore 1    
+    descrizione[0] = "0"; // Nessun giocatore selezionato
+    descrizione[1] = "0"; // Giocatore 1    
     descrizione[2] = "Amici Mati"; // Giocatore 2
     descrizione[3] = "Amici Carlotta"; // Giocatore 3
     descrizione[4] = "Fra 1"; // Giocatore 4
@@ -1102,9 +1102,11 @@ function giocatoriAggiuntivi() {
         checkbox.type = "checkbox";
         checkbox.name = "giocatore" + i;
         checkbox.value = i;
-
+        if (personeScelte.includes(i)) {
+            checkbox.checked = true;
+        }
         const descrizione = document.createElement("span");
-        descrizione.textContent = `Descrizione per il giocatore ${i}`; // ← cambia qui
+        descrizione.textContent = descrizione[i]; // ← cambia qui
 
         wrapper.appendChild(checkbox);
         wrapper.appendChild(descrizione);
@@ -1125,11 +1127,12 @@ function giocatoriAggiuntivi() {
         });
         personeScelte = selezionati; // Aggiorna l'array globale
         container.style.display = "none"; // nascondi il div
+        caricaGiocatori(); // Ricarica i giocatori
         // Qui puoi usare l'array `selezionati` come vuoi
     };
 
     container.appendChild(bottone);
-    container.style.display = "block"; // mostra il div
+    container.style.display = "flex"; // mostra il div
 }
 
 
