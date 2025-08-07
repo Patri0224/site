@@ -1,5 +1,5 @@
 //variabili globali
-const persone = {
+var persone = {
     0: "",
     1: "Alice",
     2: "Andrea",
