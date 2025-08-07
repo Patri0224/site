@@ -6,22 +6,22 @@ export async function handler(event, context) {
     const body = JSON.parse(event.body || '{}');
     let gruppi = body.gruppi;
 
-    // Validazione: array di numeri interi
+    // Validazione sicura
     if (!Array.isArray(gruppi)) {
       gruppi = [];
     } else {
       gruppi = gruppi.map(n => parseInt(n)).filter(n => !isNaN(n));
     }
 
-    // Default: se nessun gruppo passato
     if (gruppi.length === 0) {
-      gruppi = [1];
+      gruppi = [1]; // default
     }
 
+    // ✅ Usiamo la sintassi corretta per array in neon
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
-      WHERE gruppo = ANY(${sql.array(gruppi, 'int')})
+      WHERE gruppo = ANY(${gruppi})
       ORDER BY id ASC
     `;
 
