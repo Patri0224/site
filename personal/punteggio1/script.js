@@ -1110,7 +1110,7 @@ function giocatoriAggiuntivi() {
         label.style.flex = " 0 0 98%";
         label.style.margin = "0.5%";
         label.style.padding = "0.5%";   
-        label.style.backgroundColor = "#f0f0f0";
+        label.style.backgroundColor = "#283344ff";
         label.style.borderRadius = "5px";
         label.style.cursor = "pointer";
         label.style.border = "1px solid #ccc";
