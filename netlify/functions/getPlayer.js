@@ -7,7 +7,7 @@ export async function handler(event, context) {
 
     // 🔧 Estrai 'gruppi' dal body
     let gruppi = body.gruppi;
-
+    console.log("Gruppi ricevuti:", gruppi);
     // 🔐 Validazione
     if (!Array.isArray(gruppi)) {
       gruppi = [];
