@@ -261,12 +261,12 @@ function caricaGiocatori() {
     })
         .then(res => res.json())
         .then(data => {
-            console.log("Risposta fetch:", data);
             persone = { 0: "" }; // reset con lo 0 vuoto
             data.forEach(p => {
                 persone[p.id] = p.nome;
             });
             numPersone = Object.keys(persone).length;
+            settaSquadre();
         })
         .catch(err => console.error('Errore caricamento giocatori:', err));
 
@@ -1081,7 +1081,14 @@ function settaSquadre() {
 function giocatoriAggiuntivi() {
     const container = document.getElementById("Sq3");
     container.innerHTML = ""; // svuota il div
-
+    descrizione = [];
+    descrizione[0] = "Nessuno"; // Nessun giocatore selezionato
+    descrizione[1] = "Alice"; // Giocatore 1    
+    descrizione[2] = "Amici Mati"; // Giocatore 2
+    descrizione[3] = "Amici Carlotta"; // Giocatore 3
+    descrizione[4] = "Fra 1"; // Giocatore 4
+    descrizione[5] = "Fra 2"; // Giocatore 5
+    descrizione[6] = "Pallanuoto estesa"; // Giocatore 6
     // 1. Crea i checkbox da 2 a 6
     for (let i = 2; i <= 6; i++) {
         const wrapper = document.createElement("label");
