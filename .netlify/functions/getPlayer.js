@@ -7,7 +7,6 @@ export async function handler(event, context) {
 
     // 🔧 Estrai 'gruppi' dal body
     let gruppi = body.gruppi;
-    console.log("Gruppi ricevuti:", gruppi);
     // 🔐 Validazione
     if (!Array.isArray(gruppi)) {
       gruppi = [];
@@ -19,12 +18,12 @@ export async function handler(event, context) {
     if (gruppi.length === 0) {
       gruppi = [1];
     }
-
+    str = gruppi.toString();
     // 🧠 Query con IN (...) interpolato
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
-      WHERE gruppo IN (${gruppi})
+      WHERE gruppo IN (${str})
       ORDER BY id ASC
     `;
 
