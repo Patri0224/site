@@ -1102,6 +1102,7 @@ function giocatoriAggiuntivi() {
         checkbox.value = i;
         if (personeScelte.includes(String(i))) {
             checkbox.checked = true;
+            console.log("Checkbox " + i + " is checked");
         }
         const label = document.createElement("label");
         label.htmlFor = "giocatore" + i;
