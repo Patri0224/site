@@ -1133,7 +1133,7 @@ function giocatoriAggiuntivi() {
     };
 
     container.appendChild(bottone);
-    container.style.display = "flex"; // mostra il div
+    container.style.display = "block"; // mostra il div
 }
 
 
