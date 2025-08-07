@@ -18,7 +18,8 @@ export async function handler(event, context) {
       punto,
       current_track,
       tempi,
-      nomePartita
+      nomePartita,
+      personeScelte
     } = body;
 
     // Converti array in stringa
@@ -38,14 +39,16 @@ export async function handler(event, context) {
           punto, current_track,
           tempi, nome_partita,
           nomes1, nomes2,
-          puntis1, puntis2
+          puntis1, puntis2,
+          persone_scelte
         ) VALUES (
           ${h1}, ${h2},
           ${m1}, ${m2},
           ${punto}, ${songs},
           ${temps}, ${nomePartita},
           ${team1Name}, ${team2Name},
-          ${parseInt(team1Score)}, ${parseInt(team2Score)}
+          ${parseInt(team1Score)}, ${parseInt(team2Score)},
+          ${JSON.stringify(personeScelte)}
         )
         RETURNING id
       `;
@@ -69,7 +72,8 @@ export async function handler(event, context) {
           nomes1 = ${team1Name},
           nomes2 = ${team2Name},
           puntis1 = ${parseInt(team1Score)},
-          puntis2 = ${parseInt(team2Score)}
+          puntis2 = ${parseInt(team2Score)},
+          persone_scelte = ${JSON.stringify(personeScelte)}
         WHERE id = ${idPartita}
       `;
       return {

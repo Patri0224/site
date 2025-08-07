@@ -6,17 +6,25 @@ export async function handler(event, context) {
     // Parsing il corpo della richiesta (assumendo che sia JSON con "nome")
     const { nome } = JSON.parse(event.body);
 
-    if (!nome || typeof nome !== 'string') {
+    // Validazione dei campi
+    if (!nome || typeof nome !== 'string' || nome.trim() === "") {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: 'Il campo "nome" è obbligatorio.' })
       };
     }
 
+    if (numero === undefined || isNaN(numero)) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Il campo "numero" deve essere un numero valido.' })
+      };
+    }
+
     // Esegui l'inserimento
     const result = await sql`
-      INSERT INTO public.persone (nome)
-      VALUES (${nome})
+      INSERT INTO public.persone (nome, gruppo)
+      VALUES (${nome}, ${numero})
     `;
 
     return {

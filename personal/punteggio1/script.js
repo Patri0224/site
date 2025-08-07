@@ -176,9 +176,9 @@ function caricaPartita(idPartitas) {
             punto = data.punto;
             current_track = songsFromString(data.current_track); // tua funzione
             tempi = data.tempi.split(';');
-
-            // puoi anche salvare idPartita corrente in una variabile globale
             idCorrente = data.id;
+            personeScelte = JSON.parse(data.persone_scelte);
+
             document.getElementById('lista-partite').style.display = 'none'; // nascondi la lista dopo il caricamento
             salvaStatoTemporaneo(); // salva lo stato corrente
             updateBackground();
@@ -208,7 +208,8 @@ function salvaPartita() {
         punto,
         current_track: songsToString(current_track), // tua funzione
         tempi,
-        nomePartita: prompt('Nome partita:', 'Senza nome') || 'Senza nome'
+        nomePartita: prompt('Nome partita:', 'Senza nome') || 'Senza nome',
+        personeScelte
     };
 
     fetch('/.netlify/functions/saveMatch', {
@@ -236,11 +237,19 @@ function aggiungiGiocatore() {
         alert("Nome non valido.");
         return;
     }
+    const num = prompt("Inserisci il numero del giocatore:");
+    if (!num || isNaN(num.trim()) || num.trim() === "") {
+        alert("Numero non valido.");
+        return;
+    }
 
     fetch('/.netlify/functions/addPlayer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome: nome.trim() })
+        body: JSON.stringify({
+            nome: nome.trim(),
+            numero: parseInt(num.trim(), 10)
+        })
     })
         .then(res => {
             if (!res.ok) throw new Error("Errore durante l'inserimento");
