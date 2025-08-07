@@ -8,22 +8,19 @@ export async function handler(event, context) {
     // 🔧 Estrai 'gruppi' dal body
     let gruppi = body.gruppi;
     // 🔐 Validazione
-    if (!Array.isArray(gruppi)) {
-      gruppi = [];
-    } else {
-      gruppi = gruppi.map(n => parseInt(n)).filter(n => !isNaN(n));
-    }
 
-    // Se vuoto, metti comunque 1
-    if (gruppi.length === 0) {
-      gruppi = [1];
+    for (let i = 0; i < gruppi.length; i++) {
+      gruppi[i] = parseInt(gruppi[i]);
     }
-    str = gruppi.toString();
+    // Se vuoto, metti comunque 1
+    if (gruppis.length === 0) {
+      gruppis = [1];
+    }
     // 🧠 Query con IN (...) interpolato
     const persone = await sql`
       SELECT id, nome
       FROM public.persone
-      WHERE gruppo IN (`+sql.join(gruppi, ',')+`)
+      WHERE gruppo IN (`+ sql.join(gruppis, ',') + `)
       ORDER BY id ASC
     `;
 
