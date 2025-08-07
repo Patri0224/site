@@ -433,7 +433,15 @@ footer #startTimer {
     gap: 1px; /* Spaziatura tra il checkbox e il testo */
     padding: 1px; /* Aggiunge spazio interno */
 }
-
+.Sq3label{
+    flex: 0 0 98%;
+    margin: 0.5%;
+    padding: 0.5%;
+    background-color: #283344ff;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
 .SelectorSq label:hover,
 .SelectorSq label:focus {
     background-color: #554;

@@ -1094,29 +1094,20 @@ function giocatoriAggiuntivi() {
     descrizione[5] = "Fra 2"; // Giocatore 5
     descrizione[6] = "Pallanuoto estesa"; // Giocatore 6
     // 1. Crea i checkbox da 2 a 6
+    let str = "";
     for (let i = 2; i <= 6; i++) {
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.name = "giocatore" + i;
-        checkbox.id = "giocatore" + i;
-        checkbox.value = i;
-       
-        const label = document.createElement("label");
-        label.htmlFor = "giocatore" + i;
-        label.appendChild(checkbox);
-        label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
-         if (personeScelte.includes(i)) {
-            checkbox.checked = true;
+        let checked = "";
+        if (personeScelte.includes(i)) {
+            checked = "checked";
         }
-        label.style.flex = " 0 0 98%";
-        label.style.margin = "0.5%";
-        label.style.padding = "0.5%";
-        label.style.backgroundColor = "#283344ff";
-        label.style.borderRadius = "5px";
-        label.style.cursor = "pointer";
-        label.style.border = "1px solid #ccc";
-        container.appendChild(label);
+        str += `<label class="Sq3label">
+                        <input type="checkbox" name="giocatore${i}" value="${i}" ${checked}>
+                        <p>${descrizione[i]}</p>
+                    </label>`;
+
+
     }
+    container.innerHTML = str;
 
     // 2. Crea il bottone
     const bottone = document.createElement("button");
