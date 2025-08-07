@@ -434,11 +434,8 @@ footer #startTimer {
     padding: 1px; /* Aggiunge spazio interno */
 }
 .Sq3label{
-    flex: 0 0 98%;
-    margin: 0.5%;
-    padding: 0.5%;
+    flex: 0 0 98% !important;
     background-color: #283344ff;
-    border-radius: 5px;
     cursor: pointer;
     border: 1px solid #ccc;
 }
