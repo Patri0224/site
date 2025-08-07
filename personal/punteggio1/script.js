@@ -1106,10 +1106,10 @@ function giocatoriAggiuntivi() {
         if (personeScelte.includes(i)) {
             checkbox.checked = true;
         }
-        checkbox.innerHTML = descrizione[i];
         const label = document.createElement("label");
         label.htmlFor = "giocatore" + i;
         label.appendChild(checkbox);
+        label.innerHTML += ` ${descrizione[i]}`; // Aggiungi la descrizione
         wrapper.appendChild(label);
         container.appendChild(wrapper);
     }
@@ -1133,7 +1133,7 @@ function giocatoriAggiuntivi() {
     };
 
     container.appendChild(bottone);
-    container.style.display = "block"; // mostra il div
+    container.style.display = "flex"; // mostra il div
 }
 
 
