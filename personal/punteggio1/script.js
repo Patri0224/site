@@ -34,7 +34,7 @@ var persone = {
 //ogni nome nuovo deve essere aggiunto in fondo alla lista anche se non è più in ordine alfabetico per essere uguale al database
 // automatically uses env NETLIFY_DATABASE_URL
 //
-let numPersone = Object.keys(persone).length;
+let numPersone = 40;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 
@@ -46,7 +46,7 @@ let punto = 0;
 let current_track = [];
 let accessToken = null;
 let tempi = [];
-let tempoTemp = 0;
+let tempoTemp = getCurrentTimeInSeconds();
 let ogg = [];
 ogg[0] = 1;
 ogg[1] = 1;
@@ -271,10 +271,12 @@ function caricaGiocatori() {
         .then(res => res.json())
         .then(data => {
             persone = { 0: "" }; // reset con lo 0 vuoto
+            max=0;
             data.forEach(p => {
                 persone[p.id] = p.nome;
+                if (p.id > max) max = p.id;
             });
-            numPersone = Object.keys(persone).length;
+            numPersone = max+5; // aggiorna numPersone
             settaSquadre();
         })
         .catch(err => console.error('Errore caricamento giocatori:', err));
@@ -790,7 +792,7 @@ window.addEventListener('load', function () {
     if (songs) current_track = songsFromString(songs);
     if (temps) tempi = temps.split(";");
     if (punt) punto = parseInt(punt);
-
+    tempoTemp = getCurrentTimeInSeconds();
     updateBackground();
     controlImgBackground();
     controlloIndietro();
