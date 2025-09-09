@@ -271,12 +271,12 @@ function caricaGiocatori() {
         .then(res => res.json())
         .then(data => {
             persone = { 0: "" }; // reset con lo 0 vuoto
-            max=0;
+            max = 0;
             data.forEach(p => {
                 persone[p.id] = p.nome;
                 if (p.id > max) max = p.id;
             });
-            numPersone = max+5; // aggiorna numPersone
+            numPersone = max + 5; // aggiorna numPersone
             settaSquadre();
         })
         .catch(err => console.error('Errore caricamento giocatori:', err));
@@ -1173,6 +1173,7 @@ function mostraCanzone(index) {
 }
 //gestione ctrl-z
 function indietroPunteggio() {
+    showMenu(2);
     if (premuto == true) {
         if (punteggio1.length > 4 && punteggio2.length > 4) {
             premuto = false;
@@ -1216,13 +1217,13 @@ function showMenu(op) {
     document.getElementById("canzoni").style.display = "none";
     document.getElementById("cici").style.display = "none";
     document.getElementById("lista-partite").style.display = "none";
+    document.getElementById("grafico").style.display = "none";
     if (op == 2) {
         document.getElementById("menu").style.display = "none";
     } else if (document.getElementById("menu").style.display == "block") {
         document.getElementById("menu").style.display = "none";
     } else {
         document.getElementById("menu").style.display = "block";
-        document.getElementById("grafico").style.display = "none";
     }
 }
 function setTitoloChecked(op) {
