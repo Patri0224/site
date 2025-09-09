@@ -34,7 +34,8 @@ var persone = {
 //ogni nome nuovo deve essere aggiunto in fondo alla lista anche se non è più in ordine alfabetico per essere uguale al database
 // automatically uses env NETLIFY_DATABASE_URL
 //
-let numPersone = 40;
+let nnnn = 40;
+let numPersone = nnnn;
 var premuto = false;//per conferma indietro
 var pReload = false;//per conferma reload
 
@@ -260,6 +261,7 @@ function aggiungiGiocatore() {
 }
 
 function caricaGiocatori() {
+    personeTemp = { ...persone }; // copia di backup
     if (!navigator.onLine) {
         return;
     }
@@ -277,9 +279,16 @@ function caricaGiocatori() {
                 if (p.id > max) max = p.id;
             });
             numPersone = max + 5; // aggiorna numPersone
+            if (JSON.stringify(persone) === JSON.stringify({ 0: "" })) {
+                persone = { ...personeTemp }
+                numPersone = nnnn;
+            } // se errore ripristina
             settaSquadre();
         })
-        .catch(err => console.error('Errore caricamento giocatori:', err));
+        .catch(err => {
+            console.error('Errore caricamento giocatori:', err);
+            persone = { ...personeTemp }; // ripristina da backup
+        });
 
 }
 /*
