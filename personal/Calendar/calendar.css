@@ -203,8 +203,6 @@ main {
 
     .events-in-day span {
         border-radius: 6px;
-        margin-left: 3px;
-        margin-right: 3px;
         padding: 2px 4px;
         font-size: 0.65rem;
     }
