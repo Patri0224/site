@@ -27,20 +27,21 @@
     <div id="eventModal" class="modal hidden">
         <div class="modal-content">
             <h2 id="modalDate"></h2>
-            <div class="actions">
-                <button id="saveEvent">Aggiungi evento</button>
-                <button id="closeModal">Chiudi</button>
-            </div>
+            <p>Eventi già presenti:</p>
+            <ul id="eventList"></ul>
             <label>
-                Nome evento:
+                Aggiungi evento:
                 <input type="text" id="eventText">
             </label>
             <label>
                 <input type="checkbox" id="eventSingle">
                 Evento singolo (una volta sola)
             </label>
-            <p>Eventi già presenti:</p>
-            <ul id="eventList"></ul>
+            <div class="actions">
+                <button id="closeModal">Chiudi</button>
+                <button id="saveEvent">Aggiungi evento</button>
+            </div>
+            
         </div>
     </div>
 
