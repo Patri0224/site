@@ -15,143 +15,159 @@ let selectedDate = null;
 
 // ===================== API =====================
 async function getEvents(day, month) {
-  try {
-    const res = await fetch(`/api/events?day=${day}&month=${month}`);
-    if (!res.ok) throw new Error("Errore fetch eventi");
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return [];
-  }
+    try {
+        const res = await fetch(`/.netlify/functions/events?day=${day}&month=${month}`);
+        if (!res.ok) throw new Error("Errore fetch eventi");
+        return await res.json();
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
+
+async function getEventsMonth(month) {
+    try {
+        const res = await fetch(`/.netlify/functions/events?month=${month}`);
+        if (!res.ok) throw new Error("Errore caricamento eventi mese");
+        return await res.json(); // array di eventi {day, nome, ripetibile}
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
 }
 
 async function getWeekEvents() {
-  try {
-    const res = await fetch(`/api/events/week`);
-    if (!res.ok) throw new Error("Errore fetch settimana");
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return {};
-  }
+    try {
+        const res = await fetch(`/.netlify/functions/events?week=true`);
+        if (!res.ok) throw new Error("Errore fetch settimana");
+        return await res.json();
+    } catch (err) {
+        console.error(err);
+        return {};
+    }
 }
 
 async function saveEventAPI(day, month, nome, ripetibile) {
-  try {
-    const res = await fetch(`/api/events`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ day, month, nome, ripetibile })
-    });
-    if (!res.ok) throw new Error("Errore salvataggio evento");
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-  }
+    try {
+        const res = await fetch(`/.netlify/functions/events`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ day, month, nome, ripetibile })
+        });
+        if (!res.ok) throw new Error("Errore salvataggio evento");
+        return await res.json();
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 // ===================== Render Calendario =====================
 async function renderCalendar() {
-  calendarEl.innerHTML = "";
-  const year = 2024; // anno bisestile
-  const month = currentDate.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
+    calendarEl.innerHTML = "";
+    const year = 2024; // anno bisestile
+    const month = currentDate.getMonth(); // 0-11
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
 
-  monthLabel.textContent = firstDay.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
+    monthLabel.textContent = firstDay.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
 
-  // giorni vuoti iniziali
-  const startDay = firstDay.getDay() || 7;
-  for (let i = 1; i < startDay; i++) {
-    calendarEl.innerHTML += `<div class="day empty"></div>`;
-  }
+    // 🔹 Chiamata unica al database per il mese
+    const eventsMonth = await getEventsMonth(month + 1); // funzione nuova
 
-  // giorni mese
-  for (let d = 1; d <= lastDay.getDate(); d++) {
-    const date = new Date(year, month, d);
-    const dayEl = document.createElement("div");
-    dayEl.className = "day";
-    if (isToday(date)) dayEl.classList.add("today");
+    // giorni vuoti iniziali
+    const startDay = firstDay.getDay() || 7;
+    for (let i = 1; i < startDay; i++) {
+        calendarEl.innerHTML += `<div class="day empty"></div>`;
+    }
 
-    const eventsDay = await getEvents(d, month + 1);
-    if (eventsDay.length) dayEl.classList.add("has-event");
+    // giorni mese
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+        const date = new Date(year, month, d);
+        const dayEl = document.createElement("div");
+        dayEl.className = "day";
+        if (isToday(date)) dayEl.classList.add("today");
 
-    dayEl.innerHTML = `<strong>${d}</strong>`;
-    dayEl.onclick = () => openModal(date);
-    calendarEl.appendChild(dayEl);
-  }
+        // 🔹 Filtra gli eventi per questo giorno
+        const eventsDay = eventsMonth.filter(e => parseInt(e.day) === d);
+        if (eventsDay.length) dayEl.classList.add("has-event");
 
-  renderWeek();
+        dayEl.innerHTML = `<strong>${d}</strong>`;
+        dayEl.onclick = () => openModal(date, eventsDay); // passiamo gli eventi già filtrati
+        calendarEl.appendChild(dayEl);
+    }
+
+    renderWeek(eventsMonth); // passa gli eventi del mese se serve
 }
 
+
 function isToday(date) {
-  const today = new Date();
-  return date.getDate() === today.getDate() &&
-         date.getMonth() === today.getMonth();
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth();
 }
 
 // ===================== Settimana =====================
 async function renderWeek() {
-  weekList.innerHTML = "";
-  const eventsWeek = await getWeekEvents();
-  const today = new Date();
+    weekList.innerHTML = "";
+    const eventsWeek = await getWeekEvents();
+    const today = new Date();
 
-  for (let i = 0; i < 7; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    const key = `${date.getDate()}-${date.getMonth()+1}`;
-    const li = document.createElement("li");
-    const label = date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "numeric" });
-    li.textContent = `${label}: ${eventsWeek[key] ? eventsWeek[key].map(e => e.nome).join(", ") : "—"}`;
-    weekList.appendChild(li);
-  }
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        const key = `${date.getDate()}-${date.getMonth() + 1}`;
+        const li = document.createElement("li");
+        const label = date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "numeric" });
+        li.textContent = `${label}: ${eventsWeek[key] ? eventsWeek[key].map(e => e.nome).join(", ") : "—"}`;
+        weekList.appendChild(li);
+    }
 }
 
 // ===================== Modal =====================
 function openModal(date) {
-  selectedDate = date;
-  modal.classList.remove("hidden");
-  modalDate.textContent = date.toLocaleDateString("it-IT");
-  eventText.value = "";
-  eventSingle.checked = false;
-  renderEventList(date);
+    selectedDate = date;
+    modal.classList.remove("hidden");
+    modalDate.textContent = date.toLocaleDateString("it-IT");
+    eventText.value = "";
+    eventSingle.checked = false;
+    renderEventList(date);
 }
 
 async function renderEventList(date) {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const eventsDay = await getEvents(day, month);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const eventsDay = await getEvents(day, month);
 
-  eventList.innerHTML = "";
-  eventsDay.forEach(e => {
-    const li = document.createElement("li");
-    li.textContent = `${e.nome} ${e.ripetibile ? "" : "(singolo)"}`;
-    eventList.appendChild(li);
-  });
+    eventList.innerHTML = "";
+    eventsDay.forEach(e => {
+        const li = document.createElement("li");
+        li.textContent = `${e.nome} ${e.ripetibile ? "" : "(singolo)"}`;
+        eventList.appendChild(li);
+    });
 }
 
 saveEvent.onclick = async () => {
-  if (!selectedDate) return;
-  const day = selectedDate.getDate();
-  const month = selectedDate.getMonth() + 1;
-  await saveEventAPI(day, month, eventText.value, !eventSingle.checked);
-  closeModalFn();
-  renderCalendar();
+    if (!selectedDate) return;
+    const day = selectedDate.getDate();
+    const month = selectedDate.getMonth() + 1;
+    await saveEventAPI(day, month, eventText.value, !eventSingle.checked);
+    closeModalFn();
+    renderCalendar();
 };
 
 closeModal.onclick = closeModalFn;
 function closeModalFn() {
-  modal.classList.add("hidden");
+    modal.classList.add("hidden");
 }
 
 // ===================== Navigazione mese =====================
 document.getElementById("prevMonth").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() - 1);
-  renderCalendar();
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    renderCalendar();
 };
 document.getElementById("nextMonth").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() + 1);
-  renderCalendar();
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    renderCalendar();
 };
 
 // ===================== Init =====================

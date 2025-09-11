@@ -2,16 +2,16 @@ import { neon } from '@netlify/neon';
 const sql = neon();
 
 export async function handler(event, context) {
-  try {
-    const { httpMethod, queryStringParameters, body } = event;
+    try {
+        const { httpMethod, queryStringParameters, body } = event;
 
-    // ===== GET eventi per giorno/mese =====
-    if (httpMethod === "GET") {
-      if (queryStringParameters.day && queryStringParameters.month) {
-        const day = parseInt(queryStringParameters.day);
-        const month = parseInt(queryStringParameters.month);
+        // ===== GET eventi per giorno/mese =====
+        if (httpMethod === "GET") {
+            if (queryStringParameters.day && queryStringParameters.month) {
+                const day = parseInt(queryStringParameters.day);
+                const month = parseInt(queryStringParameters.month);
 
-        const events = await sql`
+                const events = await sql`
           SELECT nome, ripetibile
           FROM public.calendar
           WHERE EXTRACT(DAY FROM data) = ${day}
@@ -19,22 +19,35 @@ export async function handler(event, context) {
           ORDER BY id ASC
         `;
 
-        return { statusCode: 200, body: JSON.stringify(events) };
-      }
+                return { statusCode: 200, body: JSON.stringify(events) };
+            }
+            // GET eventi per un mese intero
+            if (queryStringParameters.month && !queryStringParameters.day) {
+                const month = parseInt(queryStringParameters.month);
 
-      // GET eventi prossimi 7 giorni
-      if (queryStringParameters.week) {
-        const today = new Date();
-        const result = {};
+                const events = await sql`
+    SELECT EXTRACT(DAY FROM data) AS day, nome, ripetibile
+    FROM public.calendar
+    WHERE EXTRACT(MONTH FROM data) = ${month}
+    ORDER BY day ASC
+  `;
 
-        for (let i = 0; i < 7; i++) {
-          const date = new Date(today);
-          date.setDate(today.getDate() + i);
+                return { statusCode: 200, body: JSON.stringify(events) };
+            }
 
-          const day = date.getDate();
-          const month = date.getMonth() + 1;
+            // GET eventi prossimi 7 giorni
+            if (queryStringParameters.week) {
+                const today = new Date();
+                const result = {};
 
-          const events = await sql`
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() + i);
+
+                    const day = date.getDate();
+                    const month = date.getMonth() + 1;
+
+                    const events = await sql`
             SELECT nome, ripetibile
             FROM public.calendar
             WHERE EXTRACT(DAY FROM data) = ${day}
@@ -42,30 +55,30 @@ export async function handler(event, context) {
             ORDER BY id ASC
           `;
 
-          result[`${day}-${month}`] = events;
+                    result[`${day}-${month}`] = events;
+                }
+
+                return { statusCode: 200, body: JSON.stringify(result) };
+            }
         }
 
-        return { statusCode: 200, body: JSON.stringify(result) };
-      }
-    }
+        // ===== POST nuovo evento =====
+        if (httpMethod === "POST") {
+            const { day, month, nome, ripetibile } = JSON.parse(body);
 
-    // ===== POST nuovo evento =====
-    if (httpMethod === "POST") {
-      const { day, month, nome, ripetibile } = JSON.parse(body);
+            // anno bisestile 2024
+            const date = new Date(2024, month - 1, day);
 
-      // anno bisestile 2024
-      const date = new Date(2024, month - 1, day);
-
-      await sql`
-        INSERT INTO public.calendar (nome, data, ripetibile)
-        VALUES (${nome}, ${date.toISOString()}, ${ripetibile})
+            await sql`
+                    INSERT INTO public.calendar (nome, data, ripetibile)
+                    VALUES (${nome}, ${date.toISOString()}, ${ripetibile})
       `;
 
-      return { statusCode: 200, body: JSON.stringify({ success: true }) };
-    }
+            return { statusCode: 200, body: JSON.stringify({ success: true }) };
+        }
 
-    return { statusCode: 400, body: "Bad Request" };
-  } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
-  }
+        return { statusCode: 400, body: "Bad Request" };
+    } catch (err) {
+        return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    }
 }
