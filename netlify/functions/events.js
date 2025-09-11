@@ -16,7 +16,7 @@ export async function handler(event, context) {
           FROM public.calendar
           WHERE EXTRACT(DAY FROM data) = ${day}
             AND EXTRACT(MONTH FROM data) = ${month}
-          ORDER BY id ASC
+          ORDER BY ripetibile ASC, id ASC
         `;
 
                 return { statusCode: 200, body: JSON.stringify(events) };
@@ -29,7 +29,7 @@ export async function handler(event, context) {
     SELECT EXTRACT(DAY FROM data) AS day, nome, ripetibile
     FROM public.calendar
     WHERE EXTRACT(MONTH FROM data) = ${month}
-    ORDER BY day ASC
+    ORDER BY EXTRACT(DAY FROM data) ASC, ripetibile ASC, id ASC
   `;
 
                 return { statusCode: 200, body: JSON.stringify(events) };
@@ -52,7 +52,7 @@ export async function handler(event, context) {
             FROM public.calendar
             WHERE EXTRACT(DAY FROM data) = ${day}
               AND EXTRACT(MONTH FROM data) = ${month}
-            ORDER BY id ASC
+            ORDER BY ripetibile ASC, id ASC
           `;
 
                     result[`${day}-${month}`] = events;
