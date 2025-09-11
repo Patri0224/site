@@ -58,6 +58,7 @@ main {
     font-size: 0.9rem;
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Non far espandere la cella */
 }
 
 .day.today {
@@ -75,11 +76,11 @@ main {
     font-size: 0.7rem;
     color: #a0a0ff;
     max-height: 50px;
-    overflow-y: auto;
+    overflow-y: auto;  
 }
 
 .events-in-day li {
-    white-space: wrap;
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
