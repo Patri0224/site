@@ -5,6 +5,7 @@ body {
     color: #eee;
 }
 
+/* Stile header base */
 header {
     display: flex;
     justify-content: space-between;
@@ -13,6 +14,10 @@ header {
     padding: 1rem;
     position: sticky;
     top: 0;
+}
+
+header h1 {
+    font-size: 1.5rem;
 }
 
 button {
@@ -58,7 +63,8 @@ main {
     font-size: 0.9rem;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Non far espandere la cella */
+    overflow: hidden;
+    /* Non far espandere la cella */
 }
 
 .day.today {
@@ -82,12 +88,14 @@ main {
 
 /* Colore per eventi ricorrenti */
 .events-in-day span.recurring {
-    background: #2563eb; /* blu */
+    background: #2563eb;
+    /* blu */
 }
 
 /* Colore per eventi singoli */
 .events-in-day span.single {
-    background: #dc2626; /* rosso */
+    background: #dc2626;
+    /* rosso */
 }
 
 
@@ -170,5 +178,29 @@ main {
 
     #weekEvents {
         width: 25%;
+    }
+}
+
+/* Media query per schermi piccoli */
+@media screen and (max-width: 350px) {
+    header {
+        padding: 0.1rem;
+        /* riduce l'altezza dell'header */
+    }
+
+    header h1 {
+        font-size: 1rem;
+        /* riduce la dimensione del testo */
+    }
+
+    button {
+        padding: 0.3rem 0.5rem;
+        /* pulsanti più piccoli */
+        font-size: 0.8rem;
+    }
+
+    .day-header {
+        display: none;
+        /* nasconde i nomi dei giorni della settimana */
     }
 }
