@@ -88,7 +88,18 @@ async function renderCalendar() {
     // 🔹 Chiamata unica al database per il mese
     const eventsMonth = await getEventsMonth(month + 1); // funzione nuova
 
+    const giorniSettimana = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
+
+    // Pulisci il calendario
     calendarEl.innerHTML = "";
+
+    // 🔹 Aggiungi header giorni della settimana
+    giorniSettimana.forEach(giorno => {
+        const dayHeader = document.createElement("div");
+        dayHeader.className = "day-header";
+        dayHeader.textContent = giorno;
+        calendarEl.appendChild(dayHeader);
+    }); 
     // giorni vuoti iniziali
     const startDay = firstDay.getDay() || 7;
     for (let i = 1; i < startDay; i++) {
@@ -189,6 +200,12 @@ closeModal.onclick = closeModalFn;
 function closeModalFn() {
     modal.classList.add("hidden");
 }
+
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        closeModalFn();
+    }
+});
 
 // ===================== Navigazione mese =====================
 document.getElementById("prevMonth").onclick = () => {
