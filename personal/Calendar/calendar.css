@@ -83,7 +83,7 @@ main {
     border-radius: 6px;
     padding: 2px 4px;
     font-size: 0.65rem;
-    white-space: nowrap;
+    white-space: wrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
