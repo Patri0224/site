@@ -182,7 +182,7 @@ main {
 }
 
 /* Media query per schermi piccoli */
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 380px) {
     header {
         padding: 0.1rem;
         /* riduce l'altezza dell'header */
