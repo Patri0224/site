@@ -61,6 +61,21 @@ async function saveEventAPI(day, month, nome, ripetibile) {
     }
 }
 
+async function deleteEventAPI(day, month, nome) {
+    try {
+        const res = await fetch(`/.netlify/functions/events`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ day, month, nome })
+        });
+        if (!res.ok) throw new Error("Errore eliminazione evento");
+        return await res.json();
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
 // ===================== Render Calendario =====================
 async function renderCalendar() {
     calendarEl.innerHTML = "";
@@ -138,12 +153,26 @@ function openModal(date, eventsDay = []) {
 
 function renderEventList(eventsDay) {
     eventList.innerHTML = "";
-    eventsDay.forEach(e => {
+
+    eventsDay.forEach((e, index) => {
         const li = document.createElement("li");
         li.textContent = `${e.nome} ${e.ripetibile ? "" : "(singolo)"}`;
+
+        // Pulsante elimina
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "🗑";
+        deleteBtn.style.marginLeft = "10px";
+        deleteBtn.onclick = async () => {
+            await deleteEventAPI(selectedDate.getDate(), selectedDate.getMonth() + 1, e.nome);
+            closeModalFn();
+            renderCalendar();
+        };
+
+        li.appendChild(deleteBtn);
         eventList.appendChild(li);
     });
 }
+
 
 
 saveEvent.onclick = async () => {
