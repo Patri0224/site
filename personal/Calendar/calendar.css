@@ -79,7 +79,7 @@ main {
 }
 
 .events-in-day li {
-    white-space: nowrap;
+    white-space: wrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
