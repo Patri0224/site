@@ -78,7 +78,6 @@ async function deleteEventAPI(day, month, nome) {
 
 // ===================== Render Calendario =====================
 async function renderCalendar() {
-    calendarEl.innerHTML = "";
     const year = 2024; // anno bisestile
     const month = currentDate.getMonth(); // 0-11
     const firstDay = new Date(year, month, 1);
@@ -89,6 +88,7 @@ async function renderCalendar() {
     // 🔹 Chiamata unica al database per il mese
     const eventsMonth = await getEventsMonth(month + 1); // funzione nuova
 
+    calendarEl.innerHTML = "";
     // giorni vuoti iniziali
     const startDay = firstDay.getDay() || 7;
     for (let i = 1; i < startDay; i++) {
@@ -123,8 +123,8 @@ function isToday(date) {
 
 // ===================== Settimana =====================
 async function renderWeek() {
-    weekList.innerHTML = "";
     const eventsWeek = await getWeekEvents();
+    weekList.innerHTML = "";
     const today = new Date();
 
     for (let i = 0; i < 7; i++) {
