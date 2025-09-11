@@ -3,69 +3,36 @@ const sql = neon();
 
 export async function handler(event, context) {
   try {
-    const { httpMethod, queryStringParameters, body } = event;
+    const body = JSON.parse(event.body || '{}');
+    let gruppi = body.gruppi;
 
-    // ===== GET eventi per giorno/mese =====
-    if (httpMethod === "GET") {
-      if (queryStringParameters.day && queryStringParameters.month) {
-        const day = parseInt(queryStringParameters.day);
-        const month = parseInt(queryStringParameters.month);
-
-        const events = await sql`
-          SELECT nome, ripetibile
-          FROM public.calendar
-          WHERE EXTRACT(DAY FROM data) = ${day}
-            AND EXTRACT(MONTH FROM data) = ${month}
-          ORDER BY id ASC
-        `;
-
-        return { statusCode: 200, body: JSON.stringify(events) };
-      }
-
-      // GET eventi prossimi 7 giorni
-      if (queryStringParameters.week) {
-        const today = new Date();
-        const result = {};
-
-        for (let i = 0; i < 7; i++) {
-          const date = new Date(today);
-          date.setDate(today.getDate() + i);
-
-          const day = date.getDate();
-          const month = date.getMonth() + 1;
-
-          const events = await sql`
-            SELECT nome, ripetibile
-            FROM public.calendar
-            WHERE EXTRACT(DAY FROM data) = ${day}
-              AND EXTRACT(MONTH FROM data) = ${month}
-            ORDER BY id ASC
-          `;
-
-          result[`${day}-${month}`] = events;
-        }
-
-        return { statusCode: 200, body: JSON.stringify(result) };
-      }
+    // Validazione sicura
+    if (!Array.isArray(gruppi)) {
+      gruppi = [];
+    } else {
+      gruppi = gruppi.map(n => parseInt(n)).filter(n => !isNaN(n));
     }
 
-    // ===== POST nuovo evento =====
-    if (httpMethod === "POST") {
-      const { day, month, nome, ripetibile } = JSON.parse(body);
-
-      // anno bisestile 2024
-      const date = new Date(2024, month - 1, day);
-
-      await sql`
-        INSERT INTO public.calendar (nome, data, ripetibile)
-        VALUES (${nome}, ${date.toISOString()}, ${ripetibile})
-      `;
-
-      return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    if (gruppi.length === 0) {
+      gruppi = [1]; // default
     }
 
-    return { statusCode: 400, body: "Bad Request" };
-  } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    // ✅ Usiamo la sintassi corretta per array in neon
+    const persone = await sql`
+      SELECT id, nome
+      FROM public.persone
+      WHERE gruppo = ANY(${gruppi})
+      ORDER BY id ASC
+    `;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(persone)
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message })
+    };
   }
 }

@@ -1,56 +1,71 @@
-// ./netlify/functions/events.js
-const { Client } = require("pg");
+import { neon } from '@netlify/neon';
+const sql = neon();
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL
-});
+export async function handler(event, context) {
+  try {
+    const { httpMethod, queryStringParameters, body } = event;
 
-client.connect();
+    // ===== GET eventi per giorno/mese =====
+    if (httpMethod === "GET") {
+      if (queryStringParameters.day && queryStringParameters.month) {
+        const day = parseInt(queryStringParameters.day);
+        const month = parseInt(queryStringParameters.month);
 
-exports.handler = async function(event, context) {
-  const { httpMethod, queryStringParameters, body } = event;
+        const events = await sql`
+          SELECT nome, ripetibile
+          FROM public.calendar
+          WHERE EXTRACT(DAY FROM data) = ${day}
+            AND EXTRACT(MONTH FROM data) = ${month}
+          ORDER BY id ASC
+        `;
 
-  if (httpMethod === "GET") {
-    if (queryStringParameters.day && queryStringParameters.month) {
-      // GET /events?day=DD&month=MM
-      const day = parseInt(queryStringParameters.day);
-      const month = parseInt(queryStringParameters.month);
-      const res = await client.query(
-        "SELECT nome, ripetibile FROM calendar WHERE EXTRACT(DAY FROM data)=$1 AND EXTRACT(MONTH FROM data)=$2",
-        [day, month]
-      );
-      return {
-        statusCode: 200,
-        body: JSON.stringify(res.rows)
-      };
-    } else if (queryStringParameters.week) {
-      // GET /events/week
-      const today = new Date();
-      const week = [];
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-        week.push({ day: date.getDate(), month: date.getMonth()+1 });
+        return { statusCode: 200, body: JSON.stringify(events) };
       }
-      const result = {};
-      for (const d of week) {
-        const res = await client.query(
-          "SELECT nome, ripetibile FROM calendar WHERE EXTRACT(DAY FROM data)=$1 AND EXTRACT(MONTH FROM data)=$2",
-          [d.day, d.month]
-        );
-        result[`${d.day}-${d.month}`] = res.rows;
+
+      // GET eventi prossimi 7 giorni
+      if (queryStringParameters.week) {
+        const today = new Date();
+        const result = {};
+
+        for (let i = 0; i < 7; i++) {
+          const date = new Date(today);
+          date.setDate(today.getDate() + i);
+
+          const day = date.getDate();
+          const month = date.getMonth() + 1;
+
+          const events = await sql`
+            SELECT nome, ripetibile
+            FROM public.calendar
+            WHERE EXTRACT(DAY FROM data) = ${day}
+              AND EXTRACT(MONTH FROM data) = ${month}
+            ORDER BY id ASC
+          `;
+
+          result[`${day}-${month}`] = events;
+        }
+
+        return { statusCode: 200, body: JSON.stringify(result) };
       }
-      return { statusCode: 200, body: JSON.stringify(result) };
     }
-  } else if (httpMethod === "POST") {
-    const { day, month, nome, ripetibile } = JSON.parse(body);
-    const date = new Date(2024, month - 1, day); // anno bisestile
-    await client.query(
-      "INSERT INTO calendar (nome, data, ripetibile) VALUES ($1,$2,$3)",
-      [nome, date.toISOString(), ripetibile]
-    );
-    return { statusCode: 200, body: JSON.stringify({ success: true }) };
-  }
 
-  return { statusCode: 400, body: "Bad Request" };
-};
+    // ===== POST nuovo evento =====
+    if (httpMethod === "POST") {
+      const { day, month, nome, ripetibile } = JSON.parse(body);
+
+      // anno bisestile 2024
+      const date = new Date(2024, month - 1, day);
+
+      await sql`
+        INSERT INTO public.calendar (nome, data, ripetibile)
+        VALUES (${nome}, ${date.toISOString()}, ${ripetibile})
+      `;
+
+      return { statusCode: 200, body: JSON.stringify({ success: true }) };
+    }
+
+    return { statusCode: 400, body: "Bad Request" };
+  } catch (err) {
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+  }
+}
