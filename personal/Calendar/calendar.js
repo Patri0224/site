@@ -124,20 +124,19 @@ async function renderWeek() {
 }
 
 // ===================== Modal =====================
-function openModal(date) {
+function openModal(date, eventsDay = []) {
     selectedDate = date;
     modal.classList.remove("hidden");
     modalDate.textContent = date.toLocaleDateString("it-IT");
     eventText.value = "";
     eventSingle.checked = false;
-    renderEventList(date);
+
+    // ✅ Usa gli eventi già passati invece di fare un'altra query
+    renderEventList(eventsDay);
 }
 
-async function renderEventList(date) {
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const eventsDay = await getEvents(day, month);
 
+function renderEventList(eventsDay) {
     eventList.innerHTML = "";
     eventsDay.forEach(e => {
         const li = document.createElement("li");
@@ -145,6 +144,7 @@ async function renderEventList(date) {
         eventList.appendChild(li);
     });
 }
+
 
 saveEvent.onclick = async () => {
     if (!selectedDate) return;
