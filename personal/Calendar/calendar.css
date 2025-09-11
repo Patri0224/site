@@ -80,8 +80,10 @@ main {
 .events-in-day span {
     display: inline-block;
     color: white;
-    border-radius: 6px;
-    padding: 2px 4px;
+    border-radius: 4px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 1px 2px;
     font-size: 0.57rem;
     white-space: wrap;
     text-overflow: ellipsis;
@@ -96,7 +98,7 @@ main {
 
 /* Colore per eventi singoli */
 .events-in-day span.single {
-    background: #dc2626;
+    background: #ec4908;
     /* rosso */
 }
 
@@ -198,7 +200,12 @@ main {
         display: block;
         /* nasconde i nomi dei giorni della settimana */
     }
+
     .events-in-day span {
+        border-radius: 6px;
+        margin-left: 3px;
+        margin-right: 3px;
+        padding: 2px 4px;
         font-size: 0.65rem;
     }
 }

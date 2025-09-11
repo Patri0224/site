@@ -169,10 +169,39 @@ async function renderWeek() {
         const key = `${date.getDate()}-${date.getMonth() + 1}`;
         const li = document.createElement("li");
         const label = date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "numeric" });
-        li.textContent = `${label}: ${eventsWeek[key] ? eventsWeek[key].map(e => e.nome).join(", ") : "—"}`;
+
+        if (eventsWeek[key] && eventsWeek[key].length > 0) {
+            li.textContent = `${label}: `;
+
+            eventsWeek[key].forEach((e, idx) => {
+                const span = document.createElement("span");
+                span.style.display = "inline-flex";
+                span.style.alignItems = "center";
+                span.style.marginRight = "6px";
+
+                const dot = document.createElement("span");
+                dot.style.width = "8px";
+                dot.style.height = "8px";
+                dot.style.borderRadius = "50%";
+                dot.style.display = "inline-block";
+                dot.style.marginRight = "4px";
+                dot.style.backgroundColor = e.ripetibile ? "#2563eb" : "#ec4908"; // blu vs arancione
+
+                const text = document.createElement("span");
+                text.textContent = e.nome;
+
+                span.appendChild(dot);
+                span.appendChild(text);
+                li.appendChild(span);
+            });
+        } else {
+            li.textContent = `${label}: —`;
+        }
+
         weekList.appendChild(li);
     }
 }
+
 
 // ===================== Modal =====================
 function openModal(date, eventsDay = []) {
