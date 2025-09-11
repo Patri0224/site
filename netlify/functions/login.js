@@ -22,7 +22,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 401,
-      body: JSON.stringify({ success: false, message: "Credenziali errate" }),
+      body: JSON.stringify({ success: false, message: "Credenziali errate" + process.env.USERNAME + " " + process.env.PASSWORD + ", "+ username + " " + password }),
     };
   } catch (err) {
     return {
