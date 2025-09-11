@@ -1,120 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu a Discesa</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9f9f9;
-        }
-
-        .menu-wrapper {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .menu-container {
-            position: relative;
-        }
-
-        .menu-button {
-            background-color: #3498db;
-            color: white;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .menu-button:hover {
-            background-color: #2980b9;
-        }
-
-        .menu-dropdown {
-            display: none;
-            position: absolute;
-            top: 110%;
-            left: 0;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            min-width: 220px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            z-index: 10;
-            overflow: hidden;
-        }
-
-        .menu-dropdown a {
-            display: block;
-            padding: 12px 16px;
-            color: #333;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-
-        .menu-dropdown a:hover {
-            background-color: #f0f0f0;
-        }
-
-        .menu-container.open .menu-dropdown {
-            display: block;
-        }
-    </style>
+    <title>App Showcase</title>
+    <link rel="stylesheet" href="home.css">
 </head>
 
 <body>
-    <div class="menu-wrapper">
-        <div class="menu-container">
-            <button class="menu-button" onclick="toggleMenu(this)">Personali</button>
-            <div class="menu-dropdown">
-                <a href="personal/punteggio1/punteggio.html">Vai alla pagina del punteggio</a>
-                <a href="personal/spada/index.html">Spada</a>
-            </div>
-        </div>
-        <div class="menu-container">
-            <button class="menu-button" onclick="toggleMenu(this)">Universitari</button>
-            <div class="menu-dropdown">
-                <a href="uni/inndex.html">Index Uni</a>
-            </div>
-        </div>
-        <div class="menu-container">
-            <a class="menu-button" href="personal/punteggio1/punteggio.html">Punteggio</a>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="title">Le mie App</h1>
+        <button id="loginBtn" class="btn">Login</button>
+    </header>
+
+    <!-- Modal Login -->
+    <div id="loginModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 class="section-title">Login</h2>
+            <form id="loginForm" class="form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit" class="btn">Accedi</button>
+                <button type="button" id="closeModal" class="btn btn-secondary">Chiudi</button>
+            </form>
+            <p id="loginError" class="error hidden">Credenziali errate</p>
         </div>
     </div>
 
-    <script>
-        function toggleMenu(button) {
-            const container = button.parentElement;
-            const wasOpen = container.classList.contains('open');
+    <!-- Contenuto -->
+    <main class="main">
 
-            // Chiude tutti gli altri menu
-            document.querySelectorAll('.menu-container').forEach(el => el.classList.remove('open'));
+        <!-- Private Zone -->
+        <section id="privateZone" class="hidden">
+            <h2 class="section-title">🔒 Private Zone</h2>
+            <div class="grid">
+                <a href="#" class="card">
+                    <h3 class="card-title">Admin Dashboard</h3>
+                    <p class="card-text">Gestione avanzata delle app (solo utenti autorizzati).</p>
+                </a>
+            </div>
+        </section>
 
-            // Apre o richiude quello selezionato
-            if (!wasOpen) {
-                container.classList.add('open');
-            }
-        }
+        <!-- App Complete -->
+        <section>
+            <h2 class="section-title">📱 App Complete</h2>
+            <div class="grid">
+                <a href="personal/punteggio1/punteggio.html" class="card">
+                    <h3 class="card-title">Punteggio</h3>
+                    <p class="card-text">Tiene il punteggio di due squadre per indovina la canzone.</p>
+                </a>
+            </div>
+        </section>
 
-        // Chiude il menu cliccando fuori
-        document.addEventListener('click', function (event) {
-            if (!event.target.closest('.menu-container')) {
-                document.querySelectorAll('.menu-container').forEach(el => el.classList.remove('open'));
-            }
-        });
-    </script>
+        <!-- App in Work in Progress -->
+        <section>
+            <h2 class="section-title">🚧 Work in Progress</h2>
+            <div class="grid">
+                <a href="personal/spada/index.html" class="card">
+                    <h3 class="card-title">Spada</h3>
+                    <p class="card-text">Gioco di spada</p>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="home.js"></script>
 </body>
 
 </html>
