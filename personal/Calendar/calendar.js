@@ -85,7 +85,7 @@ async function renderCalendar() {
 
     monthLabel.textContent = firstDay.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
 
-    // 🔹 Chiamata unica al database per il mese
+    // Chiamata unica al database per il mese
     const eventsMonth = await getEventsMonth(month + 1); // funzione nuova
 
     const giorniSettimana = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
@@ -93,17 +93,20 @@ async function renderCalendar() {
     // Pulisci il calendario
     calendarEl.innerHTML = "";
 
-    // 🔹 Aggiungi header giorni della settimana
+    // Aggiungi header giorni della settimana
     giorniSettimana.forEach(giorno => {
         const dayHeader = document.createElement("div");
         dayHeader.className = "day-header";
         dayHeader.textContent = giorno;
         calendarEl.appendChild(dayHeader);
-    }); 
+    });
+
     // giorni vuoti iniziali
-    const startDay = firstDay.getDay() || 7;
+    const startDay = firstDay.getDay() || 7; // domenica = 7
     for (let i = 1; i < startDay; i++) {
-        calendarEl.innerHTML += `<div class="day empty"></div>`;
+        const emptyEl = document.createElement("div");
+        emptyEl.className = "day empty";
+        calendarEl.appendChild(emptyEl);
     }
 
     // giorni mese
@@ -113,17 +116,29 @@ async function renderCalendar() {
         dayEl.className = "day";
         if (isToday(date)) dayEl.classList.add("today");
 
-        // 🔹 Filtra gli eventi per questo giorno
+        // Filtra gli eventi per questo giorno
         const eventsDay = eventsMonth.filter(e => parseInt(e.day) === d);
         if (eventsDay.length) dayEl.classList.add("has-event");
 
-        dayEl.innerHTML = `<strong>${d}</strong>`;
-        dayEl.onclick = () => openModal(date, eventsDay); // passiamo gli eventi già filtrati
+        // Contenuto della cella: giorno + lista eventi
+        let html = `<strong>${d}</strong>`;
+        if (eventsDay.length) {
+            html += `<ul class="events-in-day">`;
+            eventsDay.forEach(e => {
+                html += `<li>${e.nome}</li>`;
+            });
+            html += `</ul>`;
+        }
+        dayEl.innerHTML = html;
+
+        // Apertura modal cliccando sulla cella
+        dayEl.onclick = () => openModal(date, eventsDay);
         calendarEl.appendChild(dayEl);
     }
 
     renderWeek(eventsMonth); // passa gli eventi del mese se serve
 }
+
 
 
 function isToday(date) {

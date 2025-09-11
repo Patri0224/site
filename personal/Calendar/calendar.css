@@ -68,6 +68,22 @@ main {
     background: #2a2a3d;
 }
 
+.events-in-day {
+    margin: 2px 0 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.7rem;
+    color: #a0a0ff;
+    max-height: 50px;
+    overflow-y: auto;
+}
+
+.events-in-day li {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 #weekEvents {
     padding: 1rem;
     background: #1a1a1d;
