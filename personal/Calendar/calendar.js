@@ -167,57 +167,30 @@ async function renderWeek() {
         const date = new Date(today);
         date.setDate(today.getDate() + i);
         const key = `${date.getDate()}-${date.getMonth() + 1}`;
-
         const li = document.createElement("li");
-        li.style.display = "flex";
-        li.style.alignItems = "center"; // centro verticale perfetto
-        li.style.gap = "8px"; // distanza tra data e eventi
-        li.style.padding = "2px 0"; // uniforme, evita scroll jump
-
-        // Data
-        const labelSpan = document.createElement("span");
-        labelSpan.style.fontWeight = "bold";
-        labelSpan.style.flexShrink = "0"; // evita che si comprima
-        labelSpan.textContent = date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "numeric" });
-        li.appendChild(labelSpan);
-
-        // Eventi
-        const eventsContainer = document.createElement("div");
-        eventsContainer.style.display = "flex";
-        eventsContainer.style.flexDirection = "column";
-        eventsContainer.style.gap = "2px";
+        const label = date.toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "numeric" });
 
         if (eventsWeek[key] && eventsWeek[key].length > 0) {
-            eventsWeek[key].forEach(e => {
-                const eventEl = document.createElement("span");
-                eventEl.style.display = "flex"; // inline-flex a volte da problemi di allineamento
-                eventEl.style.alignItems = "center"; // centra pallino e testo perfettamente
-                eventEl.style.gap = "4px";
-
-                const dot = document.createElement("span");
-                dot.style.width = "8px";
-                dot.style.height = "8px";
-                dot.style.borderRadius = "50%";
-                dot.style.display = "inline-block";
-                dot.style.backgroundColor = e.ripetibile ? "#2563eb" : "#f97316";
-
-                const text = document.createElement("span");
-                text.textContent = e.nome;
-
-                eventEl.appendChild(dot);
-                eventEl.appendChild(text);
-                eventsContainer.appendChild(eventEl);
+            li.innerHTML = `${label}: `;
+            eventsWeek[key].forEach((e, idx) => {
+                const span = document.createElement("span");
+                span.textContent = e.nome;
+                span.style.fontWeight = "bold";
+                // Colore diverso se ripetibile o singolo
+                span.style.color = e.ripetibile ? "#2563eb" : "#f97316"; // blu vs arancione
+                li.appendChild(span);
+                if (idx < eventsWeek[key].length - 1) {
+                    li.appendChild(document.createTextNode(", "));
+                }
             });
         } else {
-            const dash = document.createElement("span");
-            dash.textContent = "—";
-            eventsContainer.appendChild(dash);
+            li.textContent = `${label}: —`;
         }
 
-        li.appendChild(eventsContainer);
         weekList.appendChild(li);
     }
 }
+
 
 
 // ===================== Modal =====================
