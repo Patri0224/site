@@ -69,15 +69,27 @@ main {
     background: #2a2a3d;
 }
 
-.events-in-day {
-    margin: 2px 0 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: 0.7rem;
-    color: #a0a0ff;
-    max-height: 50px;
-    overflow-y: auto;  
+.events-in-day span {
+    display: inline-block;
+    color: white;
+    border-radius: 6px;
+    padding: 2px 4px;
+    font-size: 0.65rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
+
+/* Colore per eventi ricorrenti */
+.events-in-day span.recurring {
+    background: #2563eb; /* blu */
+}
+
+/* Colore per eventi singoli */
+.events-in-day span.single {
+    background: #dc2626; /* rosso */
+}
+
 
 .events-in-day li {
     white-space: nowrap;

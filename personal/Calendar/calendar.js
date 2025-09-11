@@ -110,31 +110,41 @@ async function renderCalendar() {
     }
 
     // giorni mese
+    // giorni mese
     for (let d = 1; d <= lastDay.getDate(); d++) {
         const date = new Date(year, month, d);
         const dayEl = document.createElement("div");
         dayEl.className = "day";
         if (isToday(date)) dayEl.classList.add("today");
 
-        // Filtra gli eventi per questo giorno
+        // 🔹 Filtra gli eventi per questo giorno
         const eventsDay = eventsMonth.filter(e => parseInt(e.day) === d);
         if (eventsDay.length) dayEl.classList.add("has-event");
 
-        // Contenuto della cella: giorno + lista eventi
-        let html = `<strong>${d}</strong>`;
-        if (eventsDay.length) {
-            html += `<ul class="events-in-day">`;
-            eventsDay.forEach(e => {
-                html += `<li>${e.nome}</li>`;
-            });
-            html += `</ul>`;
-        }
-        dayEl.innerHTML = html;
+        // Numero del giorno
+        dayEl.innerHTML = `<strong>${d}</strong>`;
 
-        // Apertura modal cliccando sulla cella
-        dayEl.onclick = () => openModal(date, eventsDay);
+        // Lista eventi come badge
+        if (eventsDay.length) {
+            const eventsContainer = document.createElement("div");
+            eventsContainer.className = "events-in-day";
+
+            eventsDay.forEach(e => {
+                const span = document.createElement("span");
+                span.textContent = e.nome;
+                // aggiungi la classe in base al tipo
+                span.classList.add(e.ripetibile ? "recurring" : "single");
+                eventsContainer.appendChild(span);
+            });
+
+            dayEl.appendChild(eventsContainer);
+        }
+
+
+        dayEl.onclick = () => openModal(date, eventsDay); // passiamo gli eventi già filtrati
         calendarEl.appendChild(dayEl);
     }
+
 
     renderWeek(eventsMonth); // passa gli eventi del mese se serve
 }
