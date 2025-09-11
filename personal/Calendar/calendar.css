@@ -28,6 +28,12 @@ button:hover {
     background: #1d4ed8;
 }
 
+/* Layout base: mobile, stacked */
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
 .day-header {
     text-align: center;
@@ -119,4 +125,21 @@ button:hover {
 
 .delete-btn {
     background: #dc2626;
+}
+
+/* Media query desktop */
+@media screen and (min-width: 900px) {
+    main {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+    }
+
+    #calendar {
+        width: 75%;
+    }
+
+    #weekEvents {
+        width: 25%;
+    }
 }
