@@ -160,6 +160,7 @@ function renderEventList(eventsDay) {
 
         // Pulsante elimina
         const deleteBtn = document.createElement("button");
+        deleteBtn.className = "delete-btn";
         deleteBtn.textContent = "🗑";
         deleteBtn.style.marginLeft = "10px";
         deleteBtn.onclick = async () => {

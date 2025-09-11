@@ -76,16 +76,23 @@ export async function handler(event, context) {
 
             return { statusCode: 200, body: JSON.stringify({ success: true }) };
         }
-        if (event.httpMethod === "DELETE") {
-            const { day, month, nome } = JSON.parse(event.body);
-            await client.sql`
-            DELETE FROM calendar
-            WHERE nome = ${nome} AND EXTRACT(DAY FROM data) = ${day} AND EXTRACT(MONTH FROM data) = ${month}
-        `;
+
+        // ===== DELETE evento =====
+        if (httpMethod === "DELETE") {
+            const { day, month, nome } = JSON.parse(body);
+
+            await sql`
+        DELETE FROM public.calendar
+        WHERE nome = ${nome} 
+          AND EXTRACT(DAY FROM data) = ${day} 
+          AND EXTRACT(MONTH FROM data) = ${month}
+    `;
+
             return { statusCode: 200, body: JSON.stringify({ success: true }) };
         }
 
-        
+
+
         return { statusCode: 400, body: "Bad Request" };
     } catch (err) {
         return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
