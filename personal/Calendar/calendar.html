@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario Eventi</title>
+  <link rel="stylesheet" href="calendar.css">
+</head>
+<body>
+  <header>
+    <button id="prevBtn">◀</button>
+    <h1 id="monthLabel"></h1>
+    <button id="nextBtn">▶</button>
+  </header>
+
+  <main>
+    <section id="calendar"></section>
+    <section id="weekEvents">
+      <h2>Prossimi 7 giorni</h2>
+      <ul id="weekList"></ul>
+    </section>
+  </main>
+
+  <!-- Modal nuovo evento -->
+  <div id="eventModal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="modalDate"></h2>
+      <label>
+        Descrizione evento:
+        <input type="text" id="eventText">
+      </label>
+      <label>
+        <input type="checkbox" id="eventSingle">
+        Evento singolo (una volta sola)
+      </label>
+      <div class="actions">
+        <button id="saveEvent">Salva</button>
+        <button id="closeModal">Chiudi</button>
+      </div>
+      <ul id="eventList"></ul>
+    </div>
+  </div>
+
+  <script src="calendar.js"></script>
+</body>
+</html>

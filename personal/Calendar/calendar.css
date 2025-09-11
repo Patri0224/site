@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #0d0d0f;
+  color: #eee;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e1e21;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover { background: #1d4ed8; }
+
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 1rem;
+}
+
+.day {
+  min-height: 70px;
+  background: #1e1e21;
+  border-radius: 8px;
+  padding: 4px;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+}
+.day.today { border: 2px solid #2563eb; }
+.day.has-event { background: #2a2a3d; }
+
+#weekEvents {
+  padding: 1rem;
+  background: #1a1a1d;
+}
+#weekEvents h2 { margin-top: 0; }
+#weekList { padding-left: 1rem; }
+
+/* Modal */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: #1e1e21;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+}
+.modal-content input[type=text] {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.4rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background: #0d0d0f;
+  color: white;
+}
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
