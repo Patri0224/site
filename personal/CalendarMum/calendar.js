@@ -28,7 +28,7 @@ let selectedDate = null;
 // ===================== API =====================
 async function getEvents(day, month) {
     try {
-        const res = await fetch(`/.netlify/functions/events?day=${day}&month=${month}&persona=1`);
+        const res = await fetch(`/.netlify/functions/events?day=${day}&month=${month}&persona=2`);
         if (!res.ok) throw new Error("Errore fetch eventi");
         return await res.json();
     } catch (err) {
@@ -39,7 +39,7 @@ async function getEvents(day, month) {
 
 async function getEventsMonth(month) {
     try {
-        const res = await fetch(`/.netlify/functions/events?month=${month}&persona=1`);
+        const res = await fetch(`/.netlify/functions/events?month=${month}&persona=2`);
         if (!res.ok) throw new Error("Errore caricamento eventi mese");
         return await res.json(); // array di eventi {day, nome, ripetibile}
     } catch (err) {
@@ -50,7 +50,7 @@ async function getEventsMonth(month) {
 
 async function getWeekEvents() {
     try {
-        const res = await fetch(`/.netlify/functions/events?week=true&persona=1`);
+        const res = await fetch(`/.netlify/functions/events?week=true&persona=2`);
         if (!res.ok) throw new Error("Errore fetch settimana");
         return await res.json();
     } catch (err) {
@@ -64,7 +64,7 @@ async function saveEventAPI(day, month, nome, ripetibile, oraInizio = "00:00:00"
         const res = await fetch(`/.netlify/functions/events`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ day, month, nome, ripetibile, oraInizio, oraFine, persona: 1 })
+            body: JSON.stringify({ day, month, nome, ripetibile, oraInizio, oraFine, persona: 2 })
         });
         if (!res.ok) throw new Error("Errore salvataggio evento");
         return await res.json();
@@ -78,7 +78,7 @@ async function deleteEventAPI(day, month, nome) {
         const res = await fetch(`/.netlify/functions/events`, {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ day, month, nome, persona: 1 })
+            body: JSON.stringify({ day, month, nome, persona: 2 })
         });
         if (!res.ok) throw new Error("Errore eliminazione evento");
         return await res.json();
@@ -88,7 +88,7 @@ async function deleteEventAPI(day, month, nome) {
 }
 async function searchEventsApi(search, includeRecurring) {
     try {
-        const res = await fetch(`/.netlify/functions/events?search=${encodeURIComponent(search)}&recurring=${includeRecurring}&persona=1`);
+        const res = await fetch(`/.netlify/functions/events?search=${encodeURIComponent(search)}&recurring=${includeRecurring}&persona=2`);
         if (!res.ok) throw new Error("Errore ricerca eventi");
         return await res.json(); // array di eventi trovati
     } catch (err) {

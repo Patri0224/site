@@ -4,7 +4,7 @@ const sql = neon();
 export async function handler(event, context) {
     try {
         const { httpMethod, queryStringParameters, body } = event;
-
+        const persona = queryStringParameters.persona || 0;
         // ===== GET eventi per giorno/mese =====
         if (httpMethod === "GET") {
             if (queryStringParameters.day && queryStringParameters.month) {
@@ -16,6 +16,7 @@ export async function handler(event, context) {
             FROM public.calendar
             WHERE EXTRACT(DAY FROM data) = ${day}
               AND EXTRACT(MONTH FROM data) = ${month}
+              AND persona = ${persona}
             ORDER BY ora_inizio ASC, ripetibile ASC, id ASC;
 
         `;
@@ -30,6 +31,7 @@ export async function handler(event, context) {
                  SELECT EXTRACT(DAY FROM data) AS day, nome, ripetibile, ora_inizio, ora_fine
                     FROM public.calendar
                 WHERE EXTRACT(MONTH FROM data) = ${month}
+              AND persona = ${persona}
                 ORDER BY day ASC, ora_inizio ASC, ripetibile ASC, id ASC;
 
   `;
@@ -54,6 +56,7 @@ export async function handler(event, context) {
             FROM public.calendar
             WHERE EXTRACT(DAY FROM data) = ${day}
               AND EXTRACT(MONTH FROM data) = ${month}
+              AND persona = ${persona}
             ORDER BY ora_inizio ASC, ripetibile ASC, id ASC
           `;
 
@@ -75,6 +78,7 @@ export async function handler(event, context) {
                         SELECT id, nome, data, ripetibile, ora_inizio, ora_fine
                         FROM public.calendar
                         WHERE nome ILIKE ${'%' + search + '%'}
+                          AND persona = ${persona}
                         ORDER BY data ASC, ora_inizio ASC
                     `;
                 } else {
@@ -84,6 +88,7 @@ export async function handler(event, context) {
                         FROM public.calendar
                         WHERE nome ILIKE ${'%' + search + '%'}
                           AND ripetibile = false
+                          AND persona = ${persona}
                         ORDER BY data ASC, ora_inizio ASC
                     `;
                 }
@@ -100,8 +105,8 @@ export async function handler(event, context) {
             const date = new Date(2024, month - 1, day);
 
             await sql`
-                    INSERT INTO public.calendar (nome, data, ripetibile, ora_inizio, ora_fine)
-                    VALUES (${nome}, ${date.toISOString()}, ${ripetibile}, ${oraInizio || '00:00:00'}, ${oraFine || '00:00:00'});
+                    INSERT INTO public.calendar (nome, data, ripetibile, ora_inizio, ora_fine, persona)
+                    VALUES (${nome}, ${date.toISOString()}, ${ripetibile}, ${oraInizio || '00:00:00'}, ${oraFine || '00:00:00'}, ${persona});
 
       `;
 
@@ -117,6 +122,7 @@ export async function handler(event, context) {
         WHERE nome = ${nome} 
           AND EXTRACT(DAY FROM data) = ${day} 
           AND EXTRACT(MONTH FROM data) = ${month}
+          AND persona = ${persona};
     `;
 
             return { statusCode: 200, body: JSON.stringify({ success: true }) };

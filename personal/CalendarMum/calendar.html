@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Eventi</title>
+    <link rel="stylesheet" href="calendar.css">
+</head>
+
+<body>
+    <header>
+        <button id="prevMonth">◀</button>
+        <h1 id="monthLabel"></h1>
+        <button id="nextMonth">▶</button>
+        <button id="openSearch">Ricerca  🔍</button>
+    </header>
+
+    <main>
+        <section id="calendar"></section>
+        <section id="weekEvents">
+            <h2>Prossimi 7 giorni</h2>
+            <ul id="weekList"></ul>
+        </section>
+    </main>
+    <!-- Modal Dettaglio Giorno -->
+    <div id="dayModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="dayModalDate"></h2>
+            <ul id="dayEventList"></ul>
+            <div class="actions">
+                <button id="addNewEvent">Aggiungi nuovo evento</button>
+                <button id="closeDayModal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal nuovo evento -->
+    <div id="eventModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="modalDate"></h2>
+            <!-- <p>Eventi già presenti:</p>
+            <ul id="eventList"></ul> -->
+            <label>
+                Aggiungi evento:
+                <input type="text" id="eventText">
+            </label>
+            <label>
+                Ora inizio:
+                <input type="time" id="eventStart" value="00:00:00">
+            </label>
+            <label>
+                Ora fine:
+                <input type="time" id="eventEnd" value="00:00:00">
+            </label>
+            <div class="checkbox-container">
+                <label for="eventSingle"><input type="checkbox" id="eventSingle" checked>Evento singolo (non
+                    ricorrente)</label>
+            </div>
+            <div class="actions">
+                <button id="saveEvent">Aggiungi evento</button>
+                <button id="closeModal">Chiudi</button>
+            </div>
+
+        </div>
+    </div>
+    <!-- Modal ricerca -->
+    <div id="searchModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Ricerca eventi</h2>
+            <label>
+                Inserisci testo:
+                <input type="text" id="searchText" placeholder="Inserisci testo...">
+            </label>
+            <label>
+                <input type="checkbox" id="includeRecurring">
+                Includi eventi ricorrenti
+            </label>
+            <div class="actions">
+                <button id="doSearch">Cerca</button>
+                <button id="closeSearch">Chiudi</button>
+            </div>
+            <ul id="searchResults"></ul>
+        </div>
+    </div>
+    <script src="calendar.js"></script>
+</body>
+
+</html>
