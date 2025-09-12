@@ -155,6 +155,11 @@ main {
     margin-top: -5px;
 }
 
+#eventSingle {
+    display: block;
+    margin-top: 0.1rem; /* opzionale per distanziare dal tempo */
+}
+
 .actions {
     display: flex;
     justify-content: space-between;
