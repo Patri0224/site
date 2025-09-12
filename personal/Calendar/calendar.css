@@ -151,6 +151,9 @@ main {
 #modalDate {
     margin-top: -5px;
 }
+#dayModalDate {
+    margin-top: -5px;
+}
 
 .actions {
     display: flex;
