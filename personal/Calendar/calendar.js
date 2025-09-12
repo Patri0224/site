@@ -247,7 +247,7 @@ dayModal.addEventListener("click", (e) => {
 function openModal(date) {
     selectedDate = date;
     modal.classList.remove("hidden");
-    //modalDate.textContent = date.toLocaleDateString("it-IT");
+    modalDate.textContent = date.toLocaleDateString("it-IT");
     eventText.value = "";
     eventStart.value = "00:00:00";
     eventEnd.value = "00:00:00";
