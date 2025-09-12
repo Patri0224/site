@@ -326,14 +326,29 @@ doSearch.onclick = async () => {
     } else {
         events.forEach(e => {
             const li = document.createElement("li");
-            let timeRange = "";
+
+            // contenitore del testo principale
+            const info = document.createElement("span");
+            info.textContent = `${e.nome} (${new Date(e.data).toLocaleDateString("it-IT")})`;
+            li.appendChild(info);
+
+            // eventuale intervallo orario
             if (e.ora_inizio !== "00:00:00" && e.ora_fine !== "00:00:00") {
-                timeRange = ` ${e.ora_inizio.slice(0, 5)}-${e.ora_fine.slice(0, 5)}`;
+                const timeSpan = document.createElement("span");
+                timeSpan.textContent = ` ${e.ora_inizio.slice(0, 5)}-${e.ora_fine.slice(0, 5)}`;
+                timeSpan.classList.add("time-badge");
+                li.appendChild(timeSpan);
             }
 
-            li.textContent = `${e.nome} (${new Date(e.data).toLocaleDateString("it-IT")})${timeRange} ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
+            // badge ricorrente o singolo
+            const typeSpan = document.createElement("span");
+            typeSpan.textContent = e.ripetibile ? " (ricorrente)" : " (singolo)";
+            typeSpan.classList.add(e.ripetibile ? "recurring" : "single");
+            li.appendChild(typeSpan);
+
             searchResults.appendChild(li);
         });
+
     }
 };
 // Permetti ricerca anche con Enter
