@@ -122,7 +122,8 @@ main {
     background: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; 
+    padding-top: 40px;    
 }
 
 .modal.hidden {
@@ -159,6 +160,14 @@ main {
 
 .delete-btn {
     background: #dc2626;
+}
+
+#dayEventList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #333;
 }
 
 /* Media query desktop */

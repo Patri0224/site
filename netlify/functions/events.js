@@ -12,11 +12,12 @@ export async function handler(event, context) {
                 const month = parseInt(queryStringParameters.month);
 
                 const events = await sql`
-          SELECT nome, ripetibile
-          FROM public.calendar
-          WHERE EXTRACT(DAY FROM data) = ${day}
-            AND EXTRACT(MONTH FROM data) = ${month}
-          ORDER BY ripetibile ASC, id ASC
+            SELECT nome, ripetibile, ora_inizio, ora_fine
+            FROM public.calendar
+            WHERE EXTRACT(DAY FROM data) = ${day}
+              AND EXTRACT(MONTH FROM data) = ${month}
+            ORDER BY ora_inizio ASC, ripetibile ASC, id ASC;
+
         `;
 
                 return { statusCode: 200, body: JSON.stringify(events) };
@@ -26,10 +27,11 @@ export async function handler(event, context) {
                 const month = parseInt(queryStringParameters.month);
 
                 const events = await sql`
-    SELECT EXTRACT(DAY FROM data) AS day, nome, ripetibile
-    FROM public.calendar
-    WHERE EXTRACT(MONTH FROM data) = ${month}
-    ORDER BY EXTRACT(DAY FROM data) ASC, ripetibile ASC, id ASC
+                 SELECT EXTRACT(DAY FROM data) AS day, nome, ripetibile, ora_inizio, ora_fine
+                    FROM public.calendar
+                WHERE EXTRACT(MONTH FROM data) = ${month}
+                ORDER BY day ASC, ora_inizio ASC, ripetibile ASC, id ASC;
+
   `;
 
                 return { statusCode: 200, body: JSON.stringify(events) };
@@ -48,11 +50,11 @@ export async function handler(event, context) {
                     const month = date.getMonth() + 1;
 
                     const events = await sql`
-            SELECT nome, ripetibile
+            SELECT nome, ripetibile, ora_inizio, ora_fine
             FROM public.calendar
             WHERE EXTRACT(DAY FROM data) = ${day}
               AND EXTRACT(MONTH FROM data) = ${month}
-            ORDER BY ripetibile ASC, id ASC
+            ORDER BY ora_inizio ASC, ripetibile ASC, id ASC
           `;
 
                     result[`${day}-${month}`] = events;
@@ -70,8 +72,9 @@ export async function handler(event, context) {
             const date = new Date(2024, month - 1, day);
 
             await sql`
-                    INSERT INTO public.calendar (nome, data, ripetibile)
-                    VALUES (${nome}, ${date.toISOString()}, ${ripetibile})
+                    INSERT INTO public.calendar (nome, data, ripetibile, ora_inizio, ora_fine)
+                    VALUES (${nome}, ${date.toISOString()}, ${ripetibile}, ${oraInizio || '00:00:00'}, ${oraFine || '00:00:00'});
+
       `;
 
             return { statusCode: 200, body: JSON.stringify({ success: true }) };

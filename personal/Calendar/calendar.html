@@ -22,13 +22,24 @@
             <ul id="weekList"></ul>
         </section>
     </main>
+    <!-- Modal Dettaglio Giorno -->
+    <div id="dayModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="dayModalDate"></h2>
+            <ul id="dayEventList"></ul>
+            <div class="actions">
+                <button id="addNewEvent">Aggiungi nuovo evento</button>
+                <button id="closeDayModal">Chiudi</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal nuovo evento -->
     <div id="eventModal" class="modal hidden">
         <div class="modal-content">
-            <h2 id="modalDate"></h2>
+            <!--    <h2 id="modalDate"></h2>
             <p>Eventi già presenti:</p>
-            <ul id="eventList"></ul>
+            <ul id="eventList"></ul> -->
             <label>
                 Aggiungi evento:
                 <input type="text" id="eventText">
@@ -41,7 +52,7 @@
                 <button id="saveEvent">Aggiungi evento</button>
                 <button id="closeModal">Chiudi</button>
             </div>
-            
+
         </div>
     </div>
 

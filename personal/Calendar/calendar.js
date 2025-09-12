@@ -9,6 +9,11 @@ const eventSingle = document.getElementById("eventSingle");
 const eventList = document.getElementById("eventList");
 const saveEvent = document.getElementById("saveEvent");
 const closeModal = document.getElementById("closeModal");
+const dayModal = document.getElementById("dayModal");
+const dayModalDate = document.getElementById("dayModalDate");
+const dayEventList = document.getElementById("dayEventList");
+const addNewEvent = document.getElementById("addNewEvent");
+const closeDayModal = document.getElementById("closeDayModal");
 
 let currentDate = new Date();
 let selectedDate = null;
@@ -47,12 +52,12 @@ async function getWeekEvents() {
     }
 }
 
-async function saveEventAPI(day, month, nome, ripetibile) {
+async function saveEventAPI(day, month, nome, ripetibile, oraInizio, oraFine) {
     try {
         const res = await fetch(`/.netlify/functions/events`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ day, month, nome, ripetibile })
+            body: JSON.stringify({ day, month, nome, ripetibile, oraInizio, oraFine })
         });
         if (!res.ok) throw new Error("Errore salvataggio evento");
         return await res.json();
@@ -78,7 +83,7 @@ async function deleteEventAPI(day, month, nome) {
 
 // ===================== Render Calendario =====================
 async function renderCalendar() {
-    const year = 2024; // anno bisestile
+    const year = currentDate.getFullYear();
     const month = currentDate.getMonth(); // 0-11
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
@@ -141,7 +146,11 @@ async function renderCalendar() {
         }
 
 
-        dayEl.onclick = () => openModal(date, eventsDay); // passiamo gli eventi già filtrati
+        dayEl.onclick = () => {
+            const eventsDay = eventsMonth.filter(ev => parseInt(ev.day) === d);
+            openDayModal(date, eventsDay); // mostra eventi con ora_inizio/fine e posizione
+        };
+        // passiamo gli eventi già filtrati
         calendarEl.appendChild(dayEl);
     }
 
@@ -191,45 +200,58 @@ async function renderWeek() {
     }
 }
 
-
-
-// ===================== Modal =====================
-function openModal(date, eventsDay = []) {
+// ===================== Modal giorno =====================
+function openDayModal(date, eventsDay = []) {
     selectedDate = date;
-    modal.classList.remove("hidden");
-    modalDate.textContent = date.toLocaleDateString("it-IT");
-    eventText.value = "";
-    eventSingle.checked = false;
+    dayModal.classList.remove("hidden");
+    dayModalDate.textContent = date.toLocaleDateString("it-IT");
 
-    // ✅ Usa gli eventi già passati invece di fare un'altra query
-    renderEventList(eventsDay);
-}
-
-
-function renderEventList(eventsDay) {
-    eventList.innerHTML = "";
+    dayEventList.innerHTML = "";
 
     eventsDay.forEach((e, index) => {
         const li = document.createElement("li");
-        li.textContent = `${e.nome} ${e.ripetibile ? "" : "(singolo)"}`;
+        li.textContent = `${index + 1}. ${e.nome} [${e.ora_inizio} - ${e.ora_fine}] ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
 
         // Pulsante elimina
         const deleteBtn = document.createElement("button");
-        deleteBtn.className = "delete-btn";
         deleteBtn.textContent = "🗑";
-        deleteBtn.style.marginLeft = "10px";
+        deleteBtn.className = "delete-btn";
         deleteBtn.onclick = async () => {
             await deleteEventAPI(selectedDate.getDate(), selectedDate.getMonth() + 1, e.nome);
-            closeModalFn();
+            openDayModal(selectedDate, eventsDay.filter(ev => ev !== e));
             renderCalendar();
         };
 
         li.appendChild(deleteBtn);
-        eventList.appendChild(li);
+        dayEventList.appendChild(li);
     });
 }
 
+// chiudi modal giorno
+closeDayModal.onclick = () => dayModal.classList.add("hidden");
 
+// apri modal aggiungi evento dal dettaglio giorno
+addNewEvent.onclick = () => {
+    dayModal.classList.add("hidden");
+    openModal(selectedDate);
+};
+
+// chiusura cliccando all’esterno
+dayModal.addEventListener("click", (e) => {
+    if (e.target === dayModal) dayModal.classList.add("hidden");
+});
+
+// ===================== Modal =====================
+function openModal(date) {
+    selectedDate = date;
+    modal.classList.remove("hidden");
+    //modalDate.textContent = date.toLocaleDateString("it-IT");
+    eventText.value = "";
+    eventStart.value = "00:00";
+    eventEnd.value = "00:00";
+    eventSingle.checked = false;
+
+}
 
 saveEvent.onclick = async () => {
     if (!selectedDate) return;
@@ -237,6 +259,9 @@ saveEvent.onclick = async () => {
     const month = selectedDate.getMonth() + 1;
     await saveEventAPI(day, month, eventText.value, !eventSingle.checked);
     closeModalFn();
+    const eventsMonth = await getEventsMonth(month); // prendi gli eventi aggiornati del mese
+    const eventsDay = eventsMonth.filter(ev => parseInt(ev.day) === day);
+    openDayModal(selectedDate, eventsDay);
     renderCalendar();
 };
 
@@ -248,6 +273,7 @@ function closeModalFn() {
 modal.addEventListener("click", (e) => {
     if (e.target === modal) {
         closeModalFn();
+
     }
 });
 
