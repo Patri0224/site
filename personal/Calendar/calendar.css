@@ -116,7 +116,7 @@ main {
 }
 
 /* Modal */
-.modal {
+/*.modal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.7);
@@ -124,6 +124,19 @@ main {
     justify-content: center;
     align-items: flex-start; 
     padding-top: 40px;    
+}*/
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    /* in alto */
+    padding-top: 2rem;
 }
 
 .modal.hidden {
@@ -133,7 +146,7 @@ main {
 .modal-content {
     background: #1e1e21;
     padding: 1rem;
-    border-radius: 10px;
+    border-radius: 8px;
     width: 90%;
     max-width: 400px;
 }
@@ -151,6 +164,7 @@ main {
 #modalDate {
     margin-top: -5px;
 }
+
 #dayModalDate {
     margin-top: -5px;
 }
@@ -165,11 +179,13 @@ main {
 .delete-btn {
     background: #dc2626;
 }
+
 #dayEventList {
     padding: 3px;
     margin-top: -5px;
     padding-top: 0px;
 }
+
 #dayEventList li {
     display: flex;
     justify-content: space-between;
@@ -196,7 +212,7 @@ main {
 }
 
 /* Media query per schermi piccoli */
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 450px) {
     header {
         padding: 1rem;
         /* riduce l'altezza dell'header */
@@ -212,7 +228,9 @@ main {
         /* pulsanti più piccoli */
         font-size: 1rem;
     }
+}
 
+@media screen and (min-width: 400px) {
     .day-header {
         display: block;
         /* nasconde i nomi dei giorni della settimana */

@@ -62,6 +62,34 @@ export async function handler(event, context) {
 
                 return { statusCode: 200, body: JSON.stringify(result) };
             }
+            // 🔎 Ricerca eventi per nome
+            if (queryStringParameters.search) {
+                const search = queryStringParameters.search;
+                const recurring = queryStringParameters.recurring === "true";
+
+                let events;
+
+                if (recurring) {
+                    // includi anche i ricorrenti
+                    events = await sql`
+                        SELECT id, nome, data, ripetibile, ora_inizio, ora_fine
+                        FROM public.calendar
+                        WHERE nome ILIKE ${'%' + search + '%'}
+                        ORDER BY data ASC, ora_inizio ASC
+                    `;
+                } else {
+                    // solo eventi singoli
+                    events = await sql`
+                        SELECT id, nome, data, ripetibile, ora_inizio, ora_fine
+                        FROM public.calendar
+                        WHERE nome ILIKE ${'%' + search + '%'}
+                          AND ripetibile = false
+                        ORDER BY data ASC, ora_inizio ASC
+                    `;
+                }
+
+                return { statusCode: 200, body: JSON.stringify(events) };
+            }
         }
 
         // ===== POST nuovo evento =====

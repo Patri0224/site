@@ -14,6 +14,13 @@ const dayModalDate = document.getElementById("dayModalDate");
 const dayEventList = document.getElementById("dayEventList");
 const addNewEvent = document.getElementById("addNewEvent");
 const closeDayModal = document.getElementById("closeDayModal");
+const searchModal = document.getElementById("searchModal");
+const openSearch = document.getElementById("openSearch");
+const closeSearch = document.getElementById("closeSearch");
+const doSearch = document.getElementById("doSearch");
+const searchText = document.getElementById("searchText");
+const includeRecurring = document.getElementById("includeRecurring");
+const searchResults = document.getElementById("searchResults");
 
 let currentDate = new Date();
 let selectedDate = null;
@@ -79,7 +86,24 @@ async function deleteEventAPI(day, month, nome) {
         console.error(err);
     }
 }
+async function searchEventsApi(search, includeRecurring) {
+    try {
+        const res = await fetch(`/.netlify/functions/events?search=${encodeURIComponent(search)}&recurring=${includeRecurring}`);
+        if (!res.ok) throw new Error("Errore ricerca eventi");
+        return await res.json(); // array di eventi trovati
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
 
+// ===================== Funzioni UI =====================
+// Funzione per caricare e renderizzare il calendario
+// Ottiene gli eventi per il mese corrente
+// Ottiene gli eventi per la settimana corrente
+// Mostra i dettagli del giorno selezionato
+// Apre/chiude modali
+// Gestisce la ricerca
 
 // ===================== Render Calendario =====================
 async function renderCalendar() {
@@ -280,6 +304,44 @@ modal.addEventListener("click", (e) => {
     if (e.target === modal) {
         closeModalFn();
         dayModal.classList.add("hidden");
+    }
+});
+// ===================== Modal ricerca =====================
+openSearch.onclick = () => searchModal.classList.remove("hidden");
+closeSearch.onclick = () => searchModal.classList.add("hidden");
+
+// Esegui ricerca
+doSearch.onclick = async () => {
+    const query = searchText.value.trim();
+    const recurring = includeRecurring.checked;
+
+    if (!query) return;
+
+    // 🔹 chiamata alla funzione serverless (da implementare lato backend)
+
+    const events = await searchEventsApi(query, recurring);
+    searchResults.innerHTML = "";
+    if (events.length === 0) {
+        searchResults.innerHTML = "<li>Nessun risultato</li>";
+    } else {
+        events.forEach(e => {
+            const li = document.createElement("li");
+            li.textContent = `${e.nome} (${new Date(e.data).toLocaleDateString("it-IT")}) ${e.ora_inizio.slice(0, 5)}-${e.ora_fine.slice(0, 5)} ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
+            searchResults.appendChild(li);
+        });
+    }
+};
+// Permetti ricerca anche con Enter
+searchText.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault(); // evita il submit del form o refresh pagina
+        doSearch.click();   // simula il click del bottone "Cerca"
+    }
+});
+// Chiudi se clicco fuori dal contenuto del modal
+searchModal.addEventListener("click", (e) => {
+    if (e.target === searchModal) {
+        searchModal.classList.add("hidden");
     }
 });
 
