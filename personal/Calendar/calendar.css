@@ -116,15 +116,6 @@ main {
 }
 
 /* Modal */
-/*.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; 
-    padding-top: 40px;    
-}*/
 .modal {
     position: fixed;
     top: 0;
@@ -193,7 +184,33 @@ main {
     padding: 4px 0;
     border-bottom: 1px solid #333;
 }
+#searchResults {
+    margin-top: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+#searchResults span {
+    display: inline-block;
+    color: white;
+    border-radius: 4px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 1px 2px;
+    font-size: 0.57rem;
+    white-space: wrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+#searchResults span.recurring {
+    background: #2563eb;
+    /* blu */
+}
 
+/* Colore per eventi singoli */
+#searchResults span.single {
+    background: #ec4908;
+    /* rosso */
+}
 /* Media query desktop */
 @media screen and (min-width: 900px) {
     main {
