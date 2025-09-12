@@ -326,7 +326,12 @@ doSearch.onclick = async () => {
     } else {
         events.forEach(e => {
             const li = document.createElement("li");
-            li.textContent = `${e.nome} (${new Date(e.data).toLocaleDateString("it-IT")}) ${e.ora_inizio.slice(0, 5)}-${e.ora_fine.slice(0, 5)} ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
+            let timeRange = "";
+            if (e.ora_inizio !== "00:00:00" && e.ora_fine !== "00:00:00") {
+                timeRange = ` ${e.ora_inizio.slice(0, 5)}-${e.ora_fine.slice(0, 5)}`;
+            }
+
+            li.textContent = `${e.nome} (${new Date(e.data).toLocaleDateString("it-IT")})${timeRange} ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
             searchResults.appendChild(li);
         });
     }
