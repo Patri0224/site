@@ -139,7 +139,7 @@ main {
     padding: 1rem;
     border-radius: 8px;
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
 }
 
 .modal-content input[type=text] {
@@ -184,23 +184,26 @@ main {
     padding: 4px 0;
     border-bottom: 1px solid #333;
 }
+
 #searchResults {
     margin-top: 10px;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
 }
+
 #searchResults span {
     display: inline-block;
     color: white;
     border-radius: 4px;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding: 1px 2px;
-    font-size: 0.57rem;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 2px 4px;
+    font-size: 0.80rem;
     white-space: wrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
 #searchResults span.recurring {
     background: #2563eb;
     /* blu */
@@ -211,6 +214,35 @@ main {
     background: #ec4908;
     /* rosso */
 }
+
+/* Scrollbar personalizzata */
+#searchResults::-webkit-scrollbar {
+    width: 8px;
+}
+
+#searchResults::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+#searchResults li {
+    padding: 6px 8px;
+    margin-bottom: 4px;
+    background: #2a2a3d;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    /* se vuoi mettere badge o pulsanti a lato */
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+/* Effetto hover */
+#searchResults li:hover {
+    background: #3a3a5a;
+    cursor: pointer;
+}
+
 /* Media query desktop */
 @media screen and (min-width: 900px) {
     main {
