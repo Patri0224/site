@@ -164,7 +164,10 @@ main {
 .delete-btn {
     background: #dc2626;
 }
-
+#dayEventList {
+    padding: 3px;
+    margin: 1px 0;
+}
 #dayEventList li {
     display: flex;
     justify-content: space-between;

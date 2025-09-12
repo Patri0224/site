@@ -52,7 +52,7 @@ async function getWeekEvents() {
     }
 }
 
-async function saveEventAPI(day, month, nome, ripetibile, oraInizio, oraFine) {
+async function saveEventAPI(day, month, nome, ripetibile, oraInizio = "00:00:00", oraFine = "00:00:00") {
     try {
         const res = await fetch(`/.netlify/functions/events`, {
             method: "POST",
@@ -210,7 +210,9 @@ function openDayModal(date, eventsDay = []) {
 
     eventsDay.forEach((e, index) => {
         const li = document.createElement("li");
-        li.textContent = `${index + 1}. ${e.nome} [${e.ora_inizio} - ${e.ora_fine}] ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
+        const ora_inizio = e.ora_inizio ? e.ora_inizio.slice(0, 5) : "00:00";
+        const ora_fine = e.ora_fine ? e.ora_fine.slice(0, 5) : "00:00";
+        li.textContent = `${index + 1}. ${e.nome} [${ora_inizio} - ${ora_fine}] ${e.ripetibile ? "(ricorrente)" : "(singolo)"}`;
 
         // Pulsante elimina
         const deleteBtn = document.createElement("button");
@@ -247,8 +249,8 @@ function openModal(date) {
     modal.classList.remove("hidden");
     //modalDate.textContent = date.toLocaleDateString("it-IT");
     eventText.value = "";
-    eventStart.value = "00:00";
-    eventEnd.value = "00:00";
+    eventStart.value = "00:00:00";
+    eventEnd.value = "00:00:00";
     eventSingle.checked = false;
 
 }
@@ -257,7 +259,10 @@ saveEvent.onclick = async () => {
     if (!selectedDate) return;
     const day = selectedDate.getDate();
     const month = selectedDate.getMonth() + 1;
-    await saveEventAPI(day, month, eventText.value, !eventSingle.checked);
+
+    const ora_inizio = document.getElementById("eventStart")?.value || "00:00:00";
+    const ora_fine = document.getElementById("eventEnd")?.value || "00:00:00";
+    await saveEventAPI(day, month, eventText.value, !eventSingle.checked, ora_inizio, ora_fine);
     closeModalFn();
     const eventsMonth = await getEventsMonth(month); // prendi gli eventi aggiornati del mese
     const eventsDay = eventsMonth.filter(ev => parseInt(ev.day) === day);
@@ -268,12 +273,13 @@ saveEvent.onclick = async () => {
 closeModal.onclick = closeModalFn;
 function closeModalFn() {
     modal.classList.add("hidden");
+    dayModal.classList.remove("hidden");
 }
 
 modal.addEventListener("click", (e) => {
     if (e.target === modal) {
         closeModalFn();
-
+        dayModal.classList.add("hidden");
     }
 });
 
