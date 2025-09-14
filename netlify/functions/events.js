@@ -115,7 +115,7 @@ export async function handler(event, context) {
 
         // ===== DELETE evento =====
         if (httpMethod === "DELETE") {
-            const { day, month, nome } = JSON.parse(body);
+            const { day, month, nome, persona } = JSON.parse(body);
 
             await sql`
         DELETE FROM public.calendar
