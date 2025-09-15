@@ -99,7 +99,7 @@ export async function handler(event, context) {
 
     // ===== POST nuovo evento =====
     if (httpMethod === "POST") {
-            const { day, month, nome, ripetibile, oraInizio, oraFine, persona } = JSON.parse(body);
+      const { day, month, nome, ripetibile, oraInizio, oraFine, persona } = JSON.parse(body);
 
       // anno bisestile 2024
       const date = new Date(2024, month - 1, day);
