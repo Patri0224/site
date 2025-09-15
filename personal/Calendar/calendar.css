@@ -42,7 +42,7 @@ main {
 }
 
 .day-header {
-    display: none;
+    display: block;
     text-align: center;
     font-weight: bold;
     color: #e1dcdb;
@@ -107,8 +107,8 @@ main {
     background: #1a1a1d;
 }
 
-#weekEvents h2 {
-    margin-top: 0;
+#weekEvents h3 {
+    margin: 0;
 }
 
 #weekList {
@@ -281,11 +281,6 @@ main {
 }
 
 @media screen and (min-width: 400px) {
-    .day-header {
-        display: block;
-        /* nasconde i nomi dei giorni della settimana */
-    }
-
     .events-in-day span {
         border-radius: 6px;
         padding: 2px 4px;
