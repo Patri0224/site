@@ -21,11 +21,10 @@ const doSearch = document.getElementById("doSearch");
 const searchText = document.getElementById("searchText");
 const includeRecurring = document.getElementById("includeRecurring");
 const searchResults = document.getElementById("searchResults");
-const eliminaVecchiEventi = document.getElementById("eliminaVecchiEventi");
 
 let currentDate = new Date();
 let selectedDate = null;
-const personaSelezionata = 2; // ID persona fissa per ora
+const personaSelezionata = 1; // ID persona fissa per ora
 const rangeDiRimozione = 10; // giorni per rimuovere eventi vecchi
 // ===================== API =====================
 async function removeOldEventsApi() {
@@ -383,14 +382,7 @@ searchModal.addEventListener("click", (e) => {
     searchModal.classList.add("hidden");
   }
 });
-// ===================== Rimuovi eventi vecchi  =====================
-eliminaVecchiEventi.onclick = async () => {
-  const conferma = confirm("Sei sicuro di voler rimuovere gli eventi passati?");
-  if (!conferma) return;
 
-  await removeOldEventsApi();
-  renderCalendar();
-};
 // ===================== Navigazione mese =====================
 document.getElementById("prevMonth").onclick = () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
