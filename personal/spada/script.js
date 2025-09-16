@@ -36,8 +36,8 @@ document.addEventListener('click', (event) => {
 
 function drawLine(x1, y1, x2, y2) {
     // Calcolare la distanza e l'angolo tra i punti
-    y1=y1-lineaWidth/2;
-    y2=y2-lineaWidth/2;
+    y1 = y1 - lineaWidth / 2;
+    y2 = y2 - lineaWidth / 2;
     const deltaX = x2 - x1;
     const deltaY = y2 - y1;
     const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
