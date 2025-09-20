@@ -29,7 +29,10 @@ var persone = {
     26: "Samu",
     27: "Selina",
     28: "Totta",
-    29: "Viola"
+    29: "Viola", 
+30:"Francesca",
+31:"Sofia",
+32:"Tommaso"
 };
 //ogni nome nuovo deve essere aggiunto in fondo alla lista anche se non è più in ordine alfabetico per essere uguale al database
 // automatically uses env NETLIFY_DATABASE_URL
