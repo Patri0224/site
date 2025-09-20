@@ -132,9 +132,9 @@ async function renderCalendar() {
   const lastDay = new Date(year, month + 1, 0);
 
   monthLabel.textContent = firstDay.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
-  renderWeek(eventsMonth);
   // Chiamata unica al database per il mese
   const eventsMonth = await getEventsMonth(month + 1); // funzione nuova
+  renderWeek(eventsMonth);
 
   const giorniSettimana = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 
