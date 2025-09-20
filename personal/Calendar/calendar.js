@@ -125,13 +125,14 @@ async function searchEventsApi(search, includeRecurring) {
 
 // ===================== Render Calendario =====================
 async function renderCalendar() {
+
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth(); // 0-11
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
 
   monthLabel.textContent = firstDay.toLocaleDateString("it-IT", { month: "long", year: "numeric" });
-
+  renderWeek(eventsMonth);
   // Chiamata unica al database per il mese
   const eventsMonth = await getEventsMonth(month + 1); // funzione nuova
 
@@ -197,7 +198,7 @@ async function renderCalendar() {
   }
 
 
-  renderWeek(eventsMonth); // passa gli eventi del mese se serve
+  // passa gli eventi del mese se serve
 }
 
 
@@ -226,6 +227,8 @@ async function renderWeek() {
       eventsWeek[key].forEach((e, idx) => {
         const span = document.createElement("span");
         span.textContent = e.nome;
+        if (e.ora_inizio !== "00:00:00" && e.ora_fine !== "00:00:00")
+          span.textContent += ` (${e.ora_inizio.slice(0, 5)}-${e.ora_fine.slice(0, 5)})`;
         span.style.fontWeight = "bold";
         // Colore diverso se ripetibile o singolo
         span.style.color = e.ripetibile ? "#2563eb" : "#f97316"; // blu vs arancione

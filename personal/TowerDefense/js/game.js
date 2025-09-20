@@ -1,15 +1,10 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-// === CLASSI BASE ===
-
-
-
 // ======================
 // INIZIALIZZAZIONE GRID
 // ======================
 let grid = new Grid(15, 10, 40); // 15 colonne, 10 righe, celle 40px
-createBaseMap(grid);
 
 // ======================
 // ARRAY GIOCO
@@ -17,27 +12,29 @@ createBaseMap(grid);
 let towers = [];
 let enemies = [];
 let projectiles = [];
+let money = 200;
+let lives = 10;
 
+
+
+let difficulty = 1;
 // ======================
 // PERCORSO NEMICI (semplice esempio)
 // ======================
-const startCell = { col: 0, row: 5 };
-const endCell = { col: 14, row: 5 };
-const path = generatePathFromTiles(grid, startCell, endCell);
+let path = generateMap(grid, difficulty);
+let waveSystem = new WaveSystem(generateWaves(difficulty));
 
 // ======================
 // ONDATA INIZIALE
 // ======================
-enemies.push(new Enemy(path));
-enemies.push(new FastEnemy(path));
-enemies.push(new FastEnemy(path));
-
+let lastTime = 0;
 // ======================
 // CLICK PER PIAZZARE TORRI
 // ======================
 let selectedTowerType = CannonTower; // torre di default
 
 canvas.addEventListener("click", (e) => {
+
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
@@ -48,10 +45,16 @@ canvas.addEventListener("click", (e) => {
 
   // prima era: tile.type === "empty"
   if (tile && tile.type === "base") {
-    tile.setType("blocked"); // torre piazzata
     const towerX = col * grid.cellSize + grid.cellSize / 2;
     const towerY = row * grid.cellSize + grid.cellSize / 2;
-    towers.push(new selectedTowerType(towerX, towerY, { targetingMode: "first" }));
+    const tower = new selectedTowerType(towerX, towerY, { targetingMode: "first" })
+    if (money < tower.price) {
+      return;
+    } else {
+      money -= tower.price;
+    }
+    tile.setType("blocked"); // torre piazzata
+    towers.push(tower);
   }
 });
 
@@ -59,18 +62,24 @@ canvas.addEventListener("click", (e) => {
 // ======================
 // LOOP PRINCIPALE
 // ======================
-function gameLoop() {
+function gameLoop(timestamp) {
+  const deltaTime = timestamp - lastTime;
+  lastTime = timestamp;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   // 1️⃣ disegna griglia e tiles
   grid.draw(ctx);
 
   // 2️⃣ aggiorna e disegna nemici
-  enemies.forEach(e => {
+  // update wave system
+  waveSystem.update(deltaTime, enemies, path);
+
+  // update e draw nemici
+  for (let e of enemies) {
     e.update();
     e.draw(ctx);
-  });
-
+  }
+  console.log(enemies);
   // 3️⃣ aggiorna e disegna torri
 
   towers.forEach(t => {
@@ -89,11 +98,17 @@ function gameLoop() {
     p.draw(ctx);
   });
   projectiles = projectiles.filter(p => p.alive);
-
+  enemies = enemies.filter(e => e.alive || e.pathIndex < path.length - 1);
+  // 5️⃣ disegna UI (soldi, vite, ecc.)
+  ctx.fillStyle = "white";
+  ctx.font = "20px Arial";
+  ctx.fillText(`Money: $${money}`, 10, 20);
+  ctx.fillText(`Lives: ${lives}`, 10, 50);
   requestAnimationFrame(gameLoop);
 }
 
 // ======================
 // AVVIO GAME LOOP
 // ======================
-gameLoop();
+requestAnimationFrame(gameLoop);
+

@@ -63,13 +63,23 @@ class Enemy {
 }
 
 // === CLASSI SPECIFICHE DI NEMICI ===
-
+class BaseEnemy extends Enemy {
+    constructor (path) {
+        super(path, {
+            speed: 1,
+            hp: 40,
+            reward: 10,
+            radius: 10,
+            color: "green"
+        });
+    }
+}
 class FastEnemy extends Enemy {
     constructor (path) {
         super(path, {
             speed: 2,
             hp: 20,
-            reward: 3,
+            reward: 15,
             radius: 8,
             color: "orange"
         });
@@ -81,7 +91,7 @@ class TankEnemy extends Enemy {
         super(path, {
             speed: 0.6,
             hp: 100,
-            reward: 10,
+            reward: 40,
             radius: 14,
             color: "darkgreen"
         });
@@ -93,7 +103,7 @@ class BossEnemy extends Enemy {
         super(path, {
             speed: 1,
             hp: 300,
-            reward: 50,
+            reward: 500,
             radius: 20,
             color: "purple"
         });

@@ -2,6 +2,7 @@ class Tower {
     constructor (x, y, options = {}) {
         this.x = x;
         this.y = y;
+        this.upgradeLevel = 0;
 
         this.range = options.range || 80;
         this.damage = options.damage || 10;
@@ -10,6 +11,16 @@ class Tower {
 
         this.color = options.color || "blue";
         this.size = options.size || 30; // lato quadrato torre
+
+        this.price = options.price || 50;
+        this.maxUpgradeLevel = options.maxUpgradeLevel || 3;
+        this.upgradeCost = options.upgradeCost || 40;
+        this.upgradeCostIncrement = options.upgradeCostIncrement || 2;
+        this.sellValue = options.sellValue || Math.floor(this.price / 2);
+        this.damageUpgrade = options.damageUpgrade || 5;
+        this.rangeUpgrade = options.rangeUpgrade || 10;
+        this.fireRateUpgrade = options.fireRateUpgrade || 5;
+
 
         // strategia di targeting: "first", "last", "strongest", "weakest", "closest"
         this.targetingMode = options.targetingMode || "first";
@@ -97,7 +108,13 @@ class CannonTower extends Tower {
             fireRate: 90,
             color: "darkgray",
             size: 15,
-            targetingMode: targetingMode || "first"
+            targetingMode: targetingMode || "first",
+            price: 70,
+            upgradeCost: 50,
+            damageUpgrade: 10,
+            rangeUpgrade: 15,
+            fireRateUpgrade: 10,
+            upgradeCostIncrement: 1.5
         });
     }
 }
@@ -110,7 +127,13 @@ class ArcherTower extends Tower {
             fireRate: 30,
             color: "brown",
             size: 13,
-            targetingMode: targetingMode || "first"
+            targetingMode: targetingMode || "first",
+            price: 40,
+            upgradeCost: 30,
+            damageUpgrade: 4,
+            rangeUpgrade: 5,
+            fireRateUpgrade: 3,
+            upgradeCostIncrement: 1.5
         });
     }
 }
@@ -123,7 +146,13 @@ class SniperTower extends Tower {
             fireRate: 180,
             color: "black",
             size: 10,
-            targetingMode: targetingMode || "first"
+            targetingMode: targetingMode || "first",
+            price: 120,
+            upgradeCost: 80,
+            damageUpgrade: 20,
+            rangeUpgrade: 30,
+            fireRateUpgrade: 15,
+            upgradeCostIncrement: 1.6
         });
     }
 }
