@@ -1115,9 +1115,10 @@ function giocatoriAggiuntivi() {
     descrizione[4] = "Fra 1"; // Giocatore 4
     descrizione[5] = "Fra 2"; // Giocatore 5
     descrizione[6] = "Pallanuoto estesa"; // Giocatore 6
+descrizione[7]="Fede";
     // 1. Crea i checkbox da 2 a 6
     let str = "";
-    for (let i = 2; i <= 6; i++) {
+    for (let i = 2; i <= 7; i++) {
         let checked = "";
         if (personeScelte.includes(i)) {
             checked = "checked";
