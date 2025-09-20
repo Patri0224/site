@@ -561,7 +561,7 @@ function preset() {
         document.getElementById('score-team1').textContent = "0";
         document.getElementById('1').src = null;
         document.getElementById('1').style.display = "none";
-        document.getElementById('name-team2').textContent = "Frarco";
+        document.getElementById('name-team2').textContent = "Fralce";
         document.getElementById('score-team2').textContent = "0";
         document.getElementById('2').src = null;
         document.getElementById('2').style.display = "none";
@@ -571,7 +571,7 @@ function preset() {
         tempi = [];
         punto = 0;
         squadra1 = "2;14;21;28";
-        squadra2 = "1;6;9;19";
+        squadra2 = "1;6;9;23";
         personeScelte = [1];
         personeScelte[0] = 1;
         persone = {
@@ -604,7 +604,10 @@ function preset() {
             26: "Samu",
             27: "Selina",
             28: "Totta",
-            29: "Viola"
+            29: "Viola", 
+30:"Francesca",
+31:"Sofia",
+32:"Tommaso"
         };
         tempoTemp = getCurrentTimeInSeconds();
 
@@ -695,7 +698,10 @@ function reset() {
             26: "Samu",
             27: "Selina",
             28: "Totta",
-            29: "Viola"
+            29: "Viola", 
+30:"Francesca",
+31:"Sofia",
+32:"Tommaso"
         };
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
