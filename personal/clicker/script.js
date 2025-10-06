@@ -27,40 +27,44 @@ function setupMenuButtons() {
 
     // Upgrade max lives
     createButton(canvas.width / 2 - 140, 280, 280, 50, '', () => {
-        if (points >= 5 + UpgradeCost) {
+        let costo = 5 + UpgradeCost + livesUpgraded * 2;
+        if (points >= costo) {
             player.lives++;
-            points -= 5 + UpgradeCost;
+            points -= costo;
             livesUpgraded++;
-            UpgradeCost += 3;
+            UpgradeCost += 1;
         }
     });
 
     // Upgrade speed
     createButton(canvas.width / 2 - 140, 360, 280, 50, '', () => {
-        if (points >= 5 + UpgradeCost * 1.1) {
+        let costo = 5 + UpgradeCost * 1.1 + speedUpgraded * 3;
+        if (points >= costo) {
             player.speed++;
-            points -= 5 + UpgradeCost * 1.1;
+            points -= costo;
             points = Math.floor(points);
             speedUpgraded++;
-            UpgradeCost += 3;
+            UpgradeCost += 1;
         }
     });
 
     // Upgrade damage
     createButton(canvas.width / 2 - 140, 440, 280, 50, '', () => {
-        if (points >= 10 + UpgradeCost * 1.5) {
+        let costo = 10 + UpgradeCost * 1.5 + damageUpgraded * 4;
+        if (points >= costo) {
             player.damage++;
-            points -= 10 + UpgradeCost * 1.5;            
+            points -= costo;
             points = Math.floor(points);
             damageUpgraded++;
-            UpgradeCost += 3;
+            UpgradeCost += 1;
         }
     });
 
     // Increase difficulty
     createButton(canvas.width / 2 - 140, 520, 280, 50, '', () => {
-        if (points >= 10 + UpgradeCost) {
-            points -= 10 + UpgradeCost;
+        let costo = 10 + UpgradeCost + difficultyUpgraded * 2;
+        if (points >= costo) {
+            points -= costo;
             difficultyUpgraded++;
         }
     });
