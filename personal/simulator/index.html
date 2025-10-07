@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Powder Simulation</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      background: #000; overflow: hidden;
+    }
+    canvas { display: block; }
+    #palette {
+      position: fixed; top: 10px; left: 10px;
+      background: rgba(0,0,0,0.5);
+      padding: 8px; border-radius: 8px;
+      display: flex; gap: 6px;
+    }
+    .btn {
+      width: 24px; height: 24px; border-radius: 4px;
+      cursor: pointer; border: 1px solid #444;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="palette"></div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
