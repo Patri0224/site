@@ -1,4 +1,6 @@
 import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG } from '../core/constants.js';
+import { pressure } from '../core/grid.js';
+import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
 export let currentMaterial = SAND;
 
@@ -41,6 +43,9 @@ export function setupPalette() {
     const label = document.createElement('label');
     label.textContent = 'Brush size: ';
 
+    const valueDisplay = document.createElement('span');
+    valueDisplay.textContent = getBrushSize();
+
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 1;
@@ -50,11 +55,27 @@ export function setupPalette() {
         setBrushSize(parseInt(slider.value));
         valueDisplay.textContent = getBrushSize();
     };
-
-    const valueDisplay = document.createElement('span');
-    valueDisplay.textContent = getBrushSize();
-
     sizeContainer.append(label, slider, valueDisplay);
     container.appendChild(sizeContainer);
+
+    // --- controllo water fisic ---
+    const checkboxContainer = document.createElement('div');
+    sizeContainer.classList.add('check-controls');
+
+    const label1 = document.createElement('label');
+    label1.textContent = 'Water ';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = true; // opzionale, inizialmente attivo
+    label1.appendChild(checkbox);
+    checkbox.addEventListener('change', () => {
+        setWaterPhisic(checkbox.checked);
+        pressure.fill(0);
+    });
+
+
+    checkboxContainer.append(label1);
+    container.appendChild(checkboxContainer);
 }
 

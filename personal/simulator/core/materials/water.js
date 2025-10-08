@@ -1,13 +1,19 @@
 import { WATER, GAS, EMPTY } from '../constants.js';
 import { W, H, idx, inBounds, mat, moved, pressure } from '../grid.js';
 
+let waterPhisic = true;
+export function setWaterPhisic(val) {
+  waterPhisic = val;
+}
+export function getWaterPhisic() {
+  return waterPhisic;
+}
 // -----------------------------
 // UPDATE WATER (usa la pressione)
 // -----------------------------
 export function updateWater(x, y) {
   const i = idx(x, y);
   if (moved[i]) return;
-  if (mat[i] !== WATER) return;
 
   const p = pressure[i];
   if (p === 0) return;
@@ -48,6 +54,37 @@ export function updateWater(x, y) {
         moved[ni] = 1;
         return;
       }
+    }
+  }
+
+}
+export function updateWaterNoPressure(x, y) {
+  const i = idx(x, y);
+  if (moved[i]) return;
+  // Direzioni con priorità: giù, diagonali, laterali
+  let dirs = [
+    [0, 1],    // giù
+    [-1, 1],   // giù-sinistra
+    [1, 1],    // giù-destra
+    [-1, 0],   // sinistra
+    [1, 0]     // destra
+  ];
+  // Ordine casuale per evitare bias sinistra/destra
+  if (Math.random() > 0.5) dirs = [[0, 1], [1, 1], [-1, 1], [1, 0], [-1, 0]];
+  for (const [dx, dy] of dirs) {
+    const nx = x + dx;
+    const ny = y + dy;
+    if (!inBounds(nx, ny)) continue;
+
+    const ni = idx(nx, ny);
+    const dst = mat[ni];
+
+    // Acqua scende sempre se c’è spazio
+    if ((dst === EMPTY || dst === GAS)) {
+      mat[ni] = WATER;
+      mat[i] = (dst === GAS) ? GAS : EMPTY;
+      moved[ni] = 1;
+      return;
     }
   }
 
