@@ -2,8 +2,29 @@ import { inBounds, idx, mat, cellSize } from '../core/grid.js';
 import { currentMaterial } from './palette.js';
 
 let mouseDown = false;
+let brushSize = 2;// aumenta qui il raggio del brush (2 = 3x3, 3 = 4x4 ecc.)
+export function setBrushSize(val) {
+  if (val > 0 && val < 20)
+    brushSize = val;
+}
+export function getBrushSize() {
+  return brushSize;
+}
+export let mouseX = 0;
+export let mouseY = 0;
+export let mouseInside = false;
 
 export function setupInput(canvas) {
+  canvas.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+    mouseInside = true;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    mouseInside = false;
+  });
   canvas.addEventListener('mousedown', e => {
     if (e.button === 0) {  // 0 = tasto sinistro
       mouseDown = true;
@@ -20,6 +41,7 @@ export function setupInput(canvas) {
       drawAt(e);
     }
   });
+  // ... (resto del tuo input esistente)
 }
 
 function drawAt(e) {
@@ -27,12 +49,12 @@ function drawAt(e) {
   const x = Math.floor((e.clientX - rect.left) / cellSize);
   const y = Math.floor((e.clientY - rect.top) / cellSize);
 
-  const brushSize = 2; // aumenta qui il raggio del brush (2 = 5x5, 3 = 7x7 ecc.)
+  const half = Math.floor(brushSize / 2);
 
-  for (let dy = -brushSize; dy <= brushSize; dy++) {
-    for (let dx = -brushSize; dx <= brushSize; dx++) {
-      const nx = x + dx;
-      const ny = y + dy;
+  for (let dy = 0; dy < brushSize; dy++) {
+    for (let dx = 0; dx < brushSize; dx++) {
+      const nx = x + dx - half;
+      const ny = y + dy - half;
       if (!inBounds(nx, ny)) continue;
       const i = idx(nx, ny);
       mat[i] = currentMaterial;

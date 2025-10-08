@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved, level, pressure } from '../grid.js';
+import { inBounds, idx, mat, moved, level, pressure, W } from '../grid.js';
 import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap } from '../constants.js';
 
 export function updateWood(x, y) {
@@ -79,5 +79,40 @@ export function updateWood(x, y) {
     }
 
   }
+  if (!inBounds(x, y + 1)) return;
+  const ni = idx(x, y + 1);
+  if (mat[ni] !== WATER) return;
+  if (pressure[ni] < 3) return;
+  //console.log('pressure pass', x, y, pressure[ni]);
+  const stackWood = [];
+  let e = 1;
+  while (true) {
+    if (!inBounds(x, y - e)) break;
+    if (mat[idx(x, y - e)] !== WOOD && mat[idx(x, y - e)] !== EMPTY) break;
+
+    if (mat[idx(x, y - e)] === WOOD) {
+      //console.log('push wood', x, y - e);
+      stackWood.push(idx(x, y - e));
+      e++;
+    } else {
+      if (mat[idx(x, y - e)] === EMPTY) {
+        //console.log('check air', x, y - e, pressure[ni], stackWood.length);
+        if (stackWood.length*1.5 < pressure[ni]+2) {
+          //console.log('move wood', x, y - e, pressure[ni], stackWood.length);
+          /*if (inBounds(x, y - e - 1) && mat[idx(x, y - e - 1)] === EMPTY) {
+            e++;
+          }*/
+          mat[idx(x, y - e)] = WOOD;
+          mat[i] = EMPTY;
+          moved[idx(x, y - e)] = 1;
+          moved[i] = 1;
+          moved[stackWood[0]] = 1;
+        }
+        break;
+      }
+    }
+
+  }
+
 
 }

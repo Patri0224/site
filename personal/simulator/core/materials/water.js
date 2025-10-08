@@ -50,12 +50,6 @@ export function updateWater(x, y) {
       }
     }
   }
-  // Altrimenti si sposta verso pressione minore
-
-
-
-
-  // Bilanciamento laterale tra celle d'acqua
 
 }
 
@@ -87,6 +81,11 @@ export function calcPressure() {
           const nx = cx + dx, ny = cy + dy;
           if (!inBounds(nx, ny)) continue;
           const ni = idx(nx, ny);
+          if (dy !== 0) {
+            const leftWall = inBounds(cx - 1, cy) && mat[idx(cx - 1, cy)] === EMPTY;
+            const rightWall = inBounds(cx + 1, cy) && mat[idx(cx + 1, cy)] === EMPTY;
+            if (leftWall && rightWall) continue; // colonna stretta, non unire i bacini
+          }
           if (mat[ni] === WATER && !visited[ni]) {
             visited[ni] = 1;
             stack.push(ni);

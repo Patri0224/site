@@ -21,12 +21,29 @@ export function updateSand(x, y) {
 
   // 💧 sabbia affonda in acqua scambiandosi di posto
   if (dst === WATER) {
-    mat[ti] = SAND;
-    mat[i] = WATER;
-    moved[ti] = 1;
-    return;
+    let a = 1;
+    if (Math.random() < 0.5) a = -1;
+    if (inBounds(x + a, below)) {
+      const tii = idx(x + a, below);
+      if (mat[tii] === EMPTY || mat[tii] === GAS) {
+        mat[ti] = SAND;
+        mat[i] = mat[tii];
+        moved[ti] = 1;
+        mat[tii] = WATER;
+        return;
+      } else if (mat[tii] === WATER && Math.random() < 0.2) {
+        mat[tii] = SAND;
+        mat[i] = WATER;
+        moved[tii] = 1;
+        return;
+      } else {
+        mat[ti] = SAND;
+        mat[i] = WATER;
+        moved[ti] = 1;
+        return;
+      }
+    }
   }
-
   // scivola lateralmente
   const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {

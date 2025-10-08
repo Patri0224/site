@@ -1,5 +1,7 @@
-import { W, H, mat, level, pressure,cellSize } from './grid.js';
+import { W, H, mat, level, pressure, cellSize } from './grid.js';
 import { matColor, EMPTY, WATER, GAS, liquidCap } from './constants.js';
+import { getBrushSize } from '../ui/input.js';
+import { mouseX, mouseY, mouseInside } from '../ui/input.js';
 
 export function render(ctx) {
   const px = cellSize;
@@ -13,7 +15,7 @@ export function render(ctx) {
       if (m === EMPTY) continue;
 
       if (m === WATER) {
-        let a = Math.min(0.2 * (pressure[i] / 10), 0.6);
+        let a = Math.min(0.2 * (pressure[i] / 15), 0.8);
         ctx.fillStyle = rgba(matColor[m], 1 - a);
       } else if (m === GAS) {
         let a = 0.1 + 0.2 * (level[i] / liquidCap);
@@ -25,6 +27,25 @@ export function render(ctx) {
     }
   }
 }
+export function drawBrushPreview(ctx) {
+  if (!mouseInside) return;
+  let brushSize = getBrushSize();
+
+  const x = Math.floor(mouseX / cellSize);
+  const y = Math.floor(mouseY / cellSize);
+  const half = Math.floor(brushSize / 2);
+
+  const size = brushSize * cellSize;
+  const px = (x - half) * cellSize;
+  const py = (y - half) * cellSize;
+
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(px + 0.5, py + 0.5, size, size);
+  ctx.restore();
+}
+
 
 function rgba(hex, a) {
   const r = parseInt(hex.slice(1, 3), 16);
