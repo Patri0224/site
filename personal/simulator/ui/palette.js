@@ -1,4 +1,4 @@
-import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG } from '../core/constants.js';
+import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
@@ -14,6 +14,7 @@ const materials = [
     { name: 'Wall', id: WALL },
     { name: 'Destr', id: DSTR },
     { name: 'Sorg', id: SURG },
+    { name: 'Fish', id: FISH }
 
 ];
 
@@ -49,7 +50,7 @@ export function setupPalette() {
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 1;
-    slider.max = 20;
+    slider.max = 20 + 1;
     slider.value = getBrushSize();
     slider.oninput = () => {
         setBrushSize(parseInt(slider.value));

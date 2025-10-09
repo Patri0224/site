@@ -3,7 +3,7 @@ import { EMPTY, WATER, GAS, liquidCap } from '../constants.js';
 
 export function updateGas(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return;
+  if (moved[i]) return false;
 
   const above = y - 1;
   if (inBounds(x, above)) {
@@ -16,7 +16,7 @@ export function updateGas(x, y) {
       mat[i] = (dst === WATER) ? WATER : EMPTY;
       level[i] = 0;
       moved[ti] = 1;
-      return;
+      return true;
     }
   }
 
@@ -32,7 +32,7 @@ export function updateGas(x, y) {
       mat[i] = EMPTY;
       level[i] = 0;
       moved[ni] = 1;
-      return;
+      return true;
     } else if (mat[ni] === GAS) {
       // flow proportional to level difference
       const diff = level[i] - level[ni];
@@ -41,8 +41,9 @@ export function updateGas(x, y) {
         level[i] -= amt;
         level[ni] += amt;
         moved[ni] = 1;
-        return;
+        return true;
       }
     }
   }
+  return false;
 }

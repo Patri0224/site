@@ -3,7 +3,7 @@ import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap } from '../constants.js';
 
 export function updateWood(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return;
+  if (moved[i]) return false;
 
   const neighborsWater = [
     [x - 1, y - 1], [x + 1, y - 1], [x, y - 1]
@@ -16,7 +16,7 @@ export function updateWood(x, y) {
       mat[ni] = WOOD;
       mat[i] = WATER;
       moved[ni] = 1;
-      return;
+      return true;
     }
   }
   const neighborsWaterLateral = [
@@ -35,7 +35,7 @@ export function updateWood(x, y) {
             mat[tii] = WOOD;
             mat[i] = dsti;
             moved[tii] = 1;
-            return;
+            return true;
           }
         }
       }
@@ -50,7 +50,7 @@ export function updateWood(x, y) {
       mat[ti] = WOOD;
       mat[i] = dst;
       moved[ti] = 1;
-      return;
+      return true;
     }
   }
 
@@ -79,10 +79,10 @@ export function updateWood(x, y) {
     }
 
   }
-  if (!inBounds(x, y + 1)) return;
+  if (!inBounds(x, y + 1)) return true;
   const ni = idx(x, y + 1);
-  if (mat[ni] !== WATER) return;
-  if (pressure[ni] < 3) return;
+  if (mat[ni] !== WATER) return true;
+  if (pressure[ni] < 3) return true;
   //console.log('pressure pass', x, y, pressure[ni]);
   const stackWood = [];
   let e = 1;
@@ -97,7 +97,7 @@ export function updateWood(x, y) {
     } else {
       if (mat[idx(x, y - e)] === EMPTY) {
         //console.log('check air', x, y - e, pressure[ni], stackWood.length);
-        if (stackWood.length*1.5 < pressure[ni]+2) {
+        if (stackWood.length * 1.5 < pressure[ni] + 2) {
           //console.log('move wood', x, y - e, pressure[ni], stackWood.length);
           /*if (inBounds(x, y - e - 1) && mat[idx(x, y - e - 1)] === EMPTY) {
             e++;
@@ -113,6 +113,6 @@ export function updateWood(x, y) {
     }
 
   }
-
+  return true;
 
 }

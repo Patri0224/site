@@ -4,7 +4,7 @@ import { currentMaterial } from './palette.js';
 let mouseDown = false;
 let brushSize = 2;// aumenta qui il raggio del brush (2 = 3x3, 3 = 4x4 ecc.)
 export function setBrushSize(val) {
-  if (val > 0 && val < 20)
+  if (val >= 1 && val <= 20)
     brushSize = val;
 }
 export function getBrushSize() {

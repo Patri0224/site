@@ -3,10 +3,10 @@ import { EMPTY, WATER, GAS, SAND } from '../constants.js';
 
 export function updateSand(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return;
+  if (moved[i]) return false;
 
   const below = y + 1;
-  if (!inBounds(x, below)) return;
+  if (!inBounds(x, below)) return false;
 
   const ti = idx(x, below);
   const dst = mat[ti];
@@ -16,7 +16,7 @@ export function updateSand(x, y) {
     mat[ti] = SAND;
     mat[i] = (dst === GAS) ? GAS : EMPTY;
     moved[ti] = 1;
-    return;
+    return true;
   }
 
   // 💧 sabbia affonda in acqua scambiandosi di posto
@@ -30,17 +30,17 @@ export function updateSand(x, y) {
         mat[i] = mat[tii];
         moved[ti] = 1;
         mat[tii] = WATER;
-        return;
+        return true;
       } else if (mat[tii] === WATER && Math.random() < 0.2) {
         mat[tii] = SAND;
         mat[i] = WATER;
         moved[tii] = 1;
-        return;
+        return true;
       } else {
         mat[ti] = SAND;
         mat[i] = WATER;
         moved[ti] = 1;
-        return;
+        return true;
       }
     }
   }
@@ -56,14 +56,15 @@ export function updateSand(x, y) {
       mat[ni] = SAND;
       mat[i] = (dst2 === GAS) ? GAS : EMPTY;
       moved[ni] = 1;
-      return;
+      return true;
     }
 
     if (dst2 === WATER) {
       mat[ni] = SAND;
       mat[i] = WATER;
       moved[ni] = 1;
-      return;
+      return true;
     }
   }
+  return false;
 }

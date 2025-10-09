@@ -51,4 +51,5 @@ export function updateFire(x, y) {
       pressure[i] = 0;
     }
   }
+  return true;
 }

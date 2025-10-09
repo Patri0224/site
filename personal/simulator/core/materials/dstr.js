@@ -16,4 +16,5 @@ export function updateDstr(x, y) {
             break;
         }
     }
+    return true;
 }

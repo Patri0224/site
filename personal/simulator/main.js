@@ -1,6 +1,6 @@
 import { initGrid, resizeGrid } from './core/grid.js';
 import { step } from './core/simulation.js';
-import { drawBrushPreview, render } from './core/renderer.js';
+import { drawBrushPreview, render, updateImageData } from './core/renderer.js';
 import { setupPalette } from './ui/palette.js';
 import { setupInput } from './ui/input.js';
 
@@ -11,7 +11,8 @@ function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - upperSpace + 1;
     canvas.style.marginTop = upperSpace + "px";
-    resizeGrid(canvas.width, canvas.height+1);
+    resizeGrid(canvas.width, canvas.height + 1);
+    updateImageData(ctx);
 }
 
 window.addEventListener('resize', resize);
