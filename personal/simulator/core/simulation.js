@@ -9,9 +9,10 @@ import { updateDstr } from './materials/dstr.js';
 import { updateSurg } from './materials/surg.js';
 import { updateFish } from './materials/fish.js';
 import { updateLava } from './materials/lava.js';
-import { updateRock } from './materials/rock.js';
+import { updateRock, calcAttached } from './materials/rock.js';
 export function step() {
     moved.fill(0);
+    //calcAttached(W, H);
 
     for (let y = H - 1; y >= 0; y--) {
         if (y % 2)
