@@ -1,7 +1,7 @@
 import { EMPTY } from './constants.js';
 
 export let W, H, mat, level, moved, fireTTL, pressure;
-export const cellSize = 6;
+export const cellSize = 10;
 
 export function idx(x, y) { return y * W + x; }
 export function inBounds(x, y) { return x >= 0 && x < W && y >= 0 && y < H; }

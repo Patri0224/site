@@ -1,5 +1,5 @@
 import { W, H, idx, mat, moved, pressure } from './grid.js';
-import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH } from './constants.js';
+import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH, LAVA, ROCK } from './constants.js';
 import { calcPressure, updateWater, balanceLiquids, equilibrateWater, updateWaterNoPressure, getWaterPhisic } from './materials/water.js';
 import { updateSand } from './materials/sand.js';
 import { updateFire } from './materials/fire.js';
@@ -8,6 +8,8 @@ import { updateWood } from './materials/wood.js';
 import { updateDstr } from './materials/dstr.js';
 import { updateSurg } from './materials/surg.js';
 import { updateFish } from './materials/fish.js';
+import { updateLava } from './materials/lava.js';
+import { updateRock } from './materials/rock.js';
 export function step() {
     moved.fill(0);
 
@@ -50,5 +52,7 @@ function updateBlock(x, y) {
         case DSTR: updateDstr(x, y); break;
         case SURG: updateSurg(x, y); break;
         case FISH: updateFish(x, y); break;
+        case LAVA: updateLava(x, y); break;
+        case ROCK: updateRock(x, y); break;
     }
 }

@@ -8,6 +8,10 @@ export const GAS = 6;
 export const DSTR = 7;
 export const SURG = 8;
 export const FISH = 9;
+export const ROCK = 10;
+export const LAVA = 11;
+export const LEAF = 12;
+export const STEEL = 13;
 
 
 
@@ -24,6 +28,11 @@ export const matColor = {
     [GAS]: '#c9f0ff',
     [DSTR]: '#8f0000',
     [SURG]: '#0054a8',
-    [FISH]: '#e7c724'
+    [FISH]: '#e77924',
+    [ROCK]: '#7e7e7e',
+    [LAVA]: '#ff652d',
+    [LEAF]: '#2fba00',
+    [STEEL]: '#4a4c4d'
+
 
 };

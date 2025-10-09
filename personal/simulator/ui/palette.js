@@ -1,4 +1,4 @@
-import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH } from '../core/constants.js';
+import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
@@ -14,7 +14,11 @@ const materials = [
     { name: 'Wall', id: WALL },
     { name: 'Destr', id: DSTR },
     { name: 'Sorg', id: SURG },
-    { name: 'Fish', id: FISH }
+    { name: 'Fish', id: FISH },
+    { name: 'Rock', id: ROCK },
+    { name: 'Lava', id: LAVA },
+    { name: 'Leaf', id: LEAF },
+    { name: 'Steel', id: STEEL },
 
 ];
 
