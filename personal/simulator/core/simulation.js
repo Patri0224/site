@@ -9,44 +9,30 @@ import { updateDstr } from './materials/dstr.js';
 import { updateSurg } from './materials/surg.js';
 import { updateFish } from './materials/fish.js';
 import { updateLava } from './materials/lava.js';
-import { updateRock, calcAttached } from './materials/rock.js';
+import { updateRock } from './materials/rock.js';
 export function step() {
     moved.fill(0);
-    //calcAttached(W, H);
-
-    for (let y = H - 1; y >= 0; y--) {
-        if (y % 2)
-            for (let x = W - 1; x >= 0; x--) updateBlock(x, y);
-
-        else
-            for (let x = 0; x < W; x++) updateBlock(x, y);
-
-    }
     if (getWaterPhisic()) {
         pressure.fill(0);
         calcPressure();
         balanceLiquids();
-        for (let y = H - 1; y >= 0; y--) {
-            if (y % 2)
-                for (let x = W - 1; x >= 0; x--) {
-                    if (mat[y * W + x] === WATER) {
-                        updateWater(x, y);
-                    }
-                }
-            else
-                for (let x = 0; x < W; x++) {
-                    if (mat[y * W + x] === WATER) {
-                        updateWater(x, y);
-                    }
-                }
-        }
-        equilibrateWater();
     }
+    for (let y = H - 1; y >= 0; y--) {
+        if (y % 2)
+            for (let x = W - 1; x >= 0; x--) updateBlock(x, y);
+        else
+            for (let x = 0; x < W; x++) updateBlock(x, y);
+    }
+    if (getWaterPhisic()) equilibrateWater();
 }
 function updateBlock(x, y) {
     switch (mat[y * W + x]) {
         case SAND: updateSand(x, y); break;
-        case WATER: if (!getWaterPhisic()) updateWaterNoPressure(x, y); break;
+        case WATER:
+            if (getWaterPhisic())
+                updateWater(x, y);
+            else
+                updateWaterNoPressure(x, y); break;
         case WOOD: updateWood(x, y); break;
         case FIRE: updateFire(x, y); break;
         case GAS: updateGas(x, y); break;

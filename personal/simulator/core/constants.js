@@ -15,7 +15,7 @@ export const STEEL = 13;
 
 
 export const cellSize = 4;
-
+export const maxBrush = 40;
 
 export const liquidCap = 4;
 

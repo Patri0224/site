@@ -1,11 +1,11 @@
-import { EMPTY, cellSize } from '../core/constants.js';
+import { EMPTY, cellSize,maxBrush } from '../core/constants.js';
 import { inBounds, idx, mat } from '../core/grid.js';
 import { currentMaterial } from './palette.js';
 
 let mouseDown = false;
 let brushSize = 20;// aumenta qui il raggio del brush (2 = 3x3, 3 = 4x4 ecc.)
 export function setBrushSize(val) {
-  if (val >= 1 && val <= 20)
+  if (val >= 1 && val <= maxBrush)
     brushSize = val;
 }
 export function getBrushSize() {

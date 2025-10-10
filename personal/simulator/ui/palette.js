@@ -1,4 +1,4 @@
-import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials } from '../core/constants.js';
+import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials,maxBrush } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
@@ -43,7 +43,7 @@ export function setupPalette() {
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 1;
-    slider.max = 20 + 1;
+    slider.max = maxBrush + 1;
     slider.value = getBrushSize();
     slider.oninput = () => {
         setBrushSize(parseInt(slider.value));
@@ -52,13 +52,13 @@ export function setupPalette() {
     // --- supporto rotellina del mouse ---
     window.addEventListener('wheel', (e) => {
         // opzionale: premi Shift per attivare la modifica (per evitare modifiche accidentali)
-        if (!e.shiftKey) return;
+        //if (!e.shiftKey) return;
 
         e.preventDefault(); // evita lo scroll pagina
 
         const delta = Math.sign(e.deltaY);
         let newSize = getBrushSize() - delta; // su → aumenta, giù → diminuisci
-        newSize = Math.min(20, Math.max(1, newSize));
+        newSize = Math.min(maxBrush, Math.max(1, newSize));
 
         setBrushSize(newSize);
         slider.value = newSize;             // sincronizza lo slider
