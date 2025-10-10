@@ -7,11 +7,12 @@ import { setupInput } from './ui/input.js';
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const upperSpace = 55;
+let nuovo = true;
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - upperSpace + 1;
     canvas.style.marginTop = upperSpace + "px";
-    resizeGrid(canvas.width, canvas.height + 1);
+    resizeGrid(canvas.width, canvas.height + 1, nuovo);
     updateImageData(ctx);
 }
 
@@ -21,7 +22,7 @@ initGrid();
 
 setupPalette();
 setupInput(canvas);
-
+nuovo = false;
 let pauseFrame = true; // inizia con il tasto destro premuto
 
 window.addEventListener('keydown', e => {

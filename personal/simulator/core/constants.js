@@ -14,7 +14,7 @@ export const LEAF = 12;
 export const STEEL = 13;
 
 
-export const cellSize = 4;
+export const cellSize = 3;
 export const maxBrush = 40;
 
 export const liquidCap = 4;

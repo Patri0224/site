@@ -13,6 +13,7 @@ export function updateImageData(ctx) {
 
 export function render(ctx, f) {
   // reset dei pixel
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   data.fill(rgba(matColor[EMPTY], 1)); // sfondo nero, oppure riempi subito con matColor[EMPTY]
 
   for (let y = 0; y < H; y++) {
