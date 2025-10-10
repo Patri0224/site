@@ -1,5 +1,6 @@
 import { inBounds, idx, mat, moved, level } from '../grid.js';
 import { EMPTY, WATER, GAS, liquidCap } from '../constants.js';
+import { fastRandom } from '../utils.js';
 
 export function updateGas(x, y) {
   const i = idx(x, y);
@@ -21,7 +22,7 @@ export function updateGas(x, y) {
   }
 
   // Move sideways if blocked
-  const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+  const dirs = fastRandom() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
     const nx = x + dx;
     if (!inBounds(nx, y)) continue;

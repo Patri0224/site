@@ -22,14 +22,14 @@ initGrid();
 setupPalette();
 setupInput(canvas);
 
-let rightMouseDown = true; // inizia con il tasto destro premuto
+let pauseFrame = true; // inizia con il tasto destro premuto
 
 window.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() === 'q') rightMouseDown = false;
+    if (e.key.toLowerCase() === 'q') pauseFrame = false;
 });
 
 window.addEventListener('keyup', e => {
-    if (e.key.toLowerCase() === 'q') rightMouseDown = true;
+    if (e.key.toLowerCase() === 'q') pauseFrame = true;
 });
 
 let lastFrameTime = performance.now();
@@ -50,10 +50,10 @@ function loop() {
         frameCount = 0;
         lastFpsUpdate = now;
     }
-    if (rightMouseDown) {
+    if (pauseFrame) {
         step();        // aggiorna la simulazione
     }
-    render(ctx);   // ridisegna la griglia
+    render(ctx, 0);   // ridisegna la griglia
     ctx.font = '16px monospace';
     ctx.fillStyle = 'white';
     ctx.fillText(`FPS: ${fps}`, 10, 20);

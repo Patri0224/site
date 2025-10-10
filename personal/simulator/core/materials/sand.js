@@ -1,5 +1,6 @@
 import { inBounds, idx, mat, moved } from '../grid.js';
 import { EMPTY, WATER, GAS, SAND } from '../constants.js';
+import { fastRandom } from '../utils.js';
 
 export function updateSand(x, y) {
   const i = idx(x, y);
@@ -22,7 +23,7 @@ export function updateSand(x, y) {
   // 💧 sabbia affonda in acqua scambiandosi di posto
   if (dst === WATER) {
     let a = 1;
-    if (Math.random() < 0.5) a = -1;
+    if (fastRandom() < 0.5) a = -1;
     if (inBounds(x + a, below)) {
       const tii = idx(x + a, below);
       if (mat[tii] === EMPTY || mat[tii] === GAS) {
@@ -31,7 +32,7 @@ export function updateSand(x, y) {
         moved[ti] = 1;
         mat[tii] = WATER;
         return true;
-      } else if (mat[tii] === WATER && Math.random() < 0.2) {
+      } else if (mat[tii] === WATER && fastRandom() < 0.2) {
         mat[tii] = SAND;
         mat[i] = WATER;
         moved[tii] = 1;
@@ -45,7 +46,7 @@ export function updateSand(x, y) {
     }
   }
   // scivola lateralmente
-  const dirs = Math.random() < 0.5 ? [-1, 1] : [1, -1];
+  const dirs = fastRandom() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
     const nx = x + dx;
     if (!inBounds(nx, below)) continue;

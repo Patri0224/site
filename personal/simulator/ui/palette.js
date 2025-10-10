@@ -1,26 +1,10 @@
-import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL } from '../core/constants.js';
+import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
 export let currentMaterial = SAND;
 
-const materials = [
-    { name: 'Canc', id: EMPTY },
-    { name: 'Sand', id: SAND },
-    { name: 'Water', id: WATER },
-    { name: 'Gas', id: GAS },
-    { name: 'Wood', id: WOOD },
-    { name: 'Fire', id: FIRE },
-    { name: 'Wall', id: WALL },
-    { name: 'Destr', id: DSTR },
-    { name: 'Sorg', id: SURG },
-    { name: 'Fish', id: FISH },
-    { name: 'Rock', id: ROCK },
-    { name: 'Lava', id: LAVA },
-    { name: 'Leaf', id: LEAF },
-    { name: 'Steel', id: STEEL },
 
-];
 
 export function setupPalette() {
     const container = document.querySelector('#palette');
@@ -29,6 +13,11 @@ export function setupPalette() {
     // --- palette materiali ---
     materials.forEach(mat => {
         const btn = document.createElement('button');
+        const bg = matColor[mat.id] || '#777';
+        btn.style.backgroundColor = bg;
+        const rgb = hexToRgb(bg);
+        const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+        btn.style.color = brightness > 128 ? '#000' : '#fff';
         btn.textContent = mat.name;
         btn.onclick = () => {
             currentMaterial = mat.id;
@@ -60,6 +49,22 @@ export function setupPalette() {
         setBrushSize(parseInt(slider.value));
         valueDisplay.textContent = getBrushSize();
     };
+    // --- supporto rotellina del mouse ---
+    window.addEventListener('wheel', (e) => {
+        // opzionale: premi Shift per attivare la modifica (per evitare modifiche accidentali)
+        if (!e.shiftKey) return;
+
+        e.preventDefault(); // evita lo scroll pagina
+
+        const delta = Math.sign(e.deltaY);
+        let newSize = getBrushSize() - delta; // su → aumenta, giù → diminuisci
+        newSize = Math.min(20, Math.max(1, newSize));
+
+        setBrushSize(newSize);
+        slider.value = newSize;             // sincronizza lo slider
+        valueDisplay.textContent = newSize; // aggiorna testo
+    });
+
     sizeContainer.append(label, slider, valueDisplay);
     container.appendChild(sizeContainer);
 
@@ -84,3 +89,11 @@ export function setupPalette() {
     container.appendChild(checkboxContainer);
 }
 
+function hexToRgb(hex) {
+    const clean = hex.replace('#', '');
+    const bigint = parseInt(clean, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return { r, g, b };
+}

@@ -1,5 +1,6 @@
 import { inBounds, idx, mat, moved, level, pressure, W } from '../grid.js';
 import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap } from '../constants.js';
+import { fastRandom } from '../utils.js';
 
 export function updateWood(x, y) {
   const i = idx(x, y);
@@ -63,7 +64,7 @@ export function updateWood(x, y) {
   for (const [nx, ny] of neighbors) {
     if (!inBounds(nx, ny)) continue;
     const ni = idx(nx, ny);
-    if (mat[ni] === FIRE && Math.random() < 0.05) {
+    if (mat[ni] === FIRE && fastRandom() < 0.05) {
       mat[i] = FIRE;
       moved[i] = 1;
       break;

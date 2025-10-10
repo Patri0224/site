@@ -1,5 +1,6 @@
 import { inBounds, idx, mat, moved } from '../grid.js';
-import { EMPTY, WATER, GAS, FISH } from '../constants.js';
+import { EMPTY, WATER, GAS, FISH, SAND } from '../constants.js';
+import { fastRandom, fastRandomInt } from '../utils.js';
 
 export function updateFish(x, y) {
     const i = idx(x, y);
@@ -11,7 +12,7 @@ export function updateFish(x, y) {
     if (below !== -1 && (mat[below] === EMPTY || mat[below] === GAS)) {
         // cade verso il basso
         if (Math.random() < 0.05) {
-            mat[i] = EMPTY;
+            mat[i] = SAND;
             return true;
         }
         [mat[i], mat[below]] = [mat[below], mat[i]];
@@ -19,7 +20,7 @@ export function updateFish(x, y) {
         moved[below] = true;
         return true;
     }
-    if (Math.random() < 0.6) return true;
+    if (fastRandom() < 0.6) return true;
     // Caso 2: pesce in acqua (può muoversi lateralmente o sopra)
     const directions = [
         { dx: -1, dy: 0 }, // sinistra
@@ -39,15 +40,15 @@ export function updateFish(x, y) {
         .filter(pos => mat[idx(pos.nx, pos.ny)] === WATER);
 
     if (candidates.length === 0) {
-        if (Math.random() < 0.4) {
-            mat[i] = EMPTY;
+        if (fastRandom() < 0.4) {
+            mat[i] = SAND;
         }
         moved[i] = true;
         return false;
     }
 
     // Scegli una cella a caso tra quelle disponibili
-    const choice = candidates[Math.floor(Math.random() * candidates.length)];
+    const choice = candidates[fastRandomInt(candidates.length)];
     const ni = idx(choice.nx, choice.ny);
 
     // Muovi il pesce

@@ -1,5 +1,6 @@
 import { WATER, GAS, EMPTY } from '../constants.js';
 import { W, H, idx, inBounds, mat, moved, pressure } from '../grid.js';
+import { fastRandom } from '../utils.js';
 
 let waterPhisic = true;
 export function setWaterPhisic(val) {
@@ -28,7 +29,7 @@ export function updateWater(x, y) {
   ];
 
   // Ordine casuale per evitare bias sinistra/destra
-  if (Math.random() > 0.5) dirs = [[0, 1], [1, 1], [-1, 1], [1, 0], [-1, 0]];
+  if (fastRandom() > 0.5) dirs = [[0, 1], [1, 1], [-1, 1], [1, 0], [-1, 0]];
 
   for (const [dx, dy] of dirs) {
     const nx = x + dx;
@@ -70,7 +71,7 @@ export function updateWaterNoPressure(x, y) {
     [1, 0]     // destra
   ];
   // Ordine casuale per evitare bias sinistra/destra
-  if (Math.random() > 0.5) dirs = [[0, 1], [1, 1], [-1, 1], [1, 0], [-1, 0]];
+  if (fastRandom() > 0.5) dirs = [[0, 1], [1, 1], [-1, 1], [1, 0], [-1, 0]];
   for (const [dx, dy] of dirs) {
     const nx = x + dx;
     const ny = y + dy;

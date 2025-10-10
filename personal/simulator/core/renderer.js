@@ -1,5 +1,5 @@
-import { W, H, idx, mat, level, pressure, cellSize } from './grid.js';
-import { matColor, EMPTY, WATER, GAS, liquidCap } from './constants.js';
+import { W, H, idx, mat, level, pressure } from './grid.js';
+import { matColor, EMPTY, WATER, GAS, liquidCap, matColor1, matColor2, cellSize } from './constants.js';
 import { getBrushSize } from '../ui/input.js';
 import { mouseX, mouseY, mouseInside } from '../ui/input.js';
 
@@ -11,7 +11,7 @@ export function updateImageData(ctx) {
   data = imageData.data;
 }
 
-export function render(ctx) {
+export function render(ctx, f) {
   // reset dei pixel
   data.fill(rgba(matColor[EMPTY], 1)); // sfondo nero, oppure riempi subito con matColor[EMPTY]
 
@@ -21,11 +21,17 @@ export function render(ctx) {
       const m = mat[i];
       if (m === EMPTY) continue;
 
-      const color = hexToRGB(matColor[m]);
+      let color;
+      switch (quickMix3(x, y, i + f)) {
+        case 0: color = hexToRGB(matColor[m]); break;
+        case 1: color = hexToRGB(matColor1[m]); break;
+        case 2: color = hexToRGB(matColor2[m]); break;
+
+      }
       let alpha = 255;
 
       if (m === WATER) {
-        const a = Math.min(0.2 * (pressure[i] / 15), 0.8);
+        const a = Math.min(0.2 * (pressure[i] / 25), 0.7);
         alpha = Math.round((1 - a) * 255);
       } else if (m === GAS) {
         const a = 0.1 + 0.2 * (level[i] / liquidCap);
@@ -50,7 +56,12 @@ export function render(ctx) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-
+function quickMix3(a, b, c) {
+  let v = (a * 73856093) ^ (b * 19349663) ^ (c * 83492791);
+  v ^= v >>> 11;
+  v ^= v * 2654435761;
+  return (v >>> 0) % 3;
+}
 export function drawBrushPreview(ctx) {
   if (!mouseInside) return;
   let brushSize = getBrushSize();

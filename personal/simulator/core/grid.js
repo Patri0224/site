@@ -1,7 +1,5 @@
-import { EMPTY } from './constants.js';
-
+import { EMPTY, LAVA, cellSize } from './constants.js';
 export let W, H, mat, level, moved, fireTTL, pressure;
-export const cellSize = 8;
 
 export function idx(x, y) { return y * W + x; }
 export function inBounds(x, y) { return x >= 0 && x < W && y >= 0 && y < H; }
@@ -22,5 +20,5 @@ export function resizeGrid(width, height) {
     moved = new Uint8Array(W * H);
     fireTTL = new Uint8Array(W * H);
     pressure = new Uint8Array(W * H);
-   
+
 }

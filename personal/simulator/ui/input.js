@@ -1,8 +1,9 @@
-import { inBounds, idx, mat, cellSize } from '../core/grid.js';
+import { EMPTY, cellSize } from '../core/constants.js';
+import { inBounds, idx, mat } from '../core/grid.js';
 import { currentMaterial } from './palette.js';
 
 let mouseDown = false;
-let brushSize = 2;// aumenta qui il raggio del brush (2 = 3x3, 3 = 4x4 ecc.)
+let brushSize = 20;// aumenta qui il raggio del brush (2 = 3x3, 3 = 4x4 ecc.)
 export function setBrushSize(val) {
   if (val >= 1 && val <= 20)
     brushSize = val;
@@ -10,6 +11,16 @@ export function setBrushSize(val) {
 export function getBrushSize() {
   return brushSize;
 }
+
+
+let sovrascrivi = false;// aumenta qui il raggio del brush (2 = 3x3, 3 = 4x4 ecc.)
+window.addEventListener('keydown', e => {
+  if (e.shiftKey) sovrascrivi = true;
+});
+
+window.addEventListener('keyup', e => {
+  if (!e.shiftKey) sovrascrivi = false;
+});
 export let mouseX = 0;
 export let mouseY = 0;
 export let mouseInside = false;
@@ -57,7 +68,8 @@ function drawAt(e) {
       const ny = y + dy - half;
       if (!inBounds(nx, ny)) continue;
       const i = idx(nx, ny);
-      mat[i] = currentMaterial;
+      if (mat[i] === EMPTY || sovrascrivi == true || currentMaterial === EMPTY)
+        mat[i] = currentMaterial;
     }
   }
 }

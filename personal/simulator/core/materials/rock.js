@@ -1,5 +1,6 @@
 import { inBounds, idx, mat, moved, W, H } from '../grid.js';
-import { EMPTY, GAS, ROCK, WALL, WATER } from '../constants.js';
+import { EMPTY, GAS, LAVA, ROCK, WALL, WATER } from '../constants.js';
+import { fastRandom } from '../utils.js';
 export let isAttached = new Uint8Array(W * H);
 
 export function updateRock(x, y) {
@@ -11,15 +12,42 @@ export function updateRock(x, y) {
         [x - 1, y - 1], [x + 1, y - 1], [x - 1, y + 1], [x + 1, y + 1]
     ];
     let near = 0;
+    let lavaNear = 0;
     for (const [dx, dy] of neighbors) {
         if (!inBounds(dx, dy)) {
+            near = 8;
+        } else {
+            const l = idx(dx, dy);
+            if (mat[l] === ROCK || mat[l] === WALL) {
+                near++;
+            }
+            if (mat[l] === LAVA) {
+                lavaNear++;
+            }
+        }
+    }/*
+    if (lavaNear >= 4 && fastRandom() < 0.02) {
+        if (lavaNear > 4) {
+            mat[i] = LAVA;
             moved[i] = 1;
             return true;
         }
-        const l = idx(dx, dy);
-        if (mat[l] === ROCK || mat[l] === WALL) {
-            near++;
+        if (fastRandom() < 0.05) {
+            mat[i] = LAVA;
+            moved[i] = 1;
+            return true;
         }
+
+    }*/
+    if (lavaNear >= 4) {
+        // In basso: la roccia si fonde lentamente
+        const heat = y / H;
+        if (fastRandom() < (0.002 * heat)) {
+            mat[i] = LAVA;
+            moved[i] = 1;
+            return true;
+        }
+
     }
     if (near >= 4) {
         moved[i] = 1;
@@ -37,6 +65,7 @@ export function updateRock(x, y) {
             return true;
         }
     }
+
     return true;
 }
 export function calcAttached(W, H) {
