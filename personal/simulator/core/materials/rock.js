@@ -1,29 +1,27 @@
 import { inBounds, idx, mat, moved, W, H } from '../grid.js';
-import { EMPTY, GAS, ROCK, WALL } from '../constants.js';
+import { EMPTY, GAS, ROCK, WALL, WATER } from '../constants.js';
 export let isAttached = new Uint8Array(W * H);
 
 export function updateRock(x, y) {
     const i = idx(x, y);
     if (moved[i]) return false;
     // Direzioni con priorità: giù, diagonali, laterali
-    const directions = [
-        [0, 1],    // giù
-        [-1, 0],   // sinistra
-        [1, 0],    // destra
-        [0, -1]    // su
+    const neighbors = [
+        [x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1],
+        [x - 1, y - 1], [x + 1, y - 1], [x - 1, y + 1], [x + 1, y + 1]
     ];
     let near = 0;
-    for (const [dx, dy] of directions) {
-        if (!inBounds(x + dx, y + dy)) {
+    for (const [dx, dy] of neighbors) {
+        if (!inBounds(dx, dy)) {
             moved[i] = 1;
             return true;
         }
-        const l = idx(x + dx, y + dy);
+        const l = idx(dx, dy);
         if (mat[l] === ROCK || mat[l] === WALL) {
             near++;
         }
     }
-    if (near >= 3) {
+    if (near >= 4) {
         moved[i] = 1;
         return true;
     }
@@ -32,7 +30,7 @@ export function updateRock(x, y) {
         const ti = idx(x, below);
         const dst = mat[ti];
         // Se spazio vuoto sotto, cade
-        if (dst === EMPTY || dst === GAS) {
+        if (dst === EMPTY || dst === GAS || dst === WATER) {
             mat[ti] = ROCK;
             mat[i] = dst;
             moved[ti] = 1;

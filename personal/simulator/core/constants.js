@@ -28,9 +28,9 @@ export const matColor = {
     [GAS]: '#c9f0ff',
     [DSTR]: '#8f0000',
     [SURG]: '#0054a8',
-    [FISH]: '#e77924',
+    [FISH]: '#e724c3',
     [ROCK]: '#7e7e7e',
-    [LAVA]: '#ff652d',
+    [LAVA]: '#ff8000',
     [LEAF]: '#2fba00',
     [STEEL]: '#4a4c4d'
 
