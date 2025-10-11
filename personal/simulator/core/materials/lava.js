@@ -23,12 +23,8 @@ export function updateLava(x, y) {
         const ni = idx(nx, ny);
         const dst = mat[ni];
 
-        // Acqua scende sempre se c’è spazio
+        // Lava scende sempre se c’è spazio
         if ((dst === EMPTY || dst === GAS)) {
-            if (fastRandom() < 0.3) {
-                moved[i] = 1;
-                return true;
-            }
             mat[ni] = LAVA;
             mat[i] = (dst === GAS) ? GAS : EMPTY;
             moved[ni] = 1;
@@ -67,22 +63,24 @@ export function updateLava(x, y) {
     // Scegli una cella a caso tra quelle disponibili
     if (fastRandom() > 0.5) directions = [[0, 1], [1, 0], [-1, 0], [0, -1]];
     for (const [dx, dy] of directions) {
-        if (!inBounds(x + dx, y + dy)) continue;
-        const di = idx(x + dx, y + dy);
+        const nx = x + dx;
+        const ny = y + dy;
+        if (!inBounds(nx, ny)) continue;
+        const di = idx(nx, ny);
         if (mat[di] !== LAVA) lavaNear--;
         if (mat[di] === WATER) {
             mat[di] = ROCK;
             moved[di] = 1;
             if (fastRandom() < 0.1) mat[i] = ROCK;
             moved[i] = 1;
-            return true;
+            return;
         }
         if (mat[di] === SAND && fastRandom() < 0.1) {
             mat[di] = ROCK;
             moved[di] = 1;
             if (fastRandom() < 0.1) mat[i] = ROCK;
             moved[i] = 1;
-            return true;
+            return;
         }
 
     }
@@ -97,9 +95,8 @@ export function updateLava(x, y) {
     if (lavaNear < 4 && fastRandom() < (0.002 * (1 - heat))) {
         mat[i] = ROCK;
         moved[i] = 1;
-        return true;
+        return;
     }
-    return true;
 }
 
 

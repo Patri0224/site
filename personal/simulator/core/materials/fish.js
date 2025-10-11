@@ -11,16 +11,16 @@ export function updateFish(x, y) {
     // Caso 1: caduta verso aria o gas
     if (below !== -1 && (mat[below] === EMPTY || mat[below] === GAS)) {
         // cade verso il basso
-        if (Math.random() < 0.05) {
+        if (fastRandom() < 0.05) {
             mat[i] = SAND;
-            return true;
+            return;
         }
         [mat[i], mat[below]] = [mat[below], mat[i]];
         moved[i] = true;
         moved[below] = true;
-        return true;
+        return;
     }
-    if (fastRandom() < 0.6) return true;
+    if (fastRandom() < 0.6) return;
     // Caso 2: pesce in acqua (può muoversi lateralmente o sopra)
     const directions = [
         { dx: -1, dy: 0 }, // sinistra
@@ -30,7 +30,7 @@ export function updateFish(x, y) {
         { dx: -1, dy: 0 }, // sinistra
         { dx: 1, dy: 0 },  // destra
         { dx: 0, dy: -1 }, // sopra
-        { dx: 0, dy: +1 }, // sotto
+        { dx: 0, dy: 1 }, // sotto
     ];
 
     // celle candidate solo se sono acqua
@@ -52,11 +52,13 @@ export function updateFish(x, y) {
     const ni = idx(choice.nx, choice.ny);
 
     // Muovi il pesce
-    [mat[i], mat[ni]] = [mat[ni], mat[i]];
+    const t = mat[i];
+    mat[i] = mat[ni];
+    mat[ni] = t;
     moved[i] = true;
     moved[ni] = true;
 
-    return true;
+    return;
 }
 
 

@@ -10,11 +10,9 @@ export function updateDstr(x, y) {
     for (const [nx, ny] of neighbors) {
         if (!inBounds(nx, ny)) continue;
         const ni = idx(nx, ny);
-        if (mat[ni] !== EMPTY && fastRandom() < 0.20) {
+        if (mat[ni] !== EMPTY) {
             mat[ni] = EMPTY;
             moved[ni] = 1;
-            break;
         }
     }
-    return true;
 }

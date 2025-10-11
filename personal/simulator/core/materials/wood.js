@@ -4,7 +4,7 @@ import { fastRandom } from '../utils.js';
 
 export function updateWood(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return false;
+  if (moved[i]) return;
 
   const neighborsWater = [
     [x - 1, y - 1], [x + 1, y - 1], [x, y - 1]
@@ -17,7 +17,7 @@ export function updateWood(x, y) {
       mat[ni] = WOOD;
       mat[i] = WATER;
       moved[ni] = 1;
-      return true;
+      return;
     }
   }
   const neighborsWaterLateral = [
@@ -36,7 +36,7 @@ export function updateWood(x, y) {
             mat[tii] = WOOD;
             mat[i] = dsti;
             moved[tii] = 1;
-            return true;
+            return;
           }
         }
       }
@@ -51,7 +51,7 @@ export function updateWood(x, y) {
       mat[ti] = WOOD;
       mat[i] = dst;
       moved[ti] = 1;
-      return true;
+      return;
     }
   }
 
@@ -80,10 +80,10 @@ export function updateWood(x, y) {
     }
 
   }
-  if (!inBounds(x, y + 1)) return true;
+  if (!inBounds(x, y + 1)) return;
   const ni = idx(x, y + 1);
-  if (mat[ni] !== WATER) return true;
-  if (pressure[ni] < 3) return true;
+  if (mat[ni] !== WATER) return;
+  if (pressure[ni] < 3) return;
   //console.log('pressure pass', x, y, pressure[ni]);
   const stackWood = [];
   let e = 1;
@@ -100,9 +100,7 @@ export function updateWood(x, y) {
         //console.log('check air', x, y - e, pressure[ni], stackWood.length);
         if (stackWood.length * 1.5 < pressure[ni] + 2) {
           //console.log('move wood', x, y - e, pressure[ni], stackWood.length);
-          /*if (inBounds(x, y - e - 1) && mat[idx(x, y - e - 1)] === EMPTY) {
-            e++;
-          }*/
+
           mat[idx(x, y - e)] = WOOD;
           mat[i] = EMPTY;
           moved[idx(x, y - e)] = 1;
@@ -114,6 +112,6 @@ export function updateWood(x, y) {
     }
 
   }
-  return true;
+  return;
 
 }

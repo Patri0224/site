@@ -20,7 +20,7 @@ export function resizeGrid(width, height, op) {
         level = new Uint8Array(W * H);
         moved = new Uint8Array(W * H);
         fireTTL = new Uint8Array(W * H);
-        pressure = new Uint8Array(W * H);
+        pressure = new Uint16Array(W * H);
     } else {
         // Salva i dati precedenti
         const W1 = W, H1 = H;
@@ -33,7 +33,7 @@ export function resizeGrid(width, height, op) {
         level = new Uint8Array(W * H);
         moved = new Uint8Array(W * H);
         fireTTL = new Uint8Array(W * H);
-        pressure = new Uint8Array(W * H);
+        pressure = new Uint16Array(W * H);
 
         // Copia solo l’area che rientra nei limiti di entrambe le griglie
         const minW = Math.min(W, W1);

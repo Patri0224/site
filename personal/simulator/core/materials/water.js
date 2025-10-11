@@ -14,10 +14,10 @@ export function getWaterPhisic() {
 // -----------------------------
 export function updateWater(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return false;
+  if (moved[i]) return;
 
   const p = pressure[i];
-  if (p === 0) return false;
+  if (p === 0) return;
 
   // Direzioni con priorità: giù, diagonali, laterali
   let dirs = [
@@ -44,24 +44,14 @@ export function updateWater(x, y) {
       mat[ni] = WATER;
       mat[i] = (dst === GAS) ? GAS : EMPTY;
       moved[ni] = 1;
-      return true;
-    }
-    if (dst === WATER) {
-      const diff = p - pressure[ni];
-      if (Math.abs(diff) > 1) {
-        const flow = Math.sign(diff);
-        pressure[i] -= flow;
-        pressure[ni] += flow;
-        moved[ni] = 1;
-        return true;
-      }
+      return;
     }
   }
-  return false;
+  return;
 }
 export function updateWaterNoPressure(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return false;
+  if (moved[i]) return;
   // Direzioni con priorità: giù, diagonali, laterali
   let dirs = [
     [0, 1],    // giù
@@ -85,10 +75,10 @@ export function updateWaterNoPressure(x, y) {
       mat[ni] = WATER;
       mat[i] = (dst === GAS) ? GAS : EMPTY;
       moved[ni] = 1;
-      return true;
+      return;
     }
   }
-  return false;
+  return;
 }
 
 
@@ -96,7 +86,7 @@ export function updateWaterNoPressure(x, y) {
 // CALCOLO PRESSIONE
 // -----------------------------
 export function calcPressure() {
-  const visited = new Uint8Array(W * H);
+  const visited = new Uint16Array(W * H);
   pressure.fill(0);
 
   for (let y = 0; y < H; y++) {
@@ -147,7 +137,7 @@ export function calcPressure() {
   }
 }
 export function equilibrateWater() {
-  const visited = new Uint8Array(W * H);
+  const visited = new Uint16Array(W * H);
   visited.fill(0);
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {

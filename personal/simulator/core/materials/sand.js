@@ -4,10 +4,10 @@ import { fastRandom } from '../utils.js';
 
 export function updateSand(x, y) {
   const i = idx(x, y);
-  if (moved[i]) return false;
+  if (moved[i]) return;
 
   const below = y + 1;
-  if (!inBounds(x, below)) return false;
+  if (!inBounds(x, below)) return;
 
   const ti = idx(x, below);
   const dst = mat[ti];
@@ -17,7 +17,7 @@ export function updateSand(x, y) {
     mat[ti] = SAND;
     mat[i] = (dst === GAS) ? GAS : EMPTY;
     moved[ti] = 1;
-    return true;
+    return;
   }
 
   // 💧 sabbia affonda in acqua scambiandosi di posto
@@ -31,17 +31,17 @@ export function updateSand(x, y) {
         mat[i] = mat[tii];
         moved[ti] = 1;
         mat[tii] = WATER;
-        return true;
+        return;
       } else if (mat[tii] === WATER && fastRandom() < 0.2) {
         mat[tii] = SAND;
         mat[i] = WATER;
         moved[tii] = 1;
-        return true;
+        return;
       } else {
         mat[ti] = SAND;
         mat[i] = WATER;
         moved[ti] = 1;
-        return true;
+        return;
       }
     }
   }
@@ -53,19 +53,12 @@ export function updateSand(x, y) {
     const ni = idx(nx, below);
     const dst2 = mat[ni];
 
-    if (dst2 === EMPTY || dst2 === GAS) {
+    if (dst2 === EMPTY || dst2 === GAS || dst2 === WATER) {
       mat[ni] = SAND;
-      mat[i] = (dst2 === GAS) ? GAS : EMPTY;
+      mat[i] = dst2;
       moved[ni] = 1;
-      return true;
-    }
-
-    if (dst2 === WATER) {
-      mat[ni] = SAND;
-      mat[i] = WATER;
-      moved[ni] = 1;
-      return true;
+      return;
     }
   }
-  return false;
+  return;
 }

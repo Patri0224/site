@@ -10,36 +10,68 @@ import { updateSurg } from './materials/surg.js';
 import { updateFish } from './materials/fish.js';
 import { updateLava } from './materials/lava.js';
 import { updateRock } from './materials/rock.js';
+
 export function step() {
-    moved.fill(0);
-    if (getWaterPhisic()) {
-        pressure.fill(0);
+    const _W = W;
+    const _H = H;
+    const _mat = mat;
+    const _moved = moved;
+    const _pressure = pressure;
+    const waterPhisic = getWaterPhisic();
+
+    _moved.fill(0);
+    if (waterPhisic) {
+        _pressure.fill(0);
         calcPressure();
         balanceLiquids();
     }
-    for (let y = H - 1; y >= 0; y--) {
-        if (y % 2)
-            for (let x = W - 1; x >= 0; x--) updateBlock(x, y);
-        else
-            for (let x = 0; x < W; x++) updateBlock(x, y);
+
+    for (let y = _H - 1; y >= 0; y--) {
+        if (y & 1) {
+            for (let x = _W - 1; x >= 0; x--) {
+                const i = y * _W + x;
+                const t = _mat[i];
+                if (!t) continue; // skip EMPTY
+
+                switch (t) {
+                    case WATER:
+                        if (waterPhisic) updateWater(x, y);
+                        else updateWaterNoPressure(x, y);
+                        break;
+                    case ROCK: updateRock(x, y); break;
+                    case LAVA: updateLava(x, y); break;
+                    case SAND: updateSand(x, y); break;
+                    case WOOD: updateWood(x, y); break;
+                    case GAS: updateGas(x, y); break;
+                    case DSTR: updateDstr(x, y); break;
+                    case SURG: updateSurg(x, y); break;
+                    case FISH: updateFish(x, y); break;
+                    case FIRE: updateFire(x, y); break;
+                }
+            }
+        } else {
+            for (let x = 0; x < _W; x++) {
+                const i = y * _W + x;
+                const t = _mat[i];
+                if (!t) continue;
+                switch (t) {
+                    case WATER:
+                        if (waterPhisic) updateWater(x, y);
+                        else updateWaterNoPressure(x, y);
+                        break;
+                    case ROCK: updateRock(x, y); break;
+                    case LAVA: updateLava(x, y); break;
+                    case SAND: updateSand(x, y); break;
+                    case WOOD: updateWood(x, y); break;
+                    case GAS: updateGas(x, y); break;
+                    case DSTR: updateDstr(x, y); break;
+                    case SURG: updateSurg(x, y); break;
+                    case FISH: updateFish(x, y); break;
+                    case FIRE: updateFire(x, y); break;
+                }
+            }
+        }
     }
-    if (getWaterPhisic()) equilibrateWater();
-}
-function updateBlock(x, y) {
-    switch (mat[y * W + x]) {
-        case SAND: updateSand(x, y); break;
-        case WATER:
-            if (getWaterPhisic())
-                updateWater(x, y);
-            else
-                updateWaterNoPressure(x, y); break;
-        case WOOD: updateWood(x, y); break;
-        case FIRE: updateFire(x, y); break;
-        case GAS: updateGas(x, y); break;
-        case DSTR: updateDstr(x, y); break;
-        case SURG: updateSurg(x, y); break;
-        case FISH: updateFish(x, y); break;
-        case LAVA: updateLava(x, y); break;
-        case ROCK: updateRock(x, y); break;
-    }
+
+    if (waterPhisic) equilibrateWater();
 }
