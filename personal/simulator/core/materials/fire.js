@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, fireTTL, level, pressure } from '../grid.js';
+import { inBounds, idx, mat, fireTTL, level, pressure, trasform } from '../grid.js';
 import { EMPTY, GAS, WOOD, FIRE, WATER } from '../constants.js';
 import { fastRandom, fastRandomInt } from '../utils.js';
 
@@ -17,10 +17,8 @@ export function updateFire(x, y) {
     if (!inBounds(nx, ny)) continue;
     const ni = idx(nx, ny);
     if (mat[ni] === WOOD && fastRandom() < 0.2) { // aumentata probabilità
-      mat[ni] = FIRE;
+      trasform(ni, FIRE);
       fireTTL[ni] = 20 + fastRandomInt(40);
-      level[ni] = 0;
-      pressure[ni] = 0;
       spread = true;
     }
   }
@@ -31,10 +29,8 @@ export function updateFire(x, y) {
     const ti = idx(x, aboveY);
     const dst = mat[ti];
     if ((dst === EMPTY || dst === GAS) && fastRandom() < 0.1) { // probabilità maggiore
-      mat[ti] = FIRE;
+      trasform(ti, FIRE);
       fireTTL[ti] = 10 + fastRandomInt(20);
-      level[ti] = 0;
-      pressure[ti] = 0;
     }
   }
 
@@ -44,12 +40,10 @@ export function updateFire(x, y) {
   }
   if (fireTTL[i] === 0) {
     if (Math.random() < 0.3) {
-      mat[i] = GAS;
+      trasform(i, GAS);
       level[i] = Math.max(1, fastRandomInt(4));
     } else {
-      mat[i] = EMPTY;
-      level[i] = 0;
-      pressure[i] = 0;
+      trasform(i, EMPTY);
     }
   }
   return;

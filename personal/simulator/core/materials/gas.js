@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved, level } from '../grid.js';
+import { inBounds, idx, mat, moved, level, exchange } from '../grid.js';
 import { EMPTY, WATER, GAS, liquidCap } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
@@ -12,11 +12,7 @@ export function updateGas(x, y) {
     const dst = mat[ti];
     // Gas rises, displacing water if needed
     if (dst === EMPTY || dst === WATER) {
-      mat[ti] = GAS;
-      level[ti] = level[i];
-      mat[i] = (dst === WATER) ? WATER : EMPTY;
-      level[i] = 0;
-      moved[ti] = 1;
+      exchange(i, ti);
       return true;
     }
   }
@@ -28,11 +24,7 @@ export function updateGas(x, y) {
     if (!inBounds(nx, y)) continue;
     const ni = idx(nx, y);
     if (mat[ni] === EMPTY) {
-      mat[ni] = GAS;
-      level[ni] = level[i];
-      mat[i] = EMPTY;
-      level[i] = 0;
-      moved[ni] = 1;
+      exchange(i, ni);
       return true;
     } else if (mat[ni] === GAS) {
       // flow proportional to level difference

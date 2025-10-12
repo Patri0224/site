@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved } from '../grid.js';
+import { inBounds, idx, mat, moved, exchange } from '../grid.js';
 import { EMPTY, WATER, GAS, SAND } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
@@ -14,9 +14,7 @@ export function updateSand(x, y) {
 
   // sabbia scende o affonda
   if (dst === EMPTY || dst === GAS) {
-    mat[ti] = SAND;
-    mat[i] = (dst === GAS) ? GAS : EMPTY;
-    moved[ti] = 1;
+    exchange(i, ti);
     return;
   }
 
@@ -27,20 +25,14 @@ export function updateSand(x, y) {
     if (inBounds(x + a, below)) {
       const tii = idx(x + a, below);
       if (mat[tii] === EMPTY || mat[tii] === GAS) {
-        mat[ti] = SAND;
-        mat[i] = mat[tii];
-        moved[ti] = 1;
-        mat[tii] = WATER;
+        exchange(ti, tii);
+        exchange(i, ti);
         return;
       } else if (mat[tii] === WATER && fastRandom() < 0.2) {
-        mat[tii] = SAND;
-        mat[i] = WATER;
-        moved[tii] = 1;
+        exchange(i, tii);
         return;
       } else {
-        mat[ti] = SAND;
-        mat[i] = WATER;
-        moved[ti] = 1;
+        exchange(i, ti);
         return;
       }
     }
@@ -54,9 +46,7 @@ export function updateSand(x, y) {
     const dst2 = mat[ni];
 
     if (dst2 === EMPTY || dst2 === GAS || dst2 === WATER) {
-      mat[ni] = SAND;
-      mat[i] = dst2;
-      moved[ni] = 1;
+        exchange(i, ni);
       return;
     }
   }

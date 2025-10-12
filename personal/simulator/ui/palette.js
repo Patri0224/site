@@ -1,4 +1,4 @@
-import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials,maxBrush } from '../core/constants.js';
+import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials, maxBrush } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
@@ -49,6 +49,7 @@ export function setupPalette() {
         setBrushSize(parseInt(slider.value));
         valueDisplay.textContent = getBrushSize();
     };
+
     // --- supporto rotellina del mouse ---
     window.addEventListener('wheel', (e) => {
         // opzionale: premi Shift per attivare la modifica (per evitare modifiche accidentali)

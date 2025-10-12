@@ -1,5 +1,5 @@
 import { WATER, GAS, EMPTY } from '../constants.js';
-import { W, H, idx, inBounds, mat, moved, pressure } from '../grid.js';
+import { W, H, idx, inBounds, mat, moved, pressure, exchange } from '../grid.js';
 import { fastRandom } from '../utils.js';
 
 let waterPhisic = true;
@@ -32,6 +32,7 @@ export function updateWater(x, y) {
   if (fastRandom() > 0.5) dirs = [[0, 1], [1, 1], [-1, 1], [1, 0], [-1, 0]];
 
   for (const [dx, dy] of dirs) {
+    if (dy == 0 && fastRandom() < 0.3) return;
     const nx = x + dx;
     const ny = y + dy;
     if (!inBounds(nx, ny)) continue;
@@ -41,9 +42,7 @@ export function updateWater(x, y) {
 
     // Acqua scende sempre se c’è spazio
     if ((dst === EMPTY || dst === GAS)) {
-      mat[ni] = WATER;
-      mat[i] = (dst === GAS) ? GAS : EMPTY;
-      moved[ni] = 1;
+      exchange(i, ni);
       return;
     }
   }
@@ -72,9 +71,7 @@ export function updateWaterNoPressure(x, y) {
 
     // Acqua scende sempre se c’è spazio
     if ((dst === EMPTY || dst === GAS)) {
-      mat[ni] = WATER;
-      mat[i] = (dst === GAS) ? GAS : EMPTY;
-      moved[ni] = 1;
+      exchange(i, ni);
       return;
     }
   }
@@ -190,8 +187,7 @@ export function equilibrateWater() {
         const entry1 = stackP1.pop();
         const ni = entry1.i;
         const ci = entry.i;
-        mat[ni] = EMPTY;
-        mat[ci] = WATER;
+        exchange(ni, ci);
         moved[ni] = 1;
         moved[ci] = 1;
         pressure[ni] = 0;

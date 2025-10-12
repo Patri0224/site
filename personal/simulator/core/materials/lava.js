@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved, H } from '../grid.js';
+import { inBounds, idx, mat, moved, H, exchange, trasform } from '../grid.js';
 import { EMPTY, WATER, GAS, LAVA, SAND, ROCK } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
@@ -25,10 +25,8 @@ export function updateLava(x, y) {
 
         // Lava scende sempre se c’è spazio
         if ((dst === EMPTY || dst === GAS)) {
-            mat[ni] = LAVA;
-            mat[i] = (dst === GAS) ? GAS : EMPTY;
-            moved[ni] = 1;
-            if (fastRandom() < 0.01) mat[ni] = ROCK;
+            exchange(i, ni);
+            if (fastRandom() < 0.01) trasform(ni, ROCK);
             return true;
         }
     }
@@ -48,8 +46,7 @@ export function updateLava(x, y) {
 
     if (candidates1.length > 0) {
         if (fastRandom() < 0.01) {
-            mat[i] = ROCK;
-            moved[i] = true;
+            trasform(i, ROCK);
             return true;
         }
     }
@@ -69,16 +66,14 @@ export function updateLava(x, y) {
         const di = idx(nx, ny);
         if (mat[di] !== LAVA) lavaNear--;
         if (mat[di] === WATER) {
-            mat[di] = ROCK;
-            moved[di] = 1;
-            if (fastRandom() < 0.1) mat[i] = ROCK;
+            trasform(di, ROCK);
+            if (fastRandom() < 0.1) trasform(i, ROCK);
             moved[i] = 1;
             return;
         }
         if (mat[di] === SAND && fastRandom() < 0.1) {
-            mat[di] = ROCK;
-            moved[di] = 1;
-            if (fastRandom() < 0.1) mat[i] = ROCK;
+            trasform(di, ROCK);
+            if (fastRandom() < 0.1) trasform(i, ROCK);;
             moved[i] = 1;
             return;
         }
@@ -93,8 +88,7 @@ export function updateLava(x, y) {
 
     // In alto: la lava si solidifica più facilmente
     if (lavaNear < 4 && fastRandom() < (0.002 * (1 - heat))) {
-        mat[i] = ROCK;
-        moved[i] = 1;
+        trasform(i, ROCK);
         return;
     }
 }

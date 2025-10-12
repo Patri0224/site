@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved, W, H } from '../grid.js';
+import { inBounds, idx, mat, moved, W, H, exchange, trasform } from '../grid.js';
 import { EMPTY, GAS, LAVA, ROCK, WALL, WATER } from '../constants.js';
 import { fastRandom } from '../utils.js';
 export let isAttached = new Uint8Array(W * H);
@@ -30,8 +30,7 @@ export function updateRock(x, y) {
         // In basso: la roccia si fonde lentamente
         const heat = y / H;
         if (fastRandom() < (0.002 * heat)) {
-            mat[i] = LAVA;
-            moved[i] = 1;
+            trasform(i, LAVA);
             return;
         }
 
@@ -46,9 +45,7 @@ export function updateRock(x, y) {
         const dst = mat[ti];
         // Se spazio vuoto sotto, cade
         if (dst === EMPTY || dst === GAS || dst === WATER) {
-            mat[ti] = ROCK;
-            mat[i] = dst;
-            moved[ti] = 1;
+            exchange(i, ti);
             return;
         }
     }

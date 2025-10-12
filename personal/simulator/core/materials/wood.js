@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved, level, pressure, W } from '../grid.js';
+import { inBounds, idx, mat, moved, level, pressure, W, exchange, trasform } from '../grid.js';
 import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
@@ -14,9 +14,7 @@ export function updateWood(x, y) {
     const ni = idx(nx, ny);
     if (mat[ni] === WATER) {
       // scambia con l'acqua se sopra
-      mat[ni] = WOOD;
-      mat[i] = WATER;
-      moved[ni] = 1;
+      exchange(i, ni);
       return;
     }
   }
@@ -33,9 +31,7 @@ export function updateWood(x, y) {
         if (inBounds(nx, ny)) {
           const ni = idx(nx, ny);
           if (mat[ni] === WATER) {
-            mat[tii] = WOOD;
-            mat[i] = dsti;
-            moved[tii] = 1;
+            exchange(i, tii);
             return;
           }
         }
@@ -48,9 +44,7 @@ export function updateWood(x, y) {
     const dst = mat[ti];
     // Se spazio vuoto sotto, cade
     if (dst === EMPTY || dst === GAS) {
-      mat[ti] = WOOD;
-      mat[i] = dst;
-      moved[ti] = 1;
+      exchange(i, ti);
       return;
     }
   }
@@ -65,17 +59,14 @@ export function updateWood(x, y) {
     if (!inBounds(nx, ny)) continue;
     const ni = idx(nx, ny);
     if (mat[ni] === FIRE && fastRandom() < 0.05) {
-      mat[i] = FIRE;
-      moved[i] = 1;
+      trasform(i, FIRE);
       break;
     }
     if (mat[ni] === GAS && level[ni] > 0) {
       const absorb = Math.max(1, Math.floor(liquidCap * 1)); // 100% per step
       level[ni] -= absorb;
       if (level[ni] <= 0) {
-        mat[ni] = EMPTY;
-        level[ni] = 0;
-        pressure[ni] = 0;
+        trasform(ni, EMPTY);
       }
     }
 
@@ -100,9 +91,7 @@ export function updateWood(x, y) {
         //console.log('check air', x, y - e, pressure[ni], stackWood.length);
         if (stackWood.length * 1.5 < pressure[ni] + 2) {
           //console.log('move wood', x, y - e, pressure[ni], stackWood.length);
-
-          mat[idx(x, y - e)] = WOOD;
-          mat[i] = EMPTY;
+          exchange(i, idx(x, y - e));
           moved[idx(x, y - e)] = 1;
           moved[i] = 1;
           moved[stackWood[0]] = 1;

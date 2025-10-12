@@ -1,4 +1,4 @@
-import { W, H, idx, mat, level, pressure } from './grid.js';
+import { W, H, idx, mat, level, pressure, colorRender } from './grid.js';
 import { matColor, EMPTY, WATER, GAS, liquidCap, matColor1, matColor2, cellSize } from './constants.js';
 import { getBrushSize } from '../ui/input.js';
 import { mouseX, mouseY, mouseInside } from '../ui/input.js';
@@ -23,7 +23,7 @@ export function render(ctx, f) {
       if (m === EMPTY) continue;
 
       let color;
-      switch (quickMix3(x, y, i + f)) {
+      switch (colorRender[i]) {
         case 0: color = hexToRGB(matColor[m]); break;
         case 1: color = hexToRGB(matColor1[m]); break;
         case 2: color = hexToRGB(matColor2[m]); break;
@@ -57,12 +57,6 @@ export function render(ctx, f) {
   ctx.putImageData(imageData, 0, 0);
 }
 
-function quickMix3(a, b, c) {
-  let v = (a * 73856093) ^ (b * 19349663) ^ (c * 83492791);
-  v ^= v >>> 11;
-  v ^= v * 2654435761;
-  return (v >>> 0) % 3;
-}
 export function drawBrushPreview(ctx) {
   if (!mouseInside) return;
   let brushSize = getBrushSize();

@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved } from '../grid.js';
+import { inBounds, idx, mat, moved, trasform, exchange } from '../grid.js';
 import { EMPTY, WATER, GAS, FISH, SAND } from '../constants.js';
 import { fastRandom, fastRandomInt } from '../utils.js';
 
@@ -12,12 +12,11 @@ export function updateFish(x, y) {
     if (below !== -1 && (mat[below] === EMPTY || mat[below] === GAS)) {
         // cade verso il basso
         if (fastRandom() < 0.05) {
-            mat[i] = SAND;
+            trasform(i, SAND);
             return;
         }
-        [mat[i], mat[below]] = [mat[below], mat[i]];
+        exchange(i, below);
         moved[i] = true;
-        moved[below] = true;
         return;
     }
     if (fastRandom() < 0.6) return;
@@ -40,8 +39,8 @@ export function updateFish(x, y) {
         .filter(pos => mat[idx(pos.nx, pos.ny)] === WATER);
 
     if (candidates.length === 0) {
-        if (fastRandom() < 0.4) {
-            mat[i] = SAND;
+        if (fastRandom() < 0.1) {
+            trasform(i, SAND);
         }
         moved[i] = true;
         return false;
@@ -52,12 +51,7 @@ export function updateFish(x, y) {
     const ni = idx(choice.nx, choice.ny);
 
     // Muovi il pesce
-    const t = mat[i];
-    mat[i] = mat[ni];
-    mat[ni] = t;
-    moved[i] = true;
-    moved[ni] = true;
-
+    exchange(i, ni);
     return;
 }
 

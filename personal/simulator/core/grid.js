@@ -1,8 +1,40 @@
 import { EMPTY, LAVA, cellSize } from './constants.js';
-export let W, H, mat, level, moved, fireTTL, pressure;
+import { fastRandomInt } from './utils.js';
+
+export let W, H, mat, level, moved, fireTTL, pressure, option1, colorRender;
 
 export function idx(x, y) { return y * W + x; }
 export function inBounds(x, y) { return x >= 0 && x < W && y >= 0 && y < H; }
+export function exchange(i, di) {
+    const t = mat[i];
+    const p = pressure[i];
+    const l = level[i];
+    const o = option1[i];
+    const c = colorRender[i];
+
+    mat[i] = mat[di];
+    pressure[i] = pressure[di];
+    level[i] = level[di];
+    option1[i] = option1[di];
+    colorRender[i] = colorRender[di];
+
+    mat[di] = t;
+    pressure[di] = p;
+    level[di] = l;
+    option1[di] = o;
+    colorRender[di] = c;
+
+    moved[di] = 1;
+
+}
+export function trasform(i, l) {
+    mat[i] = l;
+    pressure[i] = 0;
+    level[i] = 0;
+    option1[i] = 0;
+    colorRender[i] = fastRandomInt(3);
+    moved[i] = 1;
+}
 
 export function initGrid() {
     mat.fill(EMPTY);
@@ -10,6 +42,9 @@ export function initGrid() {
     moved.fill(0);
     fireTTL.fill(0);
     pressure.fill(0);
+    option1.fill(0);
+    inizializzaColor(W, W * H);
+
 }
 
 export function resizeGrid(width, height, op) {
@@ -21,10 +56,12 @@ export function resizeGrid(width, height, op) {
         moved = new Uint8Array(W * H);
         fireTTL = new Uint8Array(W * H);
         pressure = new Uint16Array(W * H);
+        option1 = new Uint8Array(W * H);
+        colorRender = new Uint8Array(W * H);
     } else {
         // Salva i dati precedenti
         const W1 = W, H1 = H;
-        const mat1 = mat, level1 = level, moved1 = moved, fireTTL1 = fireTTL, pressure1 = pressure;
+        const mat1 = mat, level1 = level, moved1 = moved, fireTTL1 = fireTTL, pressure1 = pressure, option11 = option1, colorRender1 = colorRender;
 
         // Crea nuove griglie
         W = Math.floor(width / cellSize);
@@ -34,6 +71,9 @@ export function resizeGrid(width, height, op) {
         moved = new Uint8Array(W * H);
         fireTTL = new Uint8Array(W * H);
         pressure = new Uint16Array(W * H);
+        option1 = new Uint8Array(W * H);
+        colorRender = new Uint8Array(W * H);
+        inizializzaColor(W1, W * H);
 
         // Copia solo l’area che rientra nei limiti di entrambe le griglie
         const minW = Math.min(W, W1);
@@ -48,8 +88,23 @@ export function resizeGrid(width, height, op) {
                 moved[i] = moved1[i1];
                 fireTTL[i] = fireTTL1[i1];
                 pressure[i] = pressure1[i1];
+                option1[i] = option11[i1];
+                colorRender[i] = colorRender1[i1];
             }
         }
     }
 
+}
+function inizializzaColor(a, lenght) {
+    let seed = 1234567890 + a * a;
+    let b = 0;
+    while (b < lenght) {
+        seed |= 0;
+        seed = (seed + 0x6D2B79F5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        let c = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        colorRender[b] = Math.floor(c * 3);
+        b++;
+    }
 }
