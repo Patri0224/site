@@ -50,8 +50,8 @@ export const matColor = {
     [FISH]: '#e724c3',
     [ROCK]: '#7e7e7e',
     [LAVA]: '#ff8000',
-    [LEAF]: '#2fba00',
-    [STEEL]: '#4a4c4d'
+    [LEAF]: '#2aaa00',
+    [STEEL]: '#514a44'
 
 
 };
@@ -86,8 +86,8 @@ export const matColor2 = {
     [FISH]: '#ba1cce',
     [ROCK]: '#747474',
     [LAVA]: '#ff7300',
-    [LEAF]: '#2fba00',
-    [STEEL]: '#4a4c4d'
+    [LEAF]: '#2a8c00',
+    [STEEL]: '#4b5354'
 
 
 };
