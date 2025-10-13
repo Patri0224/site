@@ -28,11 +28,13 @@ export function step() {
     }
 
     for (let y = _H - 1; y >= 0; y--) {
+
+        let rowOffset = y * _W;
         if (y & 1) {
             for (let x = _W - 1; x >= 0; x--) {
-                const i = y * _W + x;
+                const i = rowOffset + x;
                 const t = _mat[i];
-                if (!t) continue; // skip EMPTY
+                if (!t || _moved[1] === 1) continue; // skip EMPTY
 
                 switch (t) {
                     case WATER:
@@ -53,9 +55,9 @@ export function step() {
             }
         } else {
             for (let x = 0; x < _W; x++) {
-                const i = y * _W + x;
+                const i = rowOffset + x;
                 const t = _mat[i];
-                if (!t) continue;
+                if (!t || _moved[1] === 1) continue;
                 switch (t) {
                     case WATER:
                         if (waterPhisic) updateWater(x, y);

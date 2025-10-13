@@ -19,6 +19,6 @@ export function updateDstr(x, y) {
         }
     }
     const i = idx(x, y);
-    if (e == 4 && fastRandom() < 0.1)
+    if (e == 4 && fastRandom() < 0.02)
         trasform(i, EMPTY);
 }

@@ -109,6 +109,7 @@ function drawBrush(x, y) {
       const ny = y + dy - half;
       if (!inBounds(nx, ny)) continue;
       const i = idx(nx, ny);
+      if (mat[i] === currentMaterial) continue;
       if (mat[i] === EMPTY || sovrascrivi || currentMaterial === EMPTY) {
         trasform(i, currentMaterial);
       }

@@ -6,6 +6,7 @@ export let isAttached = new Uint8Array(W * H);
 export function updateRock(x, y) {
     const i = idx(x, y);
     if (moved[i]) return;
+    const _mat = mat;
     // Direzioni con priorità: giù, diagonali, laterali
     const neighbors = [
         [x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1],
@@ -18,10 +19,10 @@ export function updateRock(x, y) {
             near = 8;
         } else {
             const l = idx(dx, dy);
-            if (mat[l] === ROCK || mat[l] === WALL) {
+            if (_mat[l] === ROCK || _mat[l] === WALL) {
                 near++;
             }
-            if (mat[l] === LAVA) {
+            if (_mat[l] === LAVA) {
                 lavaNear++;
             }
         }
@@ -42,7 +43,7 @@ export function updateRock(x, y) {
     const below = y + 1;
     if (inBounds(x, below)) {
         const ti = idx(x, below);
-        const dst = mat[ti];
+        const dst = _mat[ti];
         // Se spazio vuoto sotto, cade
         if (dst === EMPTY || dst === GAS || dst === WATER) {
             exchange(i, ti);

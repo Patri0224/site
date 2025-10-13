@@ -13,10 +13,13 @@ export function getWaterPhisic() {
 // UPDATE WATER (usa la pressione)
 // -----------------------------
 export function updateWater(x, y) {
+  const _mat = mat;
+  const _moved = moved;
+  const _pressure = pressure;
   const i = idx(x, y);
-  if (moved[i]) return;
+  if (_moved[i]) return;
 
-  const p = pressure[i];
+  const p = _pressure[i];
   if (p === 0) return;
 
   // Direzioni con priorità: giù, diagonali, laterali
@@ -38,7 +41,7 @@ export function updateWater(x, y) {
     if (!inBounds(nx, ny)) continue;
 
     const ni = idx(nx, ny);
-    const dst = mat[ni];
+    const dst = _mat[ni];
 
     // Acqua scende sempre se c’è spazio
     if ((dst === EMPTY || dst === GAS)) {
@@ -49,6 +52,8 @@ export function updateWater(x, y) {
   return;
 }
 export function updateWaterNoPressure(x, y) {
+
+  const _mat = mat;
   const i = idx(x, y);
   if (moved[i]) return;
   // Direzioni con priorità: giù, diagonali, laterali
@@ -67,7 +72,7 @@ export function updateWaterNoPressure(x, y) {
     if (!inBounds(nx, ny)) continue;
 
     const ni = idx(nx, ny);
-    const dst = mat[ni];
+    const dst = _mat[ni];
 
     // Acqua scende sempre se c’è spazio
     if ((dst === EMPTY || dst === GAS)) {
@@ -83,13 +88,15 @@ export function updateWaterNoPressure(x, y) {
 // CALCOLO PRESSIONE
 // -----------------------------
 export function calcPressure() {
+  const _mat = mat;
+  const _pressure = pressure;
   const visited = new Uint16Array(W * H);
-  pressure.fill(0);
+  _pressure.fill(0);
 
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
       const i = idx(x, y);
-      if (mat[i] !== WATER || visited[i]) continue;
+      if (_mat[i] !== WATER || visited[i]) continue;
 
       // --- BFS per il bacino corrente ---
       const stack = [i];
@@ -107,11 +114,11 @@ export function calcPressure() {
           if (!inBounds(nx, ny)) continue;
           const ni = idx(nx, ny);
           if (dy !== 0) {
-            const leftWall = inBounds(cx - 1, cy) && mat[idx(cx - 1, cy)] === EMPTY;
-            const rightWall = inBounds(cx + 1, cy) && mat[idx(cx + 1, cy)] === EMPTY;
+            const leftWall = inBounds(cx - 1, cy) && _mat[idx(cx - 1, cy)] === EMPTY;
+            const rightWall = inBounds(cx + 1, cy) && _mat[idx(cx + 1, cy)] === EMPTY;
             if (leftWall && rightWall) continue; // colonna stretta, non unire i bacini
           }
-          if (mat[ni] === WATER && !visited[ni]) {
+          if (_mat[ni] === WATER && !visited[ni]) {
             visited[ni] = 1;
             stack.push(ni);
           }
@@ -128,18 +135,20 @@ export function calcPressure() {
       for (const ci of cells) {
         const cy = Math.floor(ci / W);
         const depth = cy - minY;
-        pressure[ci] = Math.max(1, depth + 1);
+        _pressure[ci] = Math.max(1, depth + 1);
       }
     }
   }
 }
 export function equilibrateWater() {
+  const _mat = mat;
+  const _pressure = pressure;
   const visited = new Uint16Array(W * H);
   visited.fill(0);
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
       const i = idx(x, y);
-      if (mat[i] !== WATER || visited[i]) continue;
+      if (_mat[i] !== WATER || visited[i]) continue;
 
       // --- BFS per il bacino corrente ---
       const stack = [i];
@@ -156,7 +165,7 @@ export function equilibrateWater() {
           const nx = cx + dx, ny = cy + dy;
           if (!inBounds(nx, ny)) continue;
           const ni = idx(nx, ny);
-          if (mat[ni] === WATER && !visited[ni]) {
+          if (_mat[ni] === WATER && !visited[ni]) {
             visited[ni] = 1;
             stack.push(ni);
           }
@@ -169,16 +178,16 @@ export function equilibrateWater() {
         let y = Math.floor(ci / W);
         if (inBounds(x, y - 1)) {
           const ni = idx(x, y - 1);
-          if (mat[ni] === EMPTY) {
-            if (pressure[ci] <= 2)
-              stackP1.push({ i: ci, pressure: pressure[ci] });
-            else if (pressure[ci] > 2 && Math.random() < 0.05)
-              stackP2.push({ i: ni, pressure: pressure[ci] });
+          if (_mat[ni] === EMPTY) {
+            if (_pressure[ci] <= 2)
+              stackP1.push({ i: ci, _pressure: _pressure[ci] });
+            else if (_pressure[ci] > 2 && Math.random() < 0.05)
+              stackP2.push({ i: ni, _pressure: _pressure[ci] });
           }
         }
       }
-      stackP2.sort((a, b) => b.pressure - a.pressure);
-      stackP1.sort((a, b) => a.pressure - b.pressure);
+      stackP2.sort((a, b) => b._pressure - a._pressure);
+      stackP1.sort((a, b) => a._pressure - b._pressure);
       //console.log(stackP1.length, stackP2.length);
       let l = Math.max(stackP1.length / 10, 5);
       for (const entry of stackP2) {
@@ -190,8 +199,8 @@ export function equilibrateWater() {
         exchange(ni, ci);
         moved[ni] = 1;
         moved[ci] = 1;
-        pressure[ni] = 0;
-        pressure[ci] = 2;
+        _pressure[ni] = 0;
+        _pressure[ci] = 2;
       }
     }
   }
@@ -202,21 +211,23 @@ export function equilibrateWater() {
 // BILANCIAMENTO LATERALE (smooth)
 // -----------------------------
 export function balanceLiquids() {
+  const _mat = mat;
+  const _pressure = pressure;
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
       const i = idx(x, y);
-      if (mat[i] !== WATER) continue;
+      if (_mat[i] !== WATER) continue;
 
       for (const dx of [-1, 1]) {
         const nx = x + dx;
         if (!inBounds(nx, y)) continue;
         const ni = idx(nx, y);
-        if (mat[ni] === WATER) {
-          const diff = pressure[i] - pressure[ni];
+        if (_mat[ni] === WATER) {
+          const diff = _pressure[i] - _pressure[ni];
           if (Math.abs(diff) > 1) {
             const flow = Math.sign(diff);
-            pressure[i] -= flow;
-            pressure[ni] += flow;
+            _pressure[i] -= flow;
+            _pressure[ni] += flow;
           }
         }
       }

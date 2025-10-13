@@ -5,12 +5,12 @@ import { fastRandom } from '../utils.js';
 export function updateSand(x, y) {
   const i = idx(x, y);
   if (moved[i]) return;
-
+  const _mat = mat;
   const below = y + 1;
   if (!inBounds(x, below)) return;
 
   const ti = idx(x, below);
-  const dst = mat[ti];
+  const dst = _mat[ti];
 
   // sabbia scende o affonda
   if (dst === EMPTY || dst === GAS) {
@@ -26,11 +26,11 @@ export function updateSand(x, y) {
     if (fastRandom() < 0.5) a = -1;
     if (inBounds(x + a, below)) {
       const tii = idx(x + a, below);
-      if (mat[tii] === EMPTY || mat[tii] === GAS) {
+      if (_mat[tii] === EMPTY || _mat[tii] === GAS) {
         exchange(ti, tii);
         exchange(i, ti);
         return;
-      } else if (mat[tii] === WATER && fastRandom() < 0.2) {
+      } else if (_mat[tii] === WATER && fastRandom() < 0.2) {
         exchange(i, tii);
         return;
       } else {
@@ -46,7 +46,7 @@ export function updateSand(x, y) {
     const nx = x + dx;
     if (!inBounds(nx, below)) continue;
     const ni = idx(nx, below);
-    const dst2 = mat[ni];
+    const dst2 = _mat[ni];
 
     if (dst2 === EMPTY || dst2 === GAS || dst2 === WATER) {
       exchange(i, ni);

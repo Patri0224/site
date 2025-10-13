@@ -16,7 +16,7 @@ export function updateFish(x, y) {
             return;
         }
         exchange(i, below);
-        moved[i] = true;
+        moved[i] = 1;
         return;
     }
     if (fastRandom() < 0.6) return;
@@ -42,7 +42,7 @@ export function updateFish(x, y) {
         if (fastRandom() < 0.1) {
             trasform(i, SAND);
         }
-        moved[i] = true;
+        moved[i] = 1;
         return false;
     }
 
