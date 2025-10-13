@@ -93,8 +93,6 @@ export function updateWood(x, y) {
         if (stackWood.length * 1.5 < pressure[ni] + 2) {
           //console.log('move wood', x, y - e, pressure[ni], stackWood.length);
           exchange(i, idx(x, y - e));
-          moved[idx(x, y - e)] = 1;
-          moved[i] = 1;
           moved[stackWood[0]] = 1;
         }
         break;

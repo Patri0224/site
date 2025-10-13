@@ -37,6 +37,5 @@ export function updateSteel(x, y) {
             return;
         }
     }
-    moved[i] = 1;
     return
 }

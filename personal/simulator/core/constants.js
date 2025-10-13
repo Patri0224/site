@@ -40,7 +40,7 @@ export const materials = [
 export const matColor = {
     [EMPTY]: '#000814',
     [SAND]: '#d6b370',
-    [WATER]: '#6fb7ff',
+    [WATER]: '#5fb7ff',
     [WALL]: '#666666',
     [WOOD]: '#7a4f28',
     [FIRE]: '#ff6b00',
@@ -58,7 +58,7 @@ export const matColor = {
 export const matColor1 = {
     [EMPTY]: '#000814',
     [SAND]: '#d7bb72',
-    [WATER]: '#7ebefe',
+    [WATER]: '#6ebefe',
     [WALL]: '#666666',
     [WOOD]: '#89582a',
     [FIRE]: '#ff8000',
@@ -69,14 +69,13 @@ export const matColor1 = {
     [ROCK]: '#878787',
     [LAVA]: '#ff8800',
     [LEAF]: '#2fba00',
-    [STEEL]: '#4a4c4d'
-
+    [STEEL]: '#4a4c4d',
 
 };
 export const matColor2 = {
     [EMPTY]: '#000814',
     [SAND]: '#d3a856',
-    [WATER]: '#65b2ff',
+    [WATER]: '#55b2ff',
     [WALL]: '#666666',
     [WOOD]: '#714924',
     [FIRE]: '#ff5100',

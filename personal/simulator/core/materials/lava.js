@@ -69,13 +69,11 @@ export function updateLava(x, y) {
         if (_mat[di] === WATER) {
             trasform(di, ROCK);
             if (fastRandom() < 0.1) trasform(i, ROCK);
-            moved[i] = 1;
             return;
         }
         if (_mat[di] === SAND && fastRandom() < 0.1) {
             trasform(di, ROCK);
-            if (fastRandom() < 0.1) trasform(i, ROCK);;
-            moved[i] = 1;
+            if (fastRandom() < 0.1) trasform(i, ROCK);
             return;
         }
 

@@ -1,5 +1,6 @@
 import { EMPTY, cellSize, maxBrush } from '../core/constants.js';
 import { inBounds, idx, mat, trasform } from '../core/grid.js';
+import { inputPresent } from '../main.js';
 import { currentMaterial } from './palette.js';
 
 let mouseDown = false;
@@ -99,6 +100,7 @@ function handleDraw(clientX, clientY, id) {
   }
 
   lastPositions.set(id, { x, y });
+  inputPresent();
 }
 
 function drawBrush(x, y) {
@@ -109,7 +111,7 @@ function drawBrush(x, y) {
       const ny = y + dy - half;
       if (!inBounds(nx, ny)) continue;
       const i = idx(nx, ny);
-      if (mat[i] === currentMaterial) continue;
+      //if (mat[i] === currentMaterial) continue;
       if (mat[i] === EMPTY || sovrascrivi || currentMaterial === EMPTY) {
         trasform(i, currentMaterial);
       }

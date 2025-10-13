@@ -8,12 +8,17 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const upperSpace = 55;
 let nuovo = true;
+let isResize = false;
+export function inputPresent() {
+    isResize = true;
+}
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - upperSpace + 1;
     canvas.style.marginTop = upperSpace + "px";
     resizeGrid(canvas.width, canvas.height + 1, nuovo);
     updateImageData(ctx);
+    isResize = true;
 }
 
 window.addEventListener('resize', resize);
@@ -44,17 +49,18 @@ function loop() {
     lastFrameTime = now;
 
     frameCount++;
-
     // Update FPS once per second
     if (now - lastFpsUpdate >= 1000) {
         fps = frameCount;
         frameCount = 0;
         lastFpsUpdate = now;
+        isResize = true;
     }
     if (pauseFrame) {
         step();        // aggiorna la simulazione
     }
-    render(ctx, 0);   // ridisegna la griglia
+    render(ctx, isResize);   // ridisegna la griglia
+    isResize = false;
     ctx.font = '16px monospace';
     ctx.fillStyle = 'white';
     ctx.fillText(`FPS: ${fps}`, 10, 20);

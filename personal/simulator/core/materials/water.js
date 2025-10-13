@@ -197,8 +197,6 @@ export function equilibrateWater() {
         const ni = entry1.i;
         const ci = entry.i;
         exchange(ni, ci);
-        moved[ni] = 1;
-        moved[ci] = 1;
         _pressure[ni] = 0;
         _pressure[ci] = 2;
       }

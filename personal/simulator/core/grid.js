@@ -23,12 +23,12 @@ export function exchange(i, di) {
     level[di] = l;
     option1[di] = o;
     colorRender[di] = c;
-
+    moved[i] = 1;
     moved[di] = 1;
 
 }
-export function trasform(i, l) {
-    mat[i] = l;
+export function trasform(i, material) {
+    mat[i] = material;
     pressure[i] = 0;
     level[i] = 0;
     option1[i] = 0;
@@ -47,7 +47,8 @@ export function initGrid() {
 
 }
 
-export function resizeGrid(width, height, op) {
+export function resizeGrid( width, height, op) {
+
     if (op == true) {
         W = Math.floor(width / cellSize);
         H = Math.floor(height / cellSize);

@@ -37,7 +37,6 @@ export function updateRock(x, y) {
 
     }
     if (near >= 4) {
-        moved[i] = 1;
         return;
     }
     const below = y + 1;
