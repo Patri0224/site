@@ -29,7 +29,7 @@ export function updateRock(x, y) {
     if (lavaNear >= 4) {
         // In basso: la roccia si fonde lentamente
         const heat = y / H;
-        if (fastRandom() < (0.002 * heat)) {
+        if (fastRandom() < (0.003 * heat)) {
             trasform(i, LAVA);
             return;
         }

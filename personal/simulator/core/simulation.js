@@ -1,5 +1,5 @@
 import { W, H, idx, mat, moved, pressure } from './grid.js';
-import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH, LAVA, ROCK } from './constants.js';
+import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH, LAVA, ROCK, STEEL } from './constants.js';
 import { calcPressure, updateWater, balanceLiquids, equilibrateWater, updateWaterNoPressure, getWaterPhisic } from './materials/water.js';
 import { updateSand } from './materials/sand.js';
 import { updateFire } from './materials/fire.js';
@@ -10,6 +10,7 @@ import { updateSurg } from './materials/surg.js';
 import { updateFish } from './materials/fish.js';
 import { updateLava } from './materials/lava.js';
 import { updateRock } from './materials/rock.js';
+import { updateSteel } from './materials/steel.js';
 
 export function step() {
     const _W = W;
@@ -41,6 +42,7 @@ export function step() {
                     case ROCK: updateRock(x, y); break;
                     case LAVA: updateLava(x, y); break;
                     case SAND: updateSand(x, y); break;
+                    case STEEL: updateSteel(x, y); break;
                     case WOOD: updateWood(x, y); break;
                     case GAS: updateGas(x, y); break;
                     case DSTR: updateDstr(x, y); break;
@@ -62,6 +64,7 @@ export function step() {
                     case ROCK: updateRock(x, y); break;
                     case LAVA: updateLava(x, y); break;
                     case SAND: updateSand(x, y); break;
+                    case STEEL: updateSteel(x, y); break;
                     case WOOD: updateWood(x, y); break;
                     case GAS: updateGas(x, y); break;
                     case DSTR: updateDstr(x, y); break;

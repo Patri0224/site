@@ -1,5 +1,5 @@
 import { inBounds, idx, mat, moved, H, exchange, trasform } from '../grid.js';
-import { EMPTY, WATER, GAS, LAVA, SAND, ROCK } from '../constants.js';
+import { EMPTY, WATER, GAS, LAVA, SAND, ROCK, STEEL } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
 export function updateLava(x, y) {
@@ -64,7 +64,7 @@ export function updateLava(x, y) {
         const ny = y + dy;
         if (!inBounds(nx, ny)) continue;
         const di = idx(nx, ny);
-        if (mat[di] !== LAVA) lavaNear--;
+        if (mat[di] !== LAVA && mat[di] !== STEEL) lavaNear--;
         if (mat[di] === WATER) {
             trasform(di, ROCK);
             if (fastRandom() < 0.1) trasform(i, ROCK);

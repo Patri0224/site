@@ -17,25 +17,37 @@
       display: block;
     }
 
+    /* --- PALETTE --- */
     #palette {
       position: fixed;
       top: 10px;
       left: 10px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 8px;
-      border-radius: 8px;
-      display: flex;
-      gap: 6px;
+      background: rgba(40, 40, 40, 0.9);
+      border-radius: 12px;
+      padding: 10px;
+      padding-top: 40px;
+      color: white;
+      z-index: 100;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    .palette {
+    /* Stato nascosto: invisibile e non cliccabile */
+    #palette.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.9);
+    }
+
+    /* --- CONTENUTO DELLA PALETTE --- */
+    .palette-content {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 8px;
     }
 
-    .palette button {
+    /* --- BOTTONI MATERIALI --- */
+    .palette-content button {
       padding: 6px 10px;
       border: 1px solid #777;
       background: #333;
@@ -45,29 +57,44 @@
       transition: 0.2s;
     }
 
-    .palette button:hover {
+    .palette-content button:hover {
       background: #555;
     }
 
-    .palette button.active {
+    .palette-content button.active {
       background: #ffb300;
       color: #000;
       font-weight: bold;
     }
 
-    .brush-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 10px;
-      color: white;
-    }
+    /* --- CONTROLLI --- */
+    .brush-controls,
     .check-controls {
       display: flex;
       align-items: center;
       gap: 6px;
       margin-top: 10px;
       color: white;
+    }
+
+    /* --- BOTTONI TOGGLE --- */
+    .palette-toggle {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      border: none;
+      background: rgba(40, 40, 40, 0.9);
+      color: white;
+      font-size: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 101;
+      padding: 5px 10px;
+      transition: background 0.2s;
+    }
+
+    .palette-toggle:hover {
+      background: rgba(80, 80, 80, 0.9);
     }
   </style>
 </head>

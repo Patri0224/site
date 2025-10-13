@@ -60,7 +60,7 @@ export function updateWood(x, y) {
     const ni = idx(nx, ny);
     if (mat[ni] === FIRE && fastRandom() < 0.05) {
       trasform(i, FIRE);
-      break;
+      return;
     }
     if (mat[ni] === GAS && level[ni] > 0) {
       const absorb = Math.max(1, Math.floor(liquidCap * 1)); // 100% per step

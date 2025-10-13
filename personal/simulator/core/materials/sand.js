@@ -1,4 +1,4 @@
-import { inBounds, idx, mat, moved, exchange } from '../grid.js';
+import { inBounds, idx, mat, moved, exchange, option1 } from '../grid.js';
 import { EMPTY, WATER, GAS, SAND } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
@@ -14,6 +14,8 @@ export function updateSand(x, y) {
 
   // sabbia scende o affonda
   if (dst === EMPTY || dst === GAS) {
+    option1[i] = 0;
+    if (fastRandom() < 0.05) option1[i] = 1;
     exchange(i, ti);
     return;
   }
@@ -37,6 +39,7 @@ export function updateSand(x, y) {
       }
     }
   }
+  if (option1[i] == 1) return;
   // scivola lateralmente
   const dirs = fastRandom() < 0.5 ? [-1, 1] : [1, -1];
   for (const dx of dirs) {
@@ -46,7 +49,7 @@ export function updateSand(x, y) {
     const dst2 = mat[ni];
 
     if (dst2 === EMPTY || dst2 === GAS || dst2 === WATER) {
-        exchange(i, ni);
+      exchange(i, ni);
       return;
     }
   }

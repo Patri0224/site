@@ -1,4 +1,4 @@
-import { W, H, idx, mat, level, pressure, colorRender } from './grid.js';
+import { W, H, idx, mat, level, pressure, colorRender, option1 } from './grid.js';
 import { matColor, EMPTY, WATER, GAS, liquidCap, matColor1, matColor2, cellSize } from './constants.js';
 import { getBrushSize } from '../ui/input.js';
 import { mouseX, mouseY, mouseInside } from '../ui/input.js';
@@ -22,6 +22,7 @@ export function render(ctx, f) {
       const m = mat[i];
       if (m === EMPTY) continue;
 
+
       let color;
       switch (colorRender[i]) {
         case 0: color = hexToRGB(matColor[m]); break;
@@ -29,11 +30,13 @@ export function render(ctx, f) {
         case 2: color = hexToRGB(matColor2[m]); break;
 
       }
+
       let alpha = 255;
 
       if (m === WATER) {
         const a = Math.min(0.2 * (pressure[i] / 25), 0.7);
         alpha = Math.round((1 - a) * 255);
+
       } else if (m === GAS) {
         const a = 0.1 + 0.2 * (level[i] / liquidCap);
         alpha = Math.round(a * 255);

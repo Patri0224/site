@@ -3,12 +3,38 @@ import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
 import { setBrushSize, getBrushSize } from './input.js';
 export let currentMaterial = SAND;
+export function openClosePalette() {
+    const container = document.querySelector('#palette');
+    const content = container.querySelector('.palette-content');
+    const toggleBtn = document.querySelector('.palette-toggle');
 
+    if (!content || !toggleBtn) return;
 
+    const isHidden = content.classList.toggle('hidden');
 
+}
 export function setupPalette() {
     const container = document.querySelector('#palette');
     container.classList.add('palette');
+
+    // --- pulsante per chiudere/aprire ---
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'palette-toggle';
+    toggleBtn.textContent = "☰ Palette materiali"; // menu icon
+    document.body.appendChild(toggleBtn);
+
+    let paletteVisible = true;
+
+    toggleBtn.addEventListener('click', () => {
+        paletteVisible = !paletteVisible;
+        container.classList.toggle('hidden', !paletteVisible);
+    });
+
+
+    // --- contenuto palette in un wrapper per nascondere facilmente ---
+    const content = document.createElement('div');
+    content.classList.add('palette-content');
+    container.appendChild(content);
 
     // --- palette materiali ---
     materials.forEach(mat => {
@@ -21,14 +47,17 @@ export function setupPalette() {
         btn.textContent = mat.name;
         btn.onclick = () => {
             currentMaterial = mat.id;
-            document.querySelectorAll('.palette button').forEach(b => b.classList.remove('active'));
+            content.querySelectorAll('button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            // Chiude la palette dopo la selezione
+            paletteVisible = !paletteVisible;
+            container.classList.toggle('hidden', !paletteVisible);
         };
-        container.appendChild(btn);
+        content.appendChild(btn);
     });
 
     // imposta "Sand" attivo di default
-    container.querySelector('button').classList.add('active');
+    content.querySelector('button').classList.add('active');
 
     // --- controlli brush size ---
     const sizeContainer = document.createElement('div');
@@ -51,43 +80,54 @@ export function setupPalette() {
     };
 
     // --- supporto rotellina del mouse ---
-    window.addEventListener('wheel', (e) => {
-        // opzionale: premi Shift per attivare la modifica (per evitare modifiche accidentali)
-        //if (!e.shiftKey) return;
+    let scrollActive = false;
 
-        e.preventDefault(); // evita lo scroll pagina
+    const palette = document.querySelector('#palette');
+    const canvas = document.querySelector('canvas');
+    palette.addEventListener('mouseenter', () => scrollActive = true);
+    palette.addEventListener('mouseleave', () => scrollActive = false);
+    canvas.addEventListener('mouseenter', () => scrollActive = true);
+    canvas.addEventListener('mouseleave', () => scrollActive = false);
+
+    window.addEventListener('wheel', (e) => {
+        if (!scrollActive) return;
+        e.preventDefault();
 
         const delta = Math.sign(e.deltaY);
-        let newSize = getBrushSize() - delta; // su → aumenta, giù → diminuisci
+        let newSize = getBrushSize() - delta;
         newSize = Math.min(maxBrush, Math.max(1, newSize));
 
         setBrushSize(newSize);
-        slider.value = newSize;             // sincronizza lo slider
-        valueDisplay.textContent = newSize; // aggiorna testo
-    });
+        slider.value = newSize;
+        valueDisplay.textContent = newSize;
+    }, { passive: false });
 
     sizeContainer.append(label, slider, valueDisplay);
-    container.appendChild(sizeContainer);
+    content.appendChild(sizeContainer);
 
     // --- controllo water fisic ---
     const checkboxContainer = document.createElement('div');
-    sizeContainer.classList.add('check-controls');
+    checkboxContainer.classList.add('check-controls');
 
     const label1 = document.createElement('label');
     label1.textContent = 'Water ';
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.checked = true; // opzionale, inizialmente attivo
+    checkbox.checked = true;
     label1.appendChild(checkbox);
     checkbox.addEventListener('change', () => {
         setWaterPhisic(checkbox.checked);
         pressure.fill(0);
     });
 
-
     checkboxContainer.append(label1);
-    container.appendChild(checkboxContainer);
+    content.appendChild(checkboxContainer);
+
+    // --- logica toggle ---
+    toggleBtn.addEventListener('click', () => {
+        const isHidden = content.classList.toggle('hidden');
+    });
 }
 
 function hexToRgb(hex) {
