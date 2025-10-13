@@ -1,7 +1,7 @@
 import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials, maxBrush } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
-import { setBrushSize, getBrushSize } from './input.js';
+import { setBrushSize, getBrushSize, getSovrascrivi, setSovrascrivi } from './input.js';
 export let currentMaterial = SAND;
 export function openClosePalette() {
     const container = document.querySelector('#palette');
@@ -18,16 +18,32 @@ export function setupPalette() {
     container.classList.add('palette');
 
     // --- pulsante per chiudere/aprire ---
+    const la = document.querySelector('.palette-toggle');
     const toggleBtn = document.createElement('button');
-    toggleBtn.className = 'palette-toggle';
     toggleBtn.textContent = "☰ Palette materiali"; // menu icon
-    document.body.appendChild(toggleBtn);
+    la.appendChild(toggleBtn);
 
     let paletteVisible = true;
 
     toggleBtn.addEventListener('click', () => {
         paletteVisible = !paletteVisible;
         container.classList.toggle('hidden', !paletteVisible);
+    });
+    const toggleBtn1 = document.createElement('button');
+    toggleBtn1.textContent = "Sovrascrivi"; // menu icon
+    la.appendChild(toggleBtn1);
+
+    toggleBtn1.addEventListener('click', () => {
+        if (getSovrascrivi() == false) {//vecchio valore
+            toggleBtn1.style.backgroundColor = "#bababade";
+            toggleBtn1.style.color = "#000000";
+            setSovrascrivi(true);
+        } else {
+            toggleBtn1.style.backgroundColor = "#2b2b2bde";
+            toggleBtn1.style.color = "white";
+            setSovrascrivi(false);
+        }
+
     });
 
 
@@ -103,7 +119,7 @@ export function setupPalette() {
     }, { passive: false });
 
     sizeContainer.append(label, slider, valueDisplay);
-    content.appendChild(sizeContainer);
+    la.appendChild(sizeContainer);
 
     // --- controllo water fisic ---
     const checkboxContainer = document.createElement('div');
@@ -124,10 +140,7 @@ export function setupPalette() {
     checkboxContainer.append(label1);
     content.appendChild(checkboxContainer);
 
-    // --- logica toggle ---
-    toggleBtn.addEventListener('click', () => {
-        const isHidden = content.classList.toggle('hidden');
-    });
+
 }
 
 function hexToRgb(hex) {

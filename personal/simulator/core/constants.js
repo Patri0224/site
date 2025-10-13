@@ -16,7 +16,7 @@ export const STEEL = 13;
 
 export const cellSize = 4;
 export const maxBrush = 40;
-
+export const NUM_WORKERS = 4;
 export const liquidCap = 4;
 
 export const materials = [

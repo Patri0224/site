@@ -25,7 +25,7 @@
       background: rgba(40, 40, 40, 0.9);
       border-radius: 12px;
       padding: 10px;
-      padding-top: 40px;
+      padding-top: 50px;
       color: white;
       z-index: 100;
       transition: opacity 0.3s ease, transform 0.3s ease;
@@ -68,7 +68,7 @@
     }
 
     /* --- CONTROLLI --- */
-    .brush-controls,
+
     .check-controls {
       display: flex;
       align-items: center;
@@ -78,22 +78,43 @@
     }
 
     /* --- BOTTONI TOGGLE --- */
+
     .palette-toggle {
       position: fixed;
       top: 10px;
       left: 10px;
-      border: none;
-      background: rgba(40, 40, 40, 0.9);
-      color: white;
-      font-size: 20px;
-      border-radius: 8px;
-      cursor: pointer;
+      display: flex;
+      /* allinea i bottoni in fila */
+      align-items: center;
+      /* centra verticalmente */
+      gap: 5px;
+      /* spazio tra i bottoni */
       z-index: 101;
-      padding: 5px 10px;
-      transition: background 0.2s;
+      padding: 3px;
     }
 
-    .palette-toggle:hover {
+    .palette-toggle button,
+    .brush-controls {
+      height: 30px;
+      min-width: 100px;
+      /* larghezza minima uniforme */
+      color: white;
+      font-size: 16px;
+      background: rgba(40, 40, 40, 0.9);
+      border: 2px  rgb(111, 111, 111);
+      border-style:inset;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+
+    .palette-toggle button:hover,
+    .brush-controls:hover {
       background: rgba(80, 80, 80, 0.9);
     }
   </style>
@@ -102,7 +123,7 @@
 <body>
   <canvas id="canvas"></canvas>
   <div id="palette"></div>
-
+  <div class="palette-toggle"></div>
   <script type="module" src="./main.js"></script>
 </body>
 

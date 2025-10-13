@@ -1,6 +1,6 @@
 import { W, H, idx, mat, moved, pressure } from './grid.js';
 import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH, LAVA, ROCK, STEEL } from './constants.js';
-import { calcPressure, updateWater, balanceLiquids, equilibrateWater, updateWaterNoPressure, getWaterPhisic } from './materials/water.js';
+import { calcPressure, updateWater, balanceLiquids, equilibrateWater, getWaterPhisic } from './materials/water.js';
 import { updateSand } from './materials/sand.js';
 import { updateFire } from './materials/fire.js';
 import { updateGas } from './materials/gas.js';
@@ -11,7 +11,19 @@ import { updateFish } from './materials/fish.js';
 import { updateLava } from './materials/lava.js';
 import { updateRock } from './materials/rock.js';
 import { updateSteel } from './materials/steel.js';
-
+const updateFns = {
+    [WATER]: updateWater,
+    [ROCK]: updateRock,
+    [LAVA]: updateLava,
+    [SAND]: updateSand,
+    [STEEL]: updateSteel,
+    [WOOD]: updateWood,
+    [GAS]: updateGas,
+    [DSTR]: updateDstr,
+    [SURG]: updateSurg,
+    [FISH]: updateFish,
+    [FIRE]: updateFire
+};
 export function step() {
     const _W = W;
     const _H = H;
@@ -28,55 +40,20 @@ export function step() {
     }
 
     for (let y = _H - 1; y >= 0; y--) {
+        const rowOffset = y * _W;
+        const reverse = y & 1;
 
-        let rowOffset = y * _W;
-        if (y & 1) {
-            for (let x = _W - 1; x >= 0; x--) {
-                const i = rowOffset + x;
-                const t = _mat[i];
-                if (!t || _moved[1] === 1) continue; // skip EMPTY
+        for (let xi = 0; xi < _W; xi++) {
+            const x = reverse ? _W - 1 - xi : xi;
+            const i = rowOffset + x;
 
-                switch (t) {
-                    case WATER:
-                        if (waterPhisic) updateWater(x, y);
-                        else updateWaterNoPressure(x, y);
-                        break;
-                    case ROCK: updateRock(x, y); break;
-                    case LAVA: updateLava(x, y); break;
-                    case SAND: updateSand(x, y); break;
-                    case STEEL: updateSteel(x, y); break;
-                    case WOOD: updateWood(x, y); break;
-                    case GAS: updateGas(x, y); break;
-                    case DSTR: updateDstr(x, y); break;
-                    case SURG: updateSurg(x, y); break;
-                    case FISH: updateFish(x, y); break;
-                    case FIRE: updateFire(x, y); break;
-                }
-            }
-        } else {
-            for (let x = 0; x < _W; x++) {
-                const i = rowOffset + x;
-                const t = _mat[i];
-                if (!t || _moved[1] === 1) continue;
-                switch (t) {
-                    case WATER:
-                        if (waterPhisic) updateWater(x, y);
-                        else updateWaterNoPressure(x, y);
-                        break;
-                    case ROCK: updateRock(x, y); break;
-                    case LAVA: updateLava(x, y); break;
-                    case SAND: updateSand(x, y); break;
-                    case STEEL: updateSteel(x, y); break;
-                    case WOOD: updateWood(x, y); break;
-                    case GAS: updateGas(x, y); break;
-                    case DSTR: updateDstr(x, y); break;
-                    case SURG: updateSurg(x, y); break;
-                    case FISH: updateFish(x, y); break;
-                    case FIRE: updateFire(x, y); break;
-                }
-            }
+            const t = _mat[i];
+            if (!t || _moved[i]) continue; // skip EMPTY
+
+            const fn = updateFns[t];
+            if (fn) fn(x, y);
+
         }
     }
-
     if (waterPhisic) equilibrateWater();
 }

@@ -15,7 +15,12 @@ export function getBrushSize() { return brushSize; }
 let sovrascrivi = false;
 window.addEventListener('keydown', e => { if (e.shiftKey) sovrascrivi = true; });
 window.addEventListener('keyup', e => { if (!e.shiftKey) sovrascrivi = false; });
-
+export function setSovrascrivi(bool) {
+  sovrascrivi = bool;
+}
+export function getSovrascrivi() {
+  return sovrascrivi;
+}
 export let mouseX = 0;
 export let mouseY = 0;
 export let mouseInside = false;
@@ -40,8 +45,9 @@ export function setupInput(canvas) {
     }
   });
 
-  canvas.addEventListener('mouseup', e => {
-    if (e.button === 0) {
+  // ✅ Ascolta mouseup anche fuori dal canvas
+  window.addEventListener('mouseup', e => {
+    if (e.button === 0 && mouseDown) {
       mouseDown = false;
       lastPositions.delete('mouse');
     }
@@ -66,17 +72,17 @@ export function setupInput(canvas) {
     }
   }, { passive: false });
 
-  canvas.addEventListener('touchend', e => {
+  const clearTouch = e => {
     for (const touch of e.changedTouches) {
       lastPositions.delete(touch.identifier);
     }
+  };
+  window.addEventListener('blur', () => {
+    mouseDown = false;
+    lastPositions.delete('mouse');
   });
-
-  canvas.addEventListener('touchcancel', e => {
-    for (const touch of e.changedTouches) {
-      lastPositions.delete(touch.identifier);
-    }
-  });
+  canvas.addEventListener('touchend', clearTouch);
+  canvas.addEventListener('touchcancel', clearTouch);
 }
 
 // --- Funzione comune per mouse e touch ---
