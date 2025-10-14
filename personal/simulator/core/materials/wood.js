@@ -1,105 +1,142 @@
-import { inBounds, idx, mat, moved, level, pressure, W, exchange, trasform } from '../grid.js';
+import { inBounds, idx, mat, moved, level, pressure, exchange, trasform, option1 } from '../grid.js';
 import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap } from '../constants.js';
 import { fastRandom } from '../utils.js';
+
+// --- Vicini predefiniti (non ricreati ogni frame) ---
+const NEIGH_FIRE = [
+  [-1, 0], [1, 0], [0, -1], [0, 1],
+  [-1, -1], [1, -1], [-1, 1], [1, 1],
+];
+
+const NEIGH_WATER_AROUND = [
+  [0, 1], [-1, 1], [1, 1]    // sotto
+];
 
 export function updateWood(x, y) {
   const i = idx(x, y);
   if (moved[i]) return;
-  
+
   const _mat = mat;
-  const neighborsWater = [
-    [x - 1, y - 1], [x + 1, y - 1], [x, y - 1]
-  ];
-  for (const [nx, ny] of neighborsWater) {
-    if (!inBounds(nx, ny)) continue;
-    const ni = idx(nx, ny);
-    if (_mat[ni] === WATER) {
-      // scambia con l'acqua se sopra
-      exchange(i, ni);
+  const _opt = option1;
+
+  // --- 1. Acqua sopra ---
+  const upY = y - 1;
+  if (upY >= 0) {
+    const upIdx = idx(x, upY);
+    if (_mat[upIdx] === WATER) {
+      if (!_opt[i]) {
+        trasform(upIdx, EMPTY);
+        _opt[i] = 1;
+      }
+      exchange(i, upIdx);
       return;
     }
   }
-  const neighborsWaterLateral = [
-    [x - 1, y], [x + 1, y]
-  ];
-  const upper = y - 1;
-  if (inBounds(x, upper)) {
-    const tii = idx(x, upper);
-    const dsti = _mat[tii];
-    // Se spazio vuoto sopra, cade
-    if (dsti === EMPTY || dsti === GAS) {
-      for (const [nx, ny] of neighborsWaterLateral) {
-        if (inBounds(nx, ny)) {
-          const ni = idx(nx, ny);
-          if (_mat[ni] === WATER) {
-            exchange(i, tii);
-            return;
+
+  // --- 2. Acqua laterale con spazio sopra ---
+  if (upY >= 0) {
+    const upIdx = idx(x, upY);
+    const above = _mat[upIdx];
+    if (above === EMPTY || above === GAS) {
+      let a;
+      if (fastRandom() < 0.5)
+        a = x - 1;
+      else
+        a = x + 1;
+      if (inBounds(a, y)) {
+        const li = idx(a, y);
+        if (_mat[li] === WATER) {
+          if (!_opt[i]) {
+            trasform(li, EMPTY);
+            _opt[i] = 1;
           }
+          exchange(i, upIdx);
+          return;
         }
       }
     }
   }
-  const below = y + 1;
-  if (inBounds(x, below)) {
-    const ti = idx(x, below);
-    const dst = _mat[ti];
-    // Se spazio vuoto sotto, cade
+
+  // --- 3. Acqua attorno (mix sopra/sotto/laterale) ---
+  for (let k = 0; k < NEIGH_WATER_AROUND.length; k++) {
+    const [dx, dy] = NEIGH_WATER_AROUND[k];
+    const nx = x + dx, ny = y + dy;
+    if (!inBounds(nx, ny)) continue;
+    const ni = idx(nx, ny);
+    if (_mat[ni] === WATER && !_opt[i]) {
+      trasform(ni, EMPTY);
+      _opt[i] = 1;
+    }
+  }
+
+  // --- 4. Gravità ---
+  const downY = y + 1;
+  if (inBounds(x, downY)) {
+    const di = idx(x, downY);
+    const dst = _mat[di];
     if (dst === EMPTY || dst === GAS) {
-      exchange(i, ti);
+      exchange(i, di);
       return;
     }
   }
 
-  // Vicino al fuoco: chance di bruciare
-  const neighbors = [
-    [x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1],
-    [x - 1, y - 1], [x + 1, y - 1], [x - 1, y + 1], [x + 1, y + 1]
-  ];
-
-  for (const [nx, ny] of neighbors) {
+  // --- 5. Fuoco e gas ---
+  for (let k = 0; k < NEIGH_FIRE.length; k++) {
+    const [dx, dy] = NEIGH_FIRE[k];
+    const nx = x + dx, ny = y + dy;
     if (!inBounds(nx, ny)) continue;
     const ni = idx(nx, ny);
-    if (_mat[ni] === FIRE && fastRandom() < 0.05) {
+    const t = _mat[ni];
+
+    if (t === FIRE && fastRandom() < 0.05) {
       trasform(i, FIRE);
       return;
     }
-    if (_mat[ni] === GAS && level[ni] > 0) {
-      const absorb = Math.max(1, Math.floor(liquidCap * 1)); // 100% per step
-      level[ni] -= absorb;
-      if (level[ni] <= 0) {
-        trasform(ni, EMPTY);
+  }
+
+  // --- 6. Propagazione stato "option1" ---
+  if (_opt[i] !== 1) {
+    for (let k = 0; k < NEIGH_FIRE.length; k++) {
+      if (fastRandom() < 0.1) break;
+      const [dx, dy] = NEIGH_FIRE[k];
+      const nx = x + dx, ny = y + dy;
+      if (!inBounds(nx, ny)) continue;
+      const ni = idx(nx, ny);
+      if (_opt[ni] && _mat[ni] === WOOD) {
+        _opt[ni] = 0;
+        _opt[i] = 1;
+        return;
       }
     }
-
   }
-  if (!inBounds(x, y + 1)) return;
-  const ni = idx(x, y + 1);
-  if (_mat[ni] !== WATER) return;
-  if (pressure[ni] < 3) return;
-  //console.log('pressure pass', x, y, pressure[ni]);
-  const stackWood = [];
-  let e = 1;
-  while (true) {
-    if (!inBounds(x, y - e)) break;
-    if (_mat[idx(x, y - e)] !== WOOD && _mat[idx(x, y - e)] !== EMPTY) break;
 
-    if (_mat[idx(x, y - e)] === WOOD) {
-      //console.log('push wood', x, y - e);
-      stackWood.push(idx(x, y - e));
-      e++;
-    } else {
-      if (_mat[idx(x, y - e)] === EMPTY) {
-        //console.log('check air', x, y - e, pressure[ni], stackWood.length);
-        if (stackWood.length * 1.5 < pressure[ni] + 2) {
-          //console.log('move wood', x, y - e, pressure[ni], stackWood.length);
-          exchange(i, idx(x, y - e));
-          moved[stackWood[0]] = 1;
+  // --- 7. Pressione acqua sotto ---
+  if (downY < mat.height) {
+    const ni = idx(x, downY);
+    if (_mat[ni] === WATER && pressure[ni] >= 3) {
+      const stack = [];
+      let e = 1;
+
+      while (true) {
+        const li = idx(x, y - e);
+        if (!inBounds(x, y - e)) break;
+        const mt = _mat[li];
+
+        if (mt !== WOOD && mt !== EMPTY) break;
+
+        if (mt === WOOD) {
+          stack.push(li);
+          e++;
+        } else {
+          // spazio vuoto sopra pila di legno
+          if (stack.length * 1.5 < pressure[ni] + 2) {
+            exchange(i, li);
+            moved[stack[0]] = 1;
+            return;
+          }
+          break;
         }
-        break;
       }
     }
-
   }
-  return;
-
 }

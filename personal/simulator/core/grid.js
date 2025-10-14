@@ -1,7 +1,7 @@
 import { EMPTY, LAVA, cellSize } from './constants.js';
 import { fastRandomInt } from './utils.js';
 
-export let W, H, mat, level, moved, fireTTL, pressure, option1, colorRender;
+export let W, H, mat, level, moved, fireTTL, pressure, option1, colorRender, option2;
 
 export function idx(x, y) { return y * W + x; }
 export function inBounds(x, y) { return x >= 0 && x < W && y >= 0 && y < H; }
@@ -9,19 +9,22 @@ export function exchange(i, di) {
     const t = mat[i];
     const p = pressure[i];
     const l = level[i];
-    const o = option1[i];
+    const o1 = option1[i];
+    const o2 = option2[i];
     const c = colorRender[i];
 
     mat[i] = mat[di];
     pressure[i] = pressure[di];
     level[i] = level[di];
     option1[i] = option1[di];
+    option2[i] = option2[di];
     colorRender[i] = colorRender[di];
 
     mat[di] = t;
     pressure[di] = p;
     level[di] = l;
-    option1[di] = o;
+    option1[di] = o1;
+    option2[di] = o2;
     colorRender[di] = c;
     moved[i] = 1;
     moved[di] = 1;
@@ -32,6 +35,7 @@ export function trasform(i, material) {
     pressure[i] = 0;
     level[i] = 0;
     option1[i] = 0;
+    option2[i] = 0;
     colorRender[i] = fastRandomInt(3);
     moved[i] = 1;
 }
@@ -43,11 +47,12 @@ export function initGrid() {
     fireTTL.fill(0);
     pressure.fill(0);
     option1.fill(0);
+    option2.fill(0);
     inizializzaColor(W, W * H);
 
 }
 
-export function resizeGrid( width, height, op) {
+export function resizeGrid(width, height, op) {
 
     if (op == true) {
         W = Math.floor(width / cellSize);
@@ -58,11 +63,12 @@ export function resizeGrid( width, height, op) {
         fireTTL = new Uint8Array(W * H);
         pressure = new Uint16Array(W * H);
         option1 = new Uint8Array(W * H);
+        option2 = new Uint8Array(W * H);
         colorRender = new Uint8Array(W * H);
     } else {
         // Salva i dati precedenti
         const W1 = W, H1 = H;
-        const mat1 = mat, level1 = level, moved1 = moved, fireTTL1 = fireTTL, pressure1 = pressure, option11 = option1, colorRender1 = colorRender;
+        const mat1 = mat, level1 = level, moved1 = moved, fireTTL1 = fireTTL, pressure1 = pressure, option11 = option1, option21 = option2, colorRender1 = colorRender;
 
         // Crea nuove griglie
         W = Math.floor(width / cellSize);
@@ -73,6 +79,7 @@ export function resizeGrid( width, height, op) {
         fireTTL = new Uint8Array(W * H);
         pressure = new Uint16Array(W * H);
         option1 = new Uint8Array(W * H);
+        option2 = new Uint8Array(W * H);
         colorRender = new Uint8Array(W * H);
         inizializzaColor(W1, W * H);
 
@@ -90,6 +97,7 @@ export function resizeGrid( width, height, op) {
                 fireTTL[i] = fireTTL1[i1];
                 pressure[i] = pressure1[i1];
                 option1[i] = option11[i1];
+                option2[i] = option21[i1];
                 colorRender[i] = colorRender1[i1];
             }
         }
