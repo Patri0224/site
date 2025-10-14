@@ -1,4 +1,4 @@
-import { EMPTY, FIRE, GAS, LEAF, liquidCap, WOOD } from "../constants.js";
+import { EMPTY, FIRE, GAS, LEAF, leafDistance, liquidCap, WOOD } from "../constants.js";
 import { exchange, idx, inBounds, level, mat, moved, option1, trasform, option2 } from "../grid.js";
 import { fastRandom, fastRandomInt } from "../utils.js";
 
@@ -22,16 +22,16 @@ export function updateLeaf(x, y) {
         if (!inBounds(nx, ny)) continue;
         const ni = idx(nx, ny);
         if (_mat[ni] === EMPTY) nearEmpty.push(ni);
-        if (_mat[ni] === WOOD) {
-            _opt2[i] = 1;
+        if (_mat[ni] === WOOD && _opt2[ni] > 0) {
+            _opt2[i] = leafDistance;
             if (_opt[ni] === 1 && _opt[i] === 0) {
                 _opt[ni] = 0;
                 _opt[i] = 1;
             }
         }
         if (_mat[ni] === LEAF) {
-            if (_opt2[ni] === 1 && fastRandom() < 0.8)
-                _opt2[i] = 1;
+            if (_opt2[ni] > 0 && _opt2[i] < (_opt2[ni] - 1))
+                _opt2[i] = _opt2[ni] - 1;
             if (_opt[ni] === 1 && _opt[i] === 0) {
                 _opt[ni] = 0;
                 _opt[i] = 1;
@@ -58,8 +58,8 @@ export function updateLeaf(x, y) {
             if (level[ni] <= 0) trasform(ni, EMPTY);
         }
     }
-    //cade per ora dritto
-    if (!_opt2[i]) {
+
+    if (_opt2[i] === 0) {
         const downY = y + 1;
         const choices = [
             [x, downY],       // giù

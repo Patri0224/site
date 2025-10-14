@@ -1,5 +1,5 @@
-import { inBounds, idx, mat, moved, level, pressure, exchange, trasform, option1 } from '../grid.js';
-import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap } from '../constants.js';
+import { inBounds, idx, mat, moved, level, pressure, exchange, trasform, option1, option2 } from '../grid.js';
+import { EMPTY, WATER, GAS, FIRE, WOOD, liquidCap, STEEL, WALL, ROCK, SAND, woodDistance } from '../constants.js';
 import { fastRandom } from '../utils.js';
 
 // --- Vicini predefiniti (non ricreati ogni frame) ---
@@ -13,6 +13,7 @@ const NEIGH_WATER_AROUND = [
 ];
 
 export function updateWood(x, y) {
+
   const i = idx(x, y);
   if (moved[i]) return;
 
@@ -57,18 +58,28 @@ export function updateWood(x, y) {
     }
   }
 
-  // --- 3. Acqua attorno (mix sopra/sotto/laterale) ---
+  // --- 3. Acqua sotto ---
+  option2[i] = 0;
   for (let k = 0; k < NEIGH_WATER_AROUND.length; k++) {
     const [dx, dy] = NEIGH_WATER_AROUND[k];
     const nx = x + dx, ny = y + dy;
     if (!inBounds(nx, ny)) continue;
     const ni = idx(nx, ny);
+    if (_mat[ni] === SAND || _mat[ni] === ROCK || _mat[ni] === WALL || _mat[ni] === STEEL) option2[i] = woodDistance;
     if (_mat[ni] === WATER && !_opt[i]) {
       trasform(ni, EMPTY);
       _opt[i] = 1;
     }
   }
-
+  for (let k = 0; k < NEIGH_FIRE.length; k++) {
+    const [dx, dy] = NEIGH_FIRE[k];
+    const nx = x + dx, ny = y + dy;
+    if (!inBounds(nx, ny)) continue;
+    const ni = idx(nx, ny);
+    if (_mat[ni] === WOOD && option2[i] < (option2[ni] - 1)) {
+      option2[i] = option2[ni] - 1;
+    }
+  }
   // --- 4. Gravità ---
   const downY = y + 1;
   if (inBounds(x, downY)) {

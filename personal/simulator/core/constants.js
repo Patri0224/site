@@ -18,7 +18,8 @@ export const cellSize = 4;
 export const maxBrush = 40;
 export const NUM_WORKERS = 4;
 export const liquidCap = 4;
-
+export const leafDistance = 20;
+export const woodDistance = 30;
 export const materials = [
     { name: 'Canc', id: EMPTY },
     { name: 'Wall', id: WALL },

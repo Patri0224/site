@@ -66,8 +66,8 @@ export function setupPalette() {
             content.querySelectorAll('button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             // Chiude la palette dopo la selezione
-            paletteVisible = !paletteVisible;
-            container.classList.toggle('hidden', !paletteVisible);
+            // paletteVisible = !paletteVisible;
+            //container.classList.toggle('hidden', !paletteVisible);
         };
         content.appendChild(btn);
     });
