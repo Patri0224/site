@@ -12,6 +12,7 @@ export const ROCK = 10;
 export const LAVA = 11;
 export const LEAF = 12;
 export const STEEL = 13;
+export const IVY = 14;
 
 
 export const cellSize = 4;
@@ -35,6 +36,7 @@ export const materials = [
     { name: 'Fire', id: FIRE },
     { name: 'Sorg', id: SURG },
     { name: 'Destr', id: DSTR },
+    { name: 'Ivy', id: IVY },
 
 ];
 
@@ -52,7 +54,8 @@ export const matColor = {
     [ROCK]: '#7e7e7e',
     [LAVA]: '#ff8000',
     [LEAF]: '#2aaa00',
-    [STEEL]: '#514a44'
+    [STEEL]: '#514a44',
+    [IVY]: '#185b00'
 
 
 };
@@ -71,6 +74,7 @@ export const matColor1 = {
     [LAVA]: '#ff8800',
     [LEAF]: '#2fba00',
     [STEEL]: '#4a4c4d',
+    [IVY]: '#1a6100'
 
 };
 export const matColor2 = {
@@ -87,7 +91,8 @@ export const matColor2 = {
     [ROCK]: '#747474',
     [LAVA]: '#ff7300',
     [LEAF]: '#2a8c00',
-    [STEEL]: '#4b5354'
+    [STEEL]: '#4b5354',
+    [IVY]: '#175301'
 
 
 };

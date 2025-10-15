@@ -30,16 +30,6 @@ export function updateLeaf(x, y) {
 
         if (t === EMPTY) {
             nearEmpty.push(ni);
-            /*
-            // Deterministico ma pseudocasuale → pattern non uniforme
-            const hash = ((nx * 73856093) ^ (ny * 19349663)) & 5; // range 0–3
-            if (hash !== 0) {
-                const up = ni - W, down = ni + W;
-                // Check foglia vicina per evitare cluster troppo densi
-                if (_mat[ni - 1] !== LEAF && _mat[ni + 1] !== LEAF && _mat[up] !== LEAF && _mat[down] !== LEAF) {
-                    nearEmpty.push(ni);
-                }
-            }*/
             continue;
         }
 
@@ -115,6 +105,11 @@ export function updateLeaf(x, y) {
     }
 
     // --- Generazione nuova foglia ---
+    if (_opt[i] === 1 && fastRandom() < 0.03 && nearEmpty.length > 2 && (i % 6) === 0) {
+        const r = nearEmpty[fastRandomInt(nearEmpty.length)];
+        _opt[i] = 0;
+        trasform(r, LEAF);
+    }
     if (_opt[i] === 1 && fastRandom() < 0.03 && nearEmpty.length > 3) {
         const r = nearEmpty[fastRandomInt(nearEmpty.length)];
         _opt[i] = 0;

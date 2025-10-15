@@ -1,5 +1,5 @@
 import { W, H, idx, mat, moved, pressure } from './grid.js';
-import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH, LAVA, ROCK, STEEL, LEAF } from './constants.js';
+import { SAND, WATER, FIRE, WOOD, GAS, DSTR, SURG, FISH, LAVA, ROCK, STEEL, LEAF, IVY } from './constants.js';
 import { calcPressure, updateWater, balanceLiquids, equilibrateWater, getWaterPhisic } from './materials/water.js';
 import { updateSand } from './materials/sand.js';
 import { updateFire } from './materials/fire.js';
@@ -12,6 +12,7 @@ import { updateLava } from './materials/lava.js';
 import { updateRock } from './materials/rock.js';
 import { updateSteel } from './materials/steel.js';
 import { updateLeaf } from './materials/leaf.js';
+import { updateIvy } from './materials/ivy.js';
 const updateFns = {
     [WATER]: updateWater,
     [ROCK]: updateRock,
@@ -20,6 +21,7 @@ const updateFns = {
     [STEEL]: updateSteel,
     [WOOD]: updateWood,
     [LEAF]: updateLeaf,
+    [IVY]: updateIvy,
     [GAS]: updateGas,
     [DSTR]: updateDstr,
     [SURG]: updateSurg,
