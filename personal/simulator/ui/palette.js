@@ -1,3 +1,4 @@
+import { eseguiComando, vecchioComando } from '../core/action.js';
 import { EMPTY, SAND, WATER, GAS, WOOD, FIRE, WALL, DSTR, SURG, FISH, ROCK, LAVA, LEAF, STEEL, matColor, materials, maxBrush } from '../core/constants.js';
 import { pressure } from '../core/grid.js';
 import { setWaterPhisic } from '../core/materials/water.js';
@@ -140,7 +141,67 @@ export function setupPalette() {
     checkboxContainer.append(label1);
     content.appendChild(checkboxContainer);
 
+    //input comandi
 
+    const comandiContainer = document.createElement('div');
+    comandiContainer.classList.add('comandi-container');
+
+    const label2 = document.createElement('label');
+    label2.textContent = 'CMD ';
+    comandiContainer.appendChild(label2);
+
+    // input testo
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Scrivi comando...';
+    input.style.marginRight = '5px';
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const comando = input.value.trim();
+            if (comando) {
+                eseguiComando(comando); // chiama la tua funzione con il testo
+                input.value = '';
+            }
+        }
+        if (e.key === 'ArrowUp') {
+            const vecchio = vecchioComando();
+            if (vecchio) {
+                input.value = vecchio;
+                // posiziona il cursore alla fine
+                setTimeout(() => {
+                    input.focus();
+                    input.setSelectionRange(input.value.length, input.value.length);
+                }, 0);
+            }
+        }
+    });
+    // --- selezione input con tasto "T" ---
+    document.addEventListener('keydown', (e) => {
+        // evita conflitti mentre stai scrivendo dentro l'input
+        if (document.activeElement === input) return;
+
+        // se premi "t" o "T", seleziona la casella di comando
+        if (e.key === 't' || e.key === 'T') {
+            e.preventDefault(); // evita eventuali effetti su altri elementi
+            input.focus();
+        }
+
+    });
+
+    comandiContainer.appendChild(input);
+
+    // pulsante per inviare
+    const btn = document.createElement('button');
+    btn.textContent = 'Invia';
+    btn.addEventListener('click', () => {
+        const comando = input.value.trim();
+        if (comando) {
+            eseguiComando(comando); // chiama la tua funzione con il testo
+            input.value = '';
+        }
+    });
+    comandiContainer.appendChild(btn);
+    la.appendChild(comandiContainer);
 }
 
 function hexToRgb(hex) {

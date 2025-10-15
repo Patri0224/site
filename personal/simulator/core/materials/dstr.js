@@ -18,7 +18,18 @@ export function updateDstr(x, y) {
             e++;
         }
     }
+    const neighbors1 = [
+        [x - 1, y - 1], [x + 1, y - 1], [x - 1, y + 1], [x + 1, y + 1]
+    ];
+    for (const [nx, ny] of neighbors) {
+        if (!inBounds(nx, ny)) {
+            e++;
+            continue;
+        };
+        const ni = idx(nx, ny);
+        if (mat[ni] === EMPTY) e++;
+    }
     const i = idx(x, y);
-    if (e == 4 && fastRandom() < 0.02)
+    if (e == 8 && fastRandom() < 0.005)
         trasform(i, EMPTY);
 }

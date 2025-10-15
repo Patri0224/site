@@ -30,16 +30,21 @@ initGrid();
 setupPalette();
 setupInput(canvas);
 nuovo = false;
-let pauseFrame = true; // inizia con il tasto destro premuto
+let pauseFrame = false; // inizia con il tasto destro premuto
 
 window.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() === 'q') pauseFrame = false;
-});
-
-window.addEventListener('keyup', e => {
     if (e.key.toLowerCase() === 'q') pauseFrame = true;
 });
 
+window.addEventListener('keyup', e => {
+    if (e.key.toLowerCase() === 'q') pauseFrame = false;
+});
+export function stopFrames() {
+    pauseFrame = true;
+}
+export function resumeFrames() {
+    pauseFrame = false;
+}
 let lastFrameTime = performance.now();
 let frameCount = 0;
 let fps = 0;
@@ -58,7 +63,7 @@ function loop() {
         lastFpsUpdate = now;
         isResize = true;
     }
-    if (pauseFrame) {
+    if (!pauseFrame) {
         step();        // aggiorna la simulazione
     }
     render(ctx, isResize);   // ridisegna la griglia
