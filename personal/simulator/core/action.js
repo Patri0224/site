@@ -50,21 +50,18 @@ export function eseguiComando(comando) {
     switch (strDiv[0]) {
         case "k":
         case "kill":
-            kill(matStringToMatNum(strDiv[1]));
-            break;
-        case "kr":
-        case "killr":
-            killr(matStringToMatNum(strDiv[1]), parseFloat(strDiv[2]));
+            if (strDiv.length == 2)
+                kill(matStringToMatNum(strDiv[1]));
+            else if (strDiv.length == 3)
+                killr(matStringToMatNum(strDiv[1]), parseFloat(strDiv[2]));
             break;
         case "t":
         case "trasform":
         case "transform": // alias
-            trasformMat(matStringToMatNum(strDiv[1]), matStringToMatNum(strDiv[2]));
-            break;
-        case "tr":
-        case "trasformr":
-        case "transformr": // alias
-            trasformr(matStringToMatNum(strDiv[1]), matStringToMatNum(strDiv[2]), parseFloat(strDiv[3]));
+            if (strDiv.length == 3)
+                trasformMat(matStringToMatNum(strDiv[1]), matStringToMatNum(strDiv[2]));
+            else if (strDiv.length == 4)
+                trasformr(matStringToMatNum(strDiv[1]), matStringToMatNum(strDiv[2]), parseFloat(strDiv[3]));
             break;
         case "list":
         case "materials":
@@ -72,11 +69,10 @@ export function eseguiComando(comando) {
             break;
         case "e":
         case "terr":
-            terr(StringToNum(strDiv[1]));
-            break;
-        case "em":
-        case "terrm":
-            terrm(StringToNum(strDiv[1]), matStringToMatNum(strDiv[2]));
+            if (strDiv.length == 2)
+                terr(StringToNum(strDiv[1]));
+            else if (strDiv.length == 3)
+                terrm(StringToNum(strDiv[1]), matStringToMatNum(strDiv[2]));
             break;
         case "ex":
         case "terrx":
