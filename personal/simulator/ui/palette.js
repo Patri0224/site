@@ -145,15 +145,10 @@ export function setupPalette() {
 
     const comandiContainer = document.createElement('div');
     comandiContainer.classList.add('comandi-container');
-
-    const label2 = document.createElement('label');
-    label2.textContent = 'CMD ';
-    comandiContainer.appendChild(label2);
-
     // input testo
     const input = document.createElement('input');
     input.type = 'text';
-    input.placeholder = 'Scrivi comando...';
+    input.placeholder = 'cmd';
     input.style.marginRight = '5px';
     input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
