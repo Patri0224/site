@@ -9,6 +9,7 @@ const ctx = canvas.getContext('2d');
 const upperSpace = 55;
 let nuovo = true;
 let isResize = false;
+let posFpsX = canvas.width - 70;
 export function inputPresent() {
     isResize = true;
 }
@@ -16,6 +17,7 @@ function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - upperSpace + 1;
     canvas.style.marginTop = upperSpace + "px";
+    posFpsX = canvas.width - 70;
     resizeGrid(canvas.width, canvas.height + 1, nuovo);
     updateImageData(ctx);
     isResize = true;
@@ -63,7 +65,7 @@ function loop() {
     isResize = false;
     ctx.font = '16px monospace';
     ctx.fillStyle = 'white';
-    ctx.fillText(`FPS: ${fps}`, 10, 20);
+    ctx.fillText(`FPS: ${fps}`, posFpsX, 20);
     drawBrushPreview(ctx);
     requestAnimationFrame(loop); // continua il loop finché il tasto destro è premuto
 }
