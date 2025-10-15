@@ -1,5 +1,5 @@
-import { W, H, idx, mat, level, pressure, colorRender, moved, option1 } from './grid.js';
-import { matColor, EMPTY, WATER, GAS, liquidCap, matColor1, matColor2, cellSize, WOOD, LEAF } from './constants.js';
+import { W, H, idx, mat, level, pressure, colorRender, moved, option1, option2 } from './grid.js';
+import { matColor, EMPTY, WATER, GAS, liquidCap, matColor1, matColor2, cellSize, WOOD, LEAF, leafDistance } from './constants.js';
 import { getBrushSize, mouseX, mouseY, mouseInside } from '../ui/input.js';
 
 let imageData, data, oldPressure;
@@ -52,7 +52,7 @@ export function render(ctx, externalChange) {
       color.r = Math.round(color.r * a * 0.8);
       color.g = Math.round(color.g * a * 0.9);
       color.b = Math.round(color.b * a * 1.0);
-    } 
+    }
 
     const di = i * 4;
     data[di] = color.r;
