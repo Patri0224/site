@@ -2,15 +2,16 @@ import { margin } from "../main.js";
 import { colors, SHAPES } from "./blocks.js";
 import { board, cells, cellSize, doesFit, idx, initGrid, W } from "./grid.js";
 import { mouseX, mouseY } from "./input.js";
-import { bestScore, score } from "./logic.js";
+import { bestScore, clearingAnimations, score } from "./logic.js";
 
 
 // buffer per la griglia (W x H)
 let availableBlocks = [0, 0, 0]; // indice dei 3 blocchi scelti
 let previewBlock = 0;  // blocco selezionato (indice in SHAPES)
-let colorCells = [];
+export let colorCells = [];
 let colorAvailableBlocks = [colors[2], colors[3], colors[4]];
 let colorpreviewBlock = colors[2];
+let lastTime = performance.now();
 export function setColorCells(pos, val) { colorCells[pos] = val; }
 export function getPreviewBlock() { return previewBlock; }
 export function getAvailableBlocks(pos) { return availableBlocks[pos]; }
@@ -22,16 +23,18 @@ export function setColorPreviewBlock(val) { colorpreviewBlock = val; }
 export function setColorAvailableBlocks(pos, val) { colorAvailableBlocks[pos] = val; }
 
 export function render(ctx) {
-    renderGrid(ctx);
+    const now = performance.now();
+    const delta = (now - lastTime) / 1000; // secondi
+    lastTime = now;
+    renderGrid(ctx, delta);
     renderOption(ctx);
     renderPiecePreview(ctx);
 }
 // =============== GRID PRINCIPALE ===============
-function renderGrid(ctx) {
+function renderGrid(ctx, delta) {
     const bg = hexaToRGB(colors[0]);
     const gridC = hexaToRGB(colors[1]);
     const ma2 = margin / 2;
-
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.fillStyle = `rgba(${bg.r},${bg.g},${bg.b},${bg.a})`;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -53,21 +56,57 @@ function renderGrid(ctx) {
             ctx.strokeRect(px + ma2, py + ma2, cellSize, cellSize);
         }
     }
+    // Se la cella fa parte di una riga/colonna che sta svanendo, riduciamo alpha
+    for (const anim of clearingAnimations) {
+        let fade = 1 - anim.progress;
+        let colore = hexaToRGB(anim.color);
+        colore.a = fade;
+        drawCell(ctx, anim.x * cellSize + ma2, anim.y * cellSize + ma2, cellSize, colore, fade);
+    }
+    for (let i = clearingAnimations.length - 1; i >= 0; i--) {
+        const anim = clearingAnimations[i];
+        anim.progress += delta * 2; // velocità (2 = 0.5s per completare)
+        if (anim.progress >= 1) {
+            clearingAnimations.splice(i, 1);
+        }
+    }
+}
+let saturation = 1;
+export function desaturate() {
+    const step = () => {
+        saturation = Math.max(0, saturation - 0.02);
+        if (saturation > 0) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+}
+
+export function risaturate() {
+    const step = () => {
+        saturation = Math.min(1, saturation + 0.02);
+        if (saturation < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
 }
 
 // Funzione helper per “abbellire” le singole celle
 function drawCell(ctx, x, y, size, color) {
-    // piccola riduzione per il bordo
     x++;
     y++;
-    size = size - 2;
+    size -= 2;
 
-    // calcolo colori chiari e scuri
-    const baseColor = `rgba(${color.r},${color.g},${color.b},${color.a})`;
-    const lightColor = `rgba(${Math.min(color.r + 40, 255)},${Math.min(color.g + 40, 255)},${Math.min(color.b + 40, 255)},${color.a})`;
-    const darkColor = `rgba(${Math.max(color.r - 40, 0)},${Math.max(color.g - 40, 0)},${Math.max(color.b - 40, 0)},${color.a})`;
+    // Applica desaturazione
+    const { r, g, b } = color;
+    const gray = (r + g + b) / 3;
+    const rS = r * saturation + gray * (1 - saturation);
+    const gS = g * saturation + gray * (1 - saturation);
+    const bS = b * saturation + gray * (1 - saturation);
 
-    // triangolo chiaro (angoli 00,01,10)
+    // Colori chiaro/scuro e base
+    const baseColor = `rgba(${rS},${gS},${bS},${color.a})`;
+    const lightColor = `rgba(${Math.min(rS + 40, 255)},${Math.min(gS + 40, 255)},${Math.min(bS + 40, 255)},${color.a})`;
+    const darkColor = `rgba(${Math.max(rS - 40, 0)},${Math.max(gS - 40, 0)},${Math.max(bS - 40, 0)},${color.a})`;
+
+    // Triangolo chiaro (00,01,10)
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(x + size, y);
@@ -76,7 +115,7 @@ function drawCell(ctx, x, y, size, color) {
     ctx.fillStyle = lightColor;
     ctx.fill();
 
-    // triangolo scuro (angoli 01,10,11)
+    // Triangolo scuro (01,10,11)
     ctx.beginPath();
     ctx.moveTo(x + size, y);
     ctx.lineTo(x, y + size);
@@ -85,27 +124,24 @@ function drawCell(ctx, x, y, size, color) {
     ctx.fillStyle = darkColor;
     ctx.fill();
 
-    // linee sottili nere
-    ctx.strokeStyle = "rgba(0,0,0,0.4)";
+    // Linee diagonali
+    ctx.strokeStyle = "rgba(0,0,0,0.3)";
     ctx.lineWidth = 1;
-    // linea diagonale 00 → 11
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(x + size, y + size);
-    ctx.stroke();
-    // linea diagonale 10 → 01
-    ctx.beginPath();
-    ctx.moveTo(x, y + size);
-    ctx.lineTo(x + size, y);
+    ctx.moveTo(x + size, y);
+    ctx.lineTo(x, y + size);
     ctx.stroke();
 
-    // quadratino centrale
-    const centerSize = size * 0.75;
-    const cx = x + (size - centerSize) / 2;
-    const cy = y + (size - centerSize) / 2;
+    // Quadrato centrale
+    const csize = size * 0.625;
+    const cx = x + (size - csize) / 2;
+    const cy = y + (size - csize) / 2;
     ctx.fillStyle = baseColor;
-    ctx.fillRect(cx, cy, centerSize, centerSize);
+    ctx.fillRect(cx, cy, csize, csize);
 }
+
 
 
 // =============== OPZIONI BLOCCO (adattiva) ===============
@@ -164,11 +200,11 @@ function drawScoreSlot(ctx, x, y, size) {
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
-    ctx.fillText(`Score`, x + size / 2, y + size / 3);
-    ctx.fillText(`${score}`, x + size / 2, y + size / 2);
+    ctx.fillText(`Score`, x + size / 2, y + size * 0.22);
+    ctx.fillText(`${score}`, x + size / 2, y + size * 0.37);
 
-    ctx.fillText(`Best`, x + size / 2, y + size * 0.7);
-    ctx.fillText(`${bestScore}`, x + size / 2, y + size * 0.85);
+    ctx.fillText(`Best`, x + size / 2, y + size * 0.63);
+    ctx.fillText(`${bestScore}`, x + size / 2, y + size * 0.78);
 }
 
 
@@ -191,33 +227,37 @@ function renderPiecePreview(ctx) {
     const ma2 = margin / 2;
     const shape = SHAPES[previewBlock];
     const color = hexaToRGB(colorpreviewBlock);
-    let size = cellSize * 1.1;
+    let size = cellSize;
 
-    // Calcola le coordinate della cella sotto il mouse
+    // Calcola la cella attualmente sotto il mouse
     const gx = Math.floor(mouseX / cellSize);
     const gy = Math.floor(mouseY / cellSize);
 
-    // Controlla se il blocco può entrare in quella posizione
     const canPlace = doesFit(previewBlock, gx, gy);
-    if (canPlace) {
-        size = cellSize;
-        // Offset per centrare il blocco sulla cella
-        const offsetX = gx * cellSize;
-        const offsetY = gy * cellSize;
 
+    // Offset per posizionamento (centrato sulla cella in griglia)
+    const gridX = gx * cellSize;
+    const gridY = gy * cellSize;
+
+    if (canPlace) {
+        // Mostra snapping sulla cella
         for (const [dx, dy] of shape) {
-            const x = offsetX + dx * size + ma2;
-            const y = offsetY + dy * size + ma2;
-            drawCell(ctx, x, y, size, color)
+            const x = gridX + dx * size;
+            const y = gridY + dy * size;
+            drawCell(ctx, x, y, size, color);
         }
     } else {
+        // Mostra il blocco seguendo il mouse (ma centrato)
+        const offsetX = mouseX - size / 2;
+        const offsetY = mouseY - size / 2;
         for (const [dx, dy] of shape) {
-            const x = dx * size - (size / 2) + mouseX;
-            const y = dy * size - (size / 2) + mouseY;
-            drawCell(ctx, x, y, size, color)
+            const x = offsetX + dx * size;
+            const y = offsetY + dy * size;
+            drawCell(ctx, x, y, size, color);
         }
     }
 }
+
 
 // =============== UTILITY PER DISEGNARE UN BLOCCO ===============
 function drawBlock(ctx, shape, cx, cy, size, color) {

@@ -1,7 +1,7 @@
 // input.js
 import { margin } from "../main.js";
 import { SHAPES } from "./blocks.js";
-import { cells, cellSize, board, idx, doesFit, insertBlock } from "./grid.js";
+import { cells, cellSize, doesFit, insertBlock } from "./grid.js";
 import {
     setPreviewBlock,
     getPreviewBlock,
@@ -11,7 +11,6 @@ import {
     getColorAvailableBlocks
 } from "./render.js";
 
-// =================== MOUSE TRACKING ===================
 export let mouseX = 0;
 export let mouseY = 0;
 export let dragging = false;
@@ -20,29 +19,60 @@ let draggedSlotIndex = -1;
 
 const canvas = document.getElementById('canvas');
 
+// =================== EVENTI MOUSE ===================
 canvas.addEventListener("mousemove", e => {
-    const rect = canvas.getBoundingClientRect();
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
-});
+    updatePointer(e.clientX, e.clientY);
+}, { passive: true });
 
 canvas.addEventListener("mousedown", e => {
-    if (e.button !== 0) return; // solo tasto sinistro
+    if (e.button !== 0) return;
+    handlePointerDown(e.clientX, e.clientY);
+}, { passive: true });
 
-    // Controlla se cliccato su uno slot di blocco
+canvas.addEventListener("mouseup", e => {
+    if (e.button !== 0) return;
+    handlePointerUp(e.clientX, e.clientY);
+}, { passive: true });
+
+// === TOUCH ===
+canvas.addEventListener("touchstart", e => {
+    const t = e.touches[0];
+    handlePointerDown(t.clientX, t.clientY);
+}, { passive: true });
+
+canvas.addEventListener("touchmove", e => {
+    const t = e.touches[0];
+    updatePointer(t.clientX, t.clientY);
+}, { passive: true });
+
+canvas.addEventListener("touchend", e => {
+    if (dragging) handlePointerUp(mouseX, mouseY);
+}, { passive: true });
+
+
+// =================== FUNZIONI COMUNI ===================
+function updatePointer(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = clientX - rect.left;
+    mouseY = clientY - rect.top;
+}
+
+function handlePointerDown(clientX, clientY) {
+    updatePointer(clientX, clientY);
+
     const slotIndex = checkClickOnOptions(mouseX, mouseY);
     if (slotIndex >= 0) {
-        // start dragging
+        // Inizio trascinamento da uno slot
         dragging = true;
         draggedBlock = getAvailableBlocks(slotIndex);
         draggedSlotIndex = slotIndex;
         setPreviewBlock(draggedBlock);
         setColorPreviewBlock(getColorAvailableBlocks(slotIndex));
-        setAvailbleBlocks(slotIndex, 0); // slot vuoto temporaneamente
+        setAvailbleBlocks(slotIndex, 0); // slot temporaneamente vuoto
         return;
     }
 
-    // se non cliccato su slot e c'è un blocco in preview, prova a piazzarlo direttamente
+    // Se cliccato sulla griglia e c’è un blocco selezionato
     const gx = Math.floor(mouseX / cellSize);
     const gy = Math.floor(mouseY / cellSize);
     const pb = getPreviewBlock();
@@ -50,10 +80,10 @@ canvas.addEventListener("mousedown", e => {
         insertBlock(pb, gx, gy);
         setPreviewBlock(0);
     }
-});
+}
 
-canvas.addEventListener("mouseup", e => {
-    if (e.button !== 0) return;
+function handlePointerUp(clientX, clientY) {
+    updatePointer(clientX, clientY);
     if (!dragging) return;
 
     dragging = false;
@@ -66,14 +96,14 @@ canvas.addEventListener("mouseup", e => {
         // qui puoi chiamare blockInserted() e controlAvailable()
         setPreviewBlock(0);
     } else {
-        // ripristina nello slot da cui è stato preso
+        // ripristina nello slot originale
         setAvailbleBlocks(draggedSlotIndex, draggedBlock);
         setPreviewBlock(0);
     }
 
     draggedBlock = 0;
     draggedSlotIndex = -1;
-});
+}
 
 // =================== CHECK CLICK SU BLOCCO OPZIONE ===================
 function checkClickOnOptions(mx, my) {
@@ -92,15 +122,6 @@ function checkClickOnOptions(mx, my) {
             const y = startY + i * (slotSize + gap);
             if (mx >= x && mx <= x + slotSize && my >= y && my <= y + slotSize) return i;
         }
-
-        // slot punteggio (solo log)
-        const yScore = startY + 3 * (slotSize + gap);
-        const xScore = startX;
-        if (mx >= xScore && mx <= xScore + slotSize && my >= yScore && my <= yScore + slotSize) {
-            console.log("Click sullo slot punteggio");
-            return -1;
-        }
-
     } else {
         startX = (canvas.width - (slotSize * 4 + gap * 3)) / 2;
         startY = cells * cellSize + gap;
@@ -109,13 +130,6 @@ function checkClickOnOptions(mx, my) {
             const x = startX + i * (slotSize + gap);
             const y = startY;
             if (mx >= x && mx <= x + slotSize && my >= y && my <= y + slotSize) return i;
-        }
-
-        const xScore = startX + 3 * (slotSize + gap);
-        const yScore = startY;
-        if (mx >= xScore && mx <= xScore + slotSize && my >= yScore && my <= yScore + slotSize) {
-            console.log("Click sullo slot punteggio");
-            return -1;
         }
     }
 

@@ -1,12 +1,13 @@
 import { gameOver } from '../main.js';
 import { colors, SHAPES } from './blocks.js';
 import { board, cells, doesFit, idx } from './grid.js';
-import { getAvailableBlocks, setAvailbleBlocks, setColorAvailableBlocks } from './render.js';
+import { colorCells, desaturate, getAvailableBlocks, risaturate, setAvailbleBlocks, setColorAvailableBlocks } from './render.js';
 import { fastRandomInt } from './utils.js';
 
 export let score = 0;
 export let combo = 0; // combo attuale
 export let bestScore = 0;
+export let clearingAnimations = [];
 export function setScore(val) { score = val; }
 export function setBestScore(val) { bestScore = val; }
 export function blockInserted(blockId) {
@@ -53,22 +54,23 @@ export function blockInserted(blockId) {
 
     // combo multiplier: +0.5 per ogni riga/colonna extra nella stessa mossa
     let multiplier = 1 + (clearedRows.length + clearedCols.length - 1) * 0.5 + 1 / 10 * combo;
-
-    // svuota righe
     clearedRows.forEach(row => {
-        for (let col = 0; col < cells; col++) {
-            board[idx(col, row)] = 0;
-        }
         score += rowPoints * multiplier;
+        for (let col = 0; col < cells; col++) {
+            const i = idx(col, row);
+            clearingAnimations.push({ progress: 0, x: col,y: row, color: colorCells[i] });
+            board[i] = 0;
+        }
+    });
+    clearedCols.forEach(col => {
+        score += colPoints * multiplier;
+        for (let row = 0; row < cells; row++) {
+            const i = idx(col, row);
+            clearingAnimations.push({ progress: 0, x: col, y: row, color: colorCells[i] });
+            board[i] = 0;
+        }
     });
 
-    // svuota colonne
-    clearedCols.forEach(col => {
-        for (let row = 0; row < cells; row++) {
-            board[idx(col, row)] = 0;
-        }
-        score += colPoints * multiplier;
-    });
 
     // aggiorna combo
     combo = clearedRows.length + clearedCols.length / 2;
@@ -147,11 +149,12 @@ export function checkAvailableBlocksFit() {
 
     if (!canFit) {
         // Nessun blocco può entrare → game over
-
+        desaturate()
         setTimeout(() => {
             if (score > bestScore) {
                 bestScore = score;
             }
+            risaturate();
             gameOver();
         }, 3000);
     }

@@ -1,3 +1,5 @@
+export const MIN=1;
+export const MAX=30;
 export const R3O = 1;
 export const R4O = 2;
 export const R5O = 3;

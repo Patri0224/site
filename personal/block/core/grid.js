@@ -1,12 +1,13 @@
 import { margin } from "../main.js";
-import { SHAPES } from "./blocks.js";
+import { MAX, MIN, SHAPES } from "./blocks.js";
 import { blockInserted } from "./logic.js";
-import { getColorPreviewBlock, getPreviewBlock, setColorCells } from "./render.js";
-export const cells = 9;
-export let W, cellSize, board;
+import { getColorPreviewBlock, setColorCells } from "./render.js";
+export const cells = 8;
+export let W, cellSize, board;// { type: 'row'|'col', index, progress }
 export function idx(x, y) { return y * cells + x; }
 export function inBounds(x, y) { return x >= 0 && x < cells && y >= 0 && y < cells; }
 export function doesFit(block, x, y) {
+    if (block < MIN || block > MAX) return false;
     for (const [dx, dy] of SHAPES[block]) {
         if (!inBounds(x + dx, y + dy)) return false;
         if (board[idx(x + dx, y + dy)] === 1) return false;

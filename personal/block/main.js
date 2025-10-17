@@ -1,6 +1,6 @@
 import { initGrid, resizeGrid } from './core/grid.js';
 import { bestScore, controlAvaible, setScore } from './core/logic.js';
-import { render } from './core/render.js'; // drawText è una funzione helper per disegnare testo
+import { render, setAvailbleBlocks } from './core/render.js'; // drawText è una funzione helper per disegnare testo
 export const margin = window.innerWidth / 100;
 export let CW, CH;
 const canvas = document.getElementById('canvas');
@@ -12,6 +12,9 @@ let state = MENU;
 
 export function gameOver() {
     state = MENU;
+    setAvailbleBlocks(0,0);
+    setAvailbleBlocks(1,0);
+    setAvailbleBlocks(2,0);
     controlAvaible(); // resetta i blocchi disponibili
 }
 
