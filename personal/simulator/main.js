@@ -3,6 +3,7 @@ import { step } from './core/simulation.js';
 import { drawBrushPreview, render, updateImageData } from './core/renderer.js';
 import { setupPalette } from './ui/palette.js';
 import { setupInput } from './ui/input.js';
+import { caricaStato, salvaStato } from './core/utils.js';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -38,6 +39,13 @@ window.addEventListener('keydown', e => {
 
 window.addEventListener('keyup', e => {
     if (e.key.toLowerCase() === 'q') pauseFrame = false;
+});
+window.addEventListener("beforeunload", salvaStato);
+window.addEventListener("load", () => {
+    if (!caricaStato()) {
+        console.log("Nessuno stato precedente, avvio nuova simulazione.");
+    }
+    inputPresent();
 });
 export function stopFrames() {
     pauseFrame = true;

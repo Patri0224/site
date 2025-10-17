@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Block grid</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* --- BOTTONI TOGGLE --- */
+        .palette-toggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 101;
+            padding: 5px 8px;
+            background: rgba(25, 25, 25, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Stile dei pulsanti esistenti */
+        .palette-toggle button,
+        .brush-controls {
+            height: 30px;
+            min-width: 100px;
+            color: white;
+            font-size: 16px;
+            background: rgba(40, 40, 40, 0.9);
+            border: 2px inset rgb(111, 111, 111);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+        }
+
+        .palette-toggle button:hover,
+        .brush-controls:hover {
+            background: rgba(80, 80, 80, 0.9);
+        }
+
+        /* === SEZIONE CMD === */
+        .comandi-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .comandi-container input[type="text"] {
+            height: 26px;
+            width: 130px;
+            font-size: 14px;
+            background: rgba(40, 40, 40, 0.9);
+            color: white;
+            border: 1px solid rgb(111, 111, 111);
+            border-radius: 6px;
+            padding: 0 6px;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .comandi-container input[type="text"]:focus {
+            border-color: rgb(180, 180, 180);
+            background: rgba(55, 55, 55, 0.95);
+        }
+
+        .comandi-container button {
+            height: 28px;
+            min-width: 60px;
+            font-size: 14px;
+            color: white;
+            background: rgba(40, 40, 40, 0.9);
+            border: 2px inset rgb(111, 111, 111);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .comandi-container button:hover {
+            background: rgba(80, 80, 80, 0.9);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <div id="palette"></div>
+    <div class="palette-toggle"></div>
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>

@@ -13,6 +13,12 @@ export const LAVA = 11;
 export const LEAF = 12;
 export const STEEL = 13;
 export const IVY = 14;
+export const REDSTONE = 15;
+export const REPEATER = 16;
+export const COMPARATOR = 17;
+export const OBSERVER = 18;
+export const BUTTON = 19;
+export const LEVER = 20;
 
 
 export const cellSize = 4;
@@ -36,8 +42,7 @@ export const materials = [
     { name: 'Fire', id: FIRE },
     { name: 'Sorg', id: SURG },
     { name: 'Destr', id: DSTR },
-    { name: 'Ivy', id: IVY },
-
+    { name: 'Ivy', id: IVY }
 ];
 
 export const matColor = {
