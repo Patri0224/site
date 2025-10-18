@@ -1,8 +1,7 @@
 import { margin } from "../main.js";
-import { MAX, MIN, SHAPES } from "./blocks.js";
+import { cells, MAX, MIN, SHAPES } from "./blocks.js";
 import { blockInserted } from "./logic.js";
-import { getColorPreviewBlock, setColorCells } from "./render.js";
-export const cells = 8;
+import { getColorPreviewBlock, setCellSize, setColorCells } from "./render.js";
 export let W, cellSize, board;// { type: 'row'|'col', index, progress }
 export function setBoard(val) {
     board.splice(0, board.length, ...val);
@@ -40,5 +39,6 @@ export function resizeGrid(width, height) {
         W = Math.min(width, height * 3 / 4) - margin;
         cellSize = W / cells;
     }
+    setCellSize(cellSize);
 
 }

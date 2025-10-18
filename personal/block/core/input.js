@@ -1,5 +1,6 @@
 // input.js
-import { cells, cellSize, doesFit, insertBlock, W } from "./grid.js";
+import { cells } from "./blocks.js";
+import {cellSize, doesFit, insertBlock, W } from "./grid.js";
 import {
     setPreviewBlock,
     getAvailableBlocks,

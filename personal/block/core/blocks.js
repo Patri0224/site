@@ -1,3 +1,4 @@
+export const cells = 8;
 export const MIN = 1;
 export const MAX = 30;
 export const R3O = 1;

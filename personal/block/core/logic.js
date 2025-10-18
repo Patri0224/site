@@ -1,6 +1,6 @@
 import { gameOver } from '../main.js';
-import { colors, SHAPES } from './blocks.js';
-import { board, cells, doesFit, idx } from './grid.js';
+import { colors, SHAPES,cells } from './blocks.js';
+import { board, doesFit, idx } from './grid.js';
 import { colorCells, desaturate, getAvailableBlocks, risaturate, setAvailbleBlocks, setColorAvailableBlocks } from './render.js';
 import { fastRandomInt } from './utils.js';
 

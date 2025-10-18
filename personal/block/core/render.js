@@ -1,17 +1,15 @@
-import { margin } from "../main.js";
-import { colors, SHAPES } from "./blocks.js";
-import { board, cells, cellSize, doesFit, idx, initGrid, W } from "./grid.js";
+import { colors, SHAPES, cells } from "./blocks.js";
+import { board, doesFit, idx, W } from "./grid.js";
 import { mouseX, mouseY } from "./input.js";
 import { bestScore, clearingAnimations, score } from "./logic.js";
 
-
-// buffer per la griglia (W x H)
+// ==================== BUFFERS ====================
 export let availableBlocks = [0, 0, 0]; // indice dei 3 blocchi scelti
-export let previewBlock = 0;  // blocco selezionato (indice in SHAPES)
+export let previewBlock = 0;            // blocco selezionato (indice in SHAPES)
 export let colorCells = [];
 export let colorAvailableBlocks = [colors[3], colors[4], colors[5]];
 export let colorpreviewBlock = colors[3];
-let lastTime = performance.now();
+// ==================== GETTER / SETTER ====================
 export function setColorCells(pos, val) { colorCells[pos] = val; }
 export function getPreviewBlock() { return previewBlock; }
 export function getAvailableBlocks(pos) { return availableBlocks[pos]; }
@@ -22,350 +20,257 @@ export function getColorAvailableBlocks(pos) { return colorAvailableBlocks[pos];
 export function setColorPreviewBlock(val) { colorpreviewBlock = val; }
 export function setColorAvailableBlocks(pos, val) { colorAvailableBlocks[pos] = val; }
 
+// ==================== CACHE COLORI ====================
+const bgRGB = hexaToRGB(colors[0]);
+const gridCRGB = hexaToRGB(colors[1]);
+const gridLRGB = hexaToRGB(colors[2]);
+
+const gradientCache = {};
+function getGradient(ctx, color, alpha) {
+    const key = `${color.r},${color.g},${color.b}`;
+    if (!gradientCache[key]) {
+        const csize = cellSize * 0.625;
+        const gradient = ctx.createLinearGradient(0, 0, csize, csize);
+        gradient.addColorStop(0, `rgba(${Math.min(color.r + 50, 255)},${Math.min(color.g + 50, 255)},${Math.min(color.b + 50, 255)},${alpha})`);
+        gradient.addColorStop(1, `rgba(${color.r},${color.g},${color.b},${alpha})`);
+        gradientCache[key] = gradient;
+    }
+    return gradientCache[key];
+}
+
+// ==================== PRECOMPUTE POSITIONS ====================
+let ma2 = 0;
+let margin = 0;
+let cellSize = 10;
+let cellPositions = Array.from({ length: cells }, (_, i) => i * cellSize + ma2);
+export function setMa2(val) {
+    margin = val;
+    ma2 = val / 2;
+    cellPositions = Array.from({ length: cells }, (_, i) => i * cellSize + ma2);
+}
+export function setCellSize(val) {
+    cellSize = val;
+    cellPositions = Array.from({ length: cells }, (_, i) => i * cellSize + ma2);
+}
+let lastTime = performance.now();
+let saturation = 1;
+
+// ==================== MAIN RENDER ====================
 export function render(ctx) {
     const now = performance.now();
-    const delta = (now - lastTime) / 1000; // secondi
+    const delta = (now - lastTime) / 1000;
     lastTime = now;
+
     renderGrid(ctx, delta);
     renderOption(ctx);
     renderPiecePreview(ctx);
 }
-// =============== GRID PRINCIPALE ===============
-function renderGrid(ctx, delta) {
-    const bg = hexaToRGB(colors[0]);         // colore di sfondo griglia
-    const gridC = hexaToRGB(colors[1]);      // colore linee griglia
-    const gridL = hexaToRGB(colors[2]);      // colore linee griglia
-    const ma2 = margin / 2;
 
-    // === SFONDO CANVAS PIÙ CHIARO DELLA GRIGLIA ===
-    const lighterBg = `rgba(${Math.min(bg.r + 15, 255)}, ${Math.min(bg.g + 15, 255)}, ${Math.min(bg.b + 15, 255)}, 1)`;
+// ==================== GRID ====================
+function renderGrid(ctx, delta) {
+    // sfondo canvas
+    const lighterBg = `rgba(${Math.min(bgRGB.r + 15, 255)}, ${Math.min(bgRGB.g + 15, 255)}, ${Math.min(bgRGB.b + 15, 255)},1)`;
     ctx.fillStyle = lighterBg;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    // === SFONDO GRIGLIA ===
-    ctx.fillStyle = `rgba(${bg.r},${bg.g},${bg.b},${bg.a})`;
+    // sfondo griglia
+    ctx.fillStyle = `rgba(${bgRGB.r},${bgRGB.g},${bgRGB.b},${bgRGB.a})`;
     ctx.fillRect(ma2, ma2, cells * cellSize, cells * cellSize);
 
-    // === DISEGNA CELLE ===
+    // celle
     for (let y = 0; y < cells; y++) {
         for (let x = 0; x < cells; x++) {
             const i = idx(x, y);
-            const val = board[i];
-            const px = x * cellSize + ma2;
-            const py = y * cellSize + ma2;
-
-            if (val === 1) {
-                const c1 = hexaToRGB(colorCells[i]);
-                drawCell(ctx, px, py, cellSize, c1);
+            if (board[i] === 1) {
+                const c = hexaToRGB(colorCells[i]);
+                drawCell(ctx, cellPositions[x], cellPositions[y], cellSize, c);
             }
         }
     }
 
-    // === LINEE DELLA GRIGLIA ===
-    ctx.lineWidth = 1.2; // un po’ più visibile
-    ctx.strokeStyle = `rgba(${gridC.r},${gridC.g},${gridC.b},${gridC.a * 1.2})`; // leggermente più marcata
-
+    // linee griglia
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = `rgba(${gridCRGB.r},${gridCRGB.g},${gridCRGB.b},${gridCRGB.a * 1.2})`;
     for (let y = 0; y <= cells; y++) {
-        const py = y * cellSize + ma2;
+        const py = cellPositions[y] || cells * cellSize + ma2;
         ctx.beginPath();
         ctx.moveTo(ma2, py);
         ctx.lineTo(cells * cellSize + ma2, py);
         ctx.stroke();
     }
-
     for (let x = 0; x <= cells; x++) {
-        const px = x * cellSize + ma2;
+        const px = cellPositions[x] || cells * cellSize + ma2;
         ctx.beginPath();
         ctx.moveTo(px, ma2);
         ctx.lineTo(px, cells * cellSize + ma2);
         ctx.stroke();
     }
 
-    // === BORDI ESTERNI PIÙ EVIDENTI ===
+    // bordi esterni
     ctx.lineWidth = 3;
-    ctx.strokeStyle = `rgba(${gridL.r * 0.6}, ${gridL.g * 0.6}, ${gridL.b * 0.6}, 1)`;
+    ctx.strokeStyle = `rgba(${gridLRGB.r * 0.6},${gridLRGB.g * 0.6},${gridLRGB.b * 0.6},1)`;
     ctx.strokeRect(ma2, ma2, cells * cellSize, cells * cellSize);
-
-    // === ANIMAZIONI DI DISSOLVENZA CELLE ===
     for (const anim of clearingAnimations) {
         let fade = 1 - anim.progress;
         let colore = hexaToRGB(anim.color);
         colore.a = fade;
-        drawCell(ctx, anim.x * cellSize + ma2, anim.y * cellSize + ma2, cellSize, colore, fade);
+        drawCell(ctx, anim.x * cellSize + ma2, anim.y * cellSize + ma2, cellSize, colore);
     }
-
+    // Rimuovi gli elementi completati
     for (let i = clearingAnimations.length - 1; i >= 0; i--) {
         const anim = clearingAnimations[i];
-        anim.progress += delta * 2; // velocità dissolvenza
-        if (anim.progress >= 1) {
-            clearingAnimations.splice(i, 1);
-        }
+        anim.progress += delta * 2;
+        if (anim.progress >= 1) clearingAnimations.splice(i, 1);
     }
+
 }
 
-let saturation = 1;
+// ==================== DESATURA / RISATURA ====================
 export function desaturate() {
-    const step = () => {
-        saturation = Math.max(0, saturation - 0.02);
-        if (saturation > 0) requestAnimationFrame(step);
-    };
+    const step = () => { saturation = Math.max(0, saturation - 0.02); if (saturation > 0) requestAnimationFrame(step); };
     requestAnimationFrame(step);
 }
-
 export function risaturate() {
-    const step = () => {
-        saturation = Math.min(1, saturation + 0.02);
-        if (saturation < 1) requestAnimationFrame(step);
-    };
+    const step = () => { saturation = Math.min(1, saturation + 0.02); if (saturation < 1) requestAnimationFrame(step); };
     requestAnimationFrame(step);
 }
 
-// Funzione helper per “abbellire” le singole celle
+// ==================== DRAW CELL ====================
 function drawCell(ctx, x, y, size, color) {
-    x++;
-    y++;
-    size -= 2;
-
-    // Applica desaturazione
+    x++; y++; size -= 2;
     const { r, g, b, a } = color;
     const gray = (r + g + b) / 3;
     const rS = r * saturation + gray * (1 - saturation);
     const gS = g * saturation + gray * (1 - saturation);
     const bS = b * saturation + gray * (1 - saturation);
 
-    // Colori base, chiaro e scuro
     const baseColor = `rgba(${rS},${gS},${bS},${a})`;
     const lightColor = `rgba(${Math.min(rS + 40, 255)},${Math.min(gS + 40, 255)},${Math.min(bS + 40, 255)},${a})`;
     const darkColor = `rgba(${Math.max(rS - 40, 0)},${Math.max(gS - 40, 0)},${Math.max(bS - 40, 0)},${a})`;
 
-    // Triangolo chiaro (00,01,10)
+    // triangoli
     ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + size, y);
-    ctx.lineTo(x, y + size);
-    ctx.closePath();
-    ctx.shadowColor = "rgba(0,0,0,0.15)";
-    ctx.shadowBlur = 3;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
-    ctx.fillStyle = lightColor;
-    ctx.fill();
+    ctx.moveTo(x, y); ctx.lineTo(x + size, y); ctx.lineTo(x, y + size); ctx.closePath();
+    ctx.shadowColor = "rgba(0,0,0,0.15)"; ctx.shadowBlur = 3; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
+    ctx.fillStyle = lightColor; ctx.fill();
     ctx.shadowColor = "transparent";
 
-    // Triangolo scuro (01,10,11)
     ctx.beginPath();
-    ctx.moveTo(x + size, y);
-    ctx.lineTo(x, y + size);
-    ctx.lineTo(x + size, y + size);
-    ctx.closePath();
-    ctx.fillStyle = darkColor;
-    ctx.fill();
+    ctx.moveTo(x + size, y); ctx.lineTo(x, y + size); ctx.lineTo(x + size, y + size); ctx.closePath();
+    ctx.fillStyle = darkColor; ctx.fill();
 
-    // Linee diagonali sottili
+    // linee diagonali
     ctx.strokeStyle = "rgba(0,0,0,0.3)";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + size, y + size);
-    ctx.moveTo(x + size, y);
-    ctx.lineTo(x, y + size);
+    ctx.moveTo(x, y); ctx.lineTo(x + size, y + size);
+    ctx.moveTo(x + size, y); ctx.lineTo(x, y + size);
     ctx.stroke();
 
-    // Quadrato centrale con gradient circolare lucido
+    // quadrato centrale
     const csize = size * 0.625;
     const cx = x + (size - csize) / 2;
     const cy = y + (size - csize) / 2;
-
-    // Gradient lineare dall’alto a sinistra in basso a destra
-    const gradient = ctx.createLinearGradient(cx, cy, cx + csize, cy + csize);
-    gradient.addColorStop(0, `rgba(${Math.min(rS + 50, 255)},${Math.min(gS + 50, 255)},${Math.min(bS + 50, 255)},1)`);
-    gradient.addColorStop(1, baseColor);
-
+    const gradient = getGradient(ctx, { r: rS, g: gS, b: bS }, a);
+    // Applica fade dell'animazione
+    ctx.globalAlpha = a;  // 'a' qui è il fade del clearingAnimation
     ctx.fillStyle = gradient;
     ctx.fillRect(cx, cy, csize, csize);
-
-    // Contorno intorno al quadrato centrale
-    ctx.strokeStyle = `rgba(${Math.max(rS - 50, 0)},${Math.max(gS - 50, 0)},${Math.max(bS - 50, 0)},1)`;
+    ctx.strokeStyle = `rgba(${Math.max(rS - 50, 0)},${Math.max(gS - 50, 0)},${Math.max(bS - 50, 0)},${a})`;
     ctx.lineWidth = 1;
     ctx.strokeRect(cx, cy, csize, csize);
 
-
-    // Bordo luminoso superiore/sinistro
-    ctx.strokeStyle = `rgba(${Math.min(rS + 60, 255)},${Math.min(gS + 60, 255)},${Math.min(bS + 60, 255)},${a})`;
-    ctx.beginPath();
-    ctx.moveTo(x, y + size);
-    ctx.lineTo(x, y);
-    ctx.lineTo(x + size, y);
-    ctx.stroke();
-
-    // Bordo scuro inferiore/destro
-    ctx.strokeStyle = `rgba(${Math.max(rS - 60, 0)},${Math.max(gS - 60, 0)},${Math.max(bS - 60, 0)},${a})`;
-    ctx.beginPath();
-    ctx.moveTo(x + size, y);
-    ctx.lineTo(x + size, y + size);
-    ctx.lineTo(x, y + size);
-    ctx.stroke();
-
-    // Piccoli dettagli geometrici negli angoli
-    // Dimensione dei puntini
+    // dettagli angoli
     const dotSize = size * 0.08;
-
-    // Puntino in alto a sinistra
     ctx.fillStyle = "rgba(255,255,255,0.3)";
-    ctx.fillRect(x + size * 0.15, y + size * 0.15, dotSize, dotSize);
-
-    // Puntino in basso a destra
-
+    ctx.fillRect(x + size * 0.2, y + size * 0.2, dotSize, dotSize);
+    ctx.fillRect(x + size * 0.75, y + size * 0.75, dotSize, dotSize);
 }
 
-
-
-
-// =============== OPZIONI BLOCCO (adattiva) ===============
+// ==================== OPZIONI BLOCCO ====================
 function renderOption(ctx) {
-    const slotSize = cellSize * 1.8; // dimensione di ogni slot
+    const slotSize = cellSize * 1.8;
     const margin = 20;
     const isLandscape = ctx.canvas.width > ctx.canvas.height;
-
     let startX, startY;
 
     if (isLandscape) {
-        // schermo orizzontale → griglia a sinistra, opzioni a destra
         startX = cells * cellSize + margin;
-        startY = (W - (slotSize * 4 + margin * 2)) / 2; // 3 blocchi + slot score
+        startY = (W - (slotSize * 4 + margin * 2)) / 2;
         for (let i = 0; i < 3; i++) {
             const y = startY + i * (slotSize + margin);
             const x = startX;
-            const color = hexaToRGB(colorAvailableBlocks[i]);
-            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], color);
+            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], hexaToRGB(colorAvailableBlocks[i]));
         }
-
-        // quarto slot: punteggio
-        const yScore = startY + 3 * (slotSize + margin);
-        drawScoreSlot(ctx, startX, yScore, slotSize);
-
+        drawScoreSlot(ctx, startX, startY + 3 * (slotSize + margin), slotSize);
     } else {
-        // schermo verticale → griglia sopra, opzioni sotto
-        startX = (W - (slotSize * 4 + margin * 3)) / 2; // 3 blocchi + slot score
+        startX = (W - (slotSize * 4 + margin * 3)) / 2;
         startY = cells * cellSize + margin;
         for (let i = 0; i < 3; i++) {
             const x = startX + i * (slotSize + margin);
             const y = startY;
-            const color = hexaToRGB(colorAvailableBlocks[i]);
-            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], color);
+            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], hexaToRGB(colorAvailableBlocks[i]));
         }
-
-        // quarto slot: punteggio
-        const xScore = startX + 3 * (slotSize + margin);
-        drawScoreSlot(ctx, xScore, startY, slotSize);
+        drawScoreSlot(ctx, startX + 3 * (slotSize + margin), startY, slotSize);
     }
 }
 
-// Funzione helper per disegnare lo “slot punteggio”
 function drawScoreSlot(ctx, x, y, size) {
-    // sfondo
-    ctx.fillStyle = "rgba(50,50,50,0.4)";
-    ctx.fillRect(x, y, size, size);
-
-    ctx.strokeStyle = "rgba(255,255,255,0.6)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(x, y, size, size);
-
-    // testo punteggio
-    ctx.fillStyle = "#ffffff";
-    ctx.font = `${size / 8}px Arial`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    ctx.fillText(`Score`, x + size / 2, y + size * 0.22);
+    ctx.fillStyle = "rgba(50,50,50,0.4)"; ctx.fillRect(x, y, size, size);
+    ctx.strokeStyle = "rgba(255,255,255,0.6)"; ctx.lineWidth = 2; ctx.strokeRect(x, y, size, size);
+    ctx.fillStyle = "#fff"; ctx.font = `${size / 8}px Arial`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("Score", x + size / 2, y + size * 0.22);
     ctx.fillText(`${score}`, x + size / 2, y + size * 0.37);
-
-    ctx.fillText(`Best`, x + size / 2, y + size * 0.63);
+    ctx.fillText("Best", x + size / 2, y + size * 0.63);
     ctx.fillText(`${bestScore}`, x + size / 2, y + size * 0.78);
 }
 
-
-// funzione helper per disegnare un singolo slot
 function drawOptionSlot(ctx, x, y, slotSize, blockId, color) {
-    // contorno slot
     ctx.strokeStyle = `rgba(${color.r},${color.g},${color.b},0.6)`;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(x, y, slotSize, slotSize);
-
-    // disegna blocco se presente
-    if (blockId != null && SHAPES[blockId]) {
-        drawBlock(ctx, SHAPES[blockId], x + slotSize / 2, y + slotSize / 2, cellSize * 0.3, color);
-    }
+    ctx.lineWidth = 2; ctx.strokeRect(x, y, slotSize, slotSize);
+    if (blockId != null && SHAPES[blockId]) drawBlock(ctx, SHAPES[blockId], x + slotSize / 2, y + slotSize / 2, cellSize * 0.3, color);
 }
 
-// =============== PREVIEW BLOCCO (segue il mouse) ===============
+// ==================== PREVIEW BLOCCO ====================
 function renderPiecePreview(ctx) {
-    if (previewBlock === 0) return;
-    const ma2 = margin / 2;
+    if (!previewBlock) return;
     const shape = SHAPES[previewBlock];
     const color = hexaToRGB(colorpreviewBlock);
-    let size = cellSize;
+    const size = cellSize;
 
-    // Calcola la cella attualmente sotto il mouse
     const gx = Math.floor((mouseX - margin) / cellSize);
     const gy = Math.floor((mouseY - margin) / cellSize);
-
     const canPlace = doesFit(previewBlock, gx, gy);
-
-    // Offset per posizionamento (centrato sulla cella in griglia)
     const gridX = gx * cellSize;
     const gridY = gy * cellSize;
+    const offsetX = canPlace ? gridX : mouseX - size / 2;
+    const offsetY = canPlace ? gridY : mouseY - size / 2;
 
-    if (canPlace) {
-        // Mostra snapping sulla cella
-        for (const [dx, dy] of shape) {
-            const x = gridX + dx * size;
-            const y = gridY + dy * size;
-            drawCell(ctx, x, y, size, color);
-        }
-    } else {
-        // Mostra il blocco seguendo il mouse (ma centrato)
-        const offsetX = mouseX - size / 2;
-        const offsetY = mouseY - size / 2;
-        for (const [dx, dy] of shape) {
-            const x = offsetX + dx * size;
-            const y = offsetY + dy * size;
-            drawCell(ctx, x, y, size, color);
-        }
+    for (const [dx, dy] of shape) {
+        drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
     }
 }
 
-
-// =============== UTILITY PER DISEGNARE UN BLOCCO ===============
+// ==================== DRAW BLOCK ====================
 function drawBlock(ctx, shape, cx, cy, size, color) {
-    // Calcola offset come prima
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     for (const [dx, dy] of shape) {
-        if (dx < minX) minX = dx;
-        if (dx > maxX) maxX = dx;
-        if (dy < minY) minY = dy;
-        if (dy > maxY) maxY = dy;
+        if (dx < minX) minX = dx; if (dx > maxX) maxX = dx;
+        if (dy < minY) minY = dy; if (dy > maxY) maxY = dy;
     }
     const width = (maxX - minX + 1) * size;
     const height = (maxY - minY + 1) * size;
     const offsetX = cx - width / 2 - minX * size;
     const offsetY = cy - height / 2 - minY * size;
-
     for (const [dx, dy] of shape) {
-        const x = offsetX + dx * size;
-        const y = offsetY + dy * size;
-        drawCell(ctx, x, y, size, color)
+        drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
     }
 }
 
-
-
-
-// =============== HEXA TO RGBA ===============
+// ==================== HEXA TO RGBA ====================
 export function hexaToRGB(hexa) {
     hexa = hexa.replace('#', '');
     let r, g, b, a = 1;
-
     if (hexa.length === 8) {
         r = parseInt(hexa.substring(0, 2), 16);
         g = parseInt(hexa.substring(2, 4), 16);
@@ -375,9 +280,6 @@ export function hexaToRGB(hexa) {
         r = parseInt(hexa.substring(0, 2), 16);
         g = parseInt(hexa.substring(2, 4), 16);
         b = parseInt(hexa.substring(4, 6), 16);
-    } else {
-        throw new Error("Formato colore non valido: " + hexa);
-    }
-
+    } else throw new Error("Formato colore non valido: " + hexa);
     return { r, g, b, a };
 }
