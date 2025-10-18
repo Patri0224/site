@@ -76,9 +76,10 @@ function loop() {
     } else if (state === GAME) {
         render(ctx);
     }
+/*
     ctx.font = '30px monospace';
     ctx.fillStyle = 'white';
-    ctx.fillText(`FPS: ${fps}`, 60, 30);
+    ctx.fillText(`FPS: ${fps}`, 60, 30);*/
     requestAnimationFrame(loop);
 }
 
