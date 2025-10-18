@@ -24,14 +24,7 @@ export function fastRandomInt(max) {
 }
 export function salvaStato() {
     const stato = {
-        state,
-        score,
-        bestScore,
-        combo,
-        board,
-        availableBlocks,
-        colorAvailableBlocks,
-        colorCells,
+        bestScore
     };
 
     try {
@@ -54,17 +47,17 @@ export function caricaStato() {
     try {
         const json = decodeURIComponent(escape(atob(b64)));
         const stato = JSON.parse(json);
-
-        // Validazione minima
-        if (!stato.board || !Array.isArray(stato.availableBlocks)) {
-            throw new Error("Formato non valido");
-        }
-
-        // Copia i dati nello stato corrente
-        setState(stato.state ?? MENU);
-        setScore(stato.score ?? 0);
+        /*
+                // Validazione minima
+                if (!stato.board || !Array.isArray(stato.availableBlocks)) {
+                    throw new Error("Formato non valido");
+                }
+        
+                // Copia i dati nello stato corrente
+                setState(stato.state ?? MENU);
+                setScore(stato.score ?? 0);*/
         setBestScore(stato.bestScore ?? 0);
-        setCombo(stato.combo ?? 0);
+        /*setCombo(stato.combo ?? 0);
 
         if (!stato.board || !stato.availableBlocks || !stato.colorAvailableBlocks) {
             throw new Error("Formato non valido");
@@ -81,7 +74,7 @@ export function caricaStato() {
         for (let i = 0; i < stato.colorCells.length; i++) {
             setColorCells(i, stato.colorCells[i]);
         }
-
+*/
         console.log("✅ Stato caricato");
         return true;
     } catch (err) {

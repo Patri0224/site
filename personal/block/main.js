@@ -32,13 +32,13 @@ window.addEventListener('resize', resize);
 resize();
 initGrid();
 
-/*
+
 window.addEventListener("beforeunload", salvaStato);
 window.addEventListener("load", () => {
     if (!caricaStato()) {
         console.log("Nessuno stato precedente, avvio nuova simulazione.");
     }
-});*/
+});
 // =================== INPUT MENU ===================
 canvas.addEventListener('mousedown', e => {
     if (state === MENU) {
