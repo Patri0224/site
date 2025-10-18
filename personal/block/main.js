@@ -50,19 +50,38 @@ canvas.addEventListener('mousedown', e => {
         state = GAME;
     }
 });
+let lastFrameTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+let lastFpsUpdate = performance.now();
+
+
 
 // =================== LOOP ===================
 function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const now = performance.now();
+    const delta = now - lastFrameTime;
+    lastFrameTime = now;
 
+    frameCount++;
+    // Update FPS once per second
+    if (now - lastFpsUpdate >= 1000) {
+        fps = frameCount;
+        frameCount = 0;
+        lastFpsUpdate = now;
+    }
     if (state === MENU) {
         renderMenu(ctx);
     } else if (state === GAME) {
         render(ctx);
     }
-
+    ctx.font = '30px monospace';
+    ctx.fillStyle = 'white';
+    ctx.fillText(`FPS: ${fps}`,60, 30);
     requestAnimationFrame(loop);
 }
+
 caricaBestScore();
 loop();
 
