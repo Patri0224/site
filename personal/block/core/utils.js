@@ -1,8 +1,5 @@
-import { MENU, setState, state } from "../main.js";
-import { colors } from "./blocks.js";
-import { board, setBoard } from "./grid.js";
-import { bestScore, combo, score, setBestScore, setCombo, setScore } from "./logic.js";
-import { availableBlocks, colorAvailableBlocks, colorCells, colorpreviewBlock, previewBlock, setAvailbleBlocks, setColorAvailableBlocks, setColorCells, setColorPreviewBlock, setPreviewBlock } from "./render.js";
+
+import { bestScore, setBestScore } from "./logic.js";
 
 //rand seed
 let seed = 123456789;
@@ -22,63 +19,23 @@ export function fastRandom() {
 export function fastRandomInt(max) {
     return Math.floor(fastRandom() * max);
 }
-export function salvaStato() {
-    const stato = {
-        bestScore
-    };
-
+export function salvaBestScore() {
     try {
-        const json = JSON.stringify(stato);
-        const b64 = btoa(unescape(encodeURIComponent(json)));
-        localStorage.setItem("gridState", b64);
-        console.log("💾 Stato salvato");
+        localStorage.setItem("bestScore", bestScore);
+        console.log("💾 Miglior punteggio salvato:", bestScore);
     } catch (err) {
-        console.error("❌ Errore durante il salvataggio:", err);
+        console.error("❌ Errore nel salvataggio del punteggio:", err);
     }
 }
 
-export function caricaStato() {
-    const b64 = localStorage.getItem("gridState");
-    if (!b64) {
-        console.warn("⚠️ Nessuno stato salvato");
-        return false;
-    }
 
-    try {
-        const json = decodeURIComponent(escape(atob(b64)));
-        const stato = JSON.parse(json);
-        /*
-                // Validazione minima
-                if (!stato.board || !Array.isArray(stato.availableBlocks)) {
-                    throw new Error("Formato non valido");
-                }
-        
-                // Copia i dati nello stato corrente
-                setState(stato.state ?? MENU);
-                setScore(stato.score ?? 0);*/
-        setBestScore(stato.bestScore ?? 0);
-        /*setCombo(stato.combo ?? 0);
-
-        if (!stato.board || !stato.availableBlocks || !stato.colorAvailableBlocks) {
-            throw new Error("Formato non valido");
-        }
-
-        // ✅ aggiorna i valori principali tramite setter
-        setBoard(stato.board);
-
-        for (let i = 0; i < stato.availableBlocks.length; i++) {
-            setAvailbleBlocks(i, stato.availableBlocks[i]);
-            setColorAvailableBlocks(i, stato.colorAvailableBlocks[i]);
-        }
-
-        for (let i = 0; i < stato.colorCells.length; i++) {
-            setColorCells(i, stato.colorCells[i]);
-        }
-*/
-        console.log("✅ Stato caricato");
-        return true;
-    } catch (err) {
-        console.error("❌ Errore nel caricamento dello stato:", err);
-        return false;
+export function caricaBestScore() {
+    const val = localStorage.getItem("bestScore");
+    if (val !== null) {
+        setBestScore(parseInt(val));
+        console.log("✅ Miglior punteggio caricato:", bestScore);
+    } else {
+        console.log("⚠️ Nessun best score salvato, partenza da 0");
+        bestScore = 0;
     }
 }

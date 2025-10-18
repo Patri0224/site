@@ -1,7 +1,7 @@
 import { margin } from "../main.js";
 import { colors, SHAPES } from "./blocks.js";
 import { board, cells, cellSize, doesFit, idx, initGrid, W } from "./grid.js";
-import { dragging, mouseX, mouseY } from "./input.js";
+import { mouseX, mouseY } from "./input.js";
 import { bestScore, clearingAnimations, score } from "./logic.js";
 
 
@@ -15,10 +15,7 @@ let lastTime = performance.now();
 export function setColorCells(pos, val) { colorCells[pos] = val; }
 export function getPreviewBlock() { return previewBlock; }
 export function getAvailableBlocks(pos) { return availableBlocks[pos]; }
-export function setPreviewBlock(val) {
-    // if (dragging) return;
-    previewBlock = val; console.log("Preview block:", previewBlock, "Dragging:", dragging);
-}
+export function setPreviewBlock(val) { previewBlock = val; }
 export function setAvailbleBlocks(pos, val) { availableBlocks[pos] = val; }
 export function getColorPreviewBlock() { return colorpreviewBlock; }
 export function getColorAvailableBlocks(pos) { return colorAvailableBlocks[pos]; }
@@ -130,16 +127,16 @@ function drawCell(ctx, x, y, size, color) {
     size -= 2;
 
     // Applica desaturazione
-    const { r, g, b } = color;
+    const { r, g, b, a } = color;
     const gray = (r + g + b) / 3;
     const rS = r * saturation + gray * (1 - saturation);
     const gS = g * saturation + gray * (1 - saturation);
     const bS = b * saturation + gray * (1 - saturation);
 
-    // Colori chiaro/scuro e base
-    const baseColor = `rgba(${rS},${gS},${bS},${color.a})`;
-    const lightColor = `rgba(${Math.min(rS + 40, 255)},${Math.min(gS + 40, 255)},${Math.min(bS + 40, 255)},${color.a})`;
-    const darkColor = `rgba(${Math.max(rS - 40, 0)},${Math.max(gS - 40, 0)},${Math.max(bS - 40, 0)},${color.a})`;
+    // Colori base, chiaro e scuro
+    const baseColor = `rgba(${rS},${gS},${bS},${a})`;
+    const lightColor = `rgba(${Math.min(rS + 40, 255)},${Math.min(gS + 40, 255)},${Math.min(bS + 40, 255)},${a})`;
+    const darkColor = `rgba(${Math.max(rS - 40, 0)},${Math.max(gS - 40, 0)},${Math.max(bS - 40, 0)},${a})`;
 
     // Triangolo chiaro (00,01,10)
     ctx.beginPath();
@@ -147,8 +144,13 @@ function drawCell(ctx, x, y, size, color) {
     ctx.lineTo(x + size, y);
     ctx.lineTo(x, y + size);
     ctx.closePath();
+    ctx.shadowColor = "rgba(0,0,0,0.15)";
+    ctx.shadowBlur = 3;
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
     ctx.fillStyle = lightColor;
     ctx.fill();
+    ctx.shadowColor = "transparent";
 
     // Triangolo scuro (01,10,11)
     ctx.beginPath();
@@ -159,7 +161,7 @@ function drawCell(ctx, x, y, size, color) {
     ctx.fillStyle = darkColor;
     ctx.fill();
 
-    // Linee diagonali
+    // Linee diagonali sottili
     ctx.strokeStyle = "rgba(0,0,0,0.3)";
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -169,13 +171,53 @@ function drawCell(ctx, x, y, size, color) {
     ctx.lineTo(x, y + size);
     ctx.stroke();
 
-    // Quadrato centrale
+    // Quadrato centrale con gradient circolare lucido
     const csize = size * 0.625;
     const cx = x + (size - csize) / 2;
     const cy = y + (size - csize) / 2;
-    ctx.fillStyle = baseColor;
+
+    // Gradient lineare dall’alto a sinistra in basso a destra
+    const gradient = ctx.createLinearGradient(cx, cy, cx + csize, cy + csize);
+    gradient.addColorStop(0, `rgba(${Math.min(rS + 50, 255)},${Math.min(gS + 50, 255)},${Math.min(bS + 50, 255)},1)`);
+    gradient.addColorStop(1, baseColor);
+
+    ctx.fillStyle = gradient;
     ctx.fillRect(cx, cy, csize, csize);
+
+    // Contorno intorno al quadrato centrale
+    ctx.strokeStyle = `rgba(${Math.max(rS - 50, 0)},${Math.max(gS - 50, 0)},${Math.max(bS - 50, 0)},1)`;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(cx, cy, csize, csize);
+
+
+    // Bordo luminoso superiore/sinistro
+    ctx.strokeStyle = `rgba(${Math.min(rS + 60, 255)},${Math.min(gS + 60, 255)},${Math.min(bS + 60, 255)},${a})`;
+    ctx.beginPath();
+    ctx.moveTo(x, y + size);
+    ctx.lineTo(x, y);
+    ctx.lineTo(x + size, y);
+    ctx.stroke();
+
+    // Bordo scuro inferiore/destro
+    ctx.strokeStyle = `rgba(${Math.max(rS - 60, 0)},${Math.max(gS - 60, 0)},${Math.max(bS - 60, 0)},${a})`;
+    ctx.beginPath();
+    ctx.moveTo(x + size, y);
+    ctx.lineTo(x + size, y + size);
+    ctx.lineTo(x, y + size);
+    ctx.stroke();
+
+    // Piccoli dettagli geometrici negli angoli
+    // Dimensione dei puntini
+    const dotSize = size * 0.08;
+
+    // Puntino in alto a sinistra
+    ctx.fillStyle = "rgba(255,255,255,0.3)";
+    ctx.fillRect(x + size * 0.15, y + size * 0.15, dotSize, dotSize);
+
+    // Puntino in basso a destra
+
 }
+
 
 
 

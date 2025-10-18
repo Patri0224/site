@@ -26,12 +26,13 @@ export function insertBlock(block, x, y) {
 }
 
 export function initGrid() {
+    board = new Uint8Array(cells * cells);
     board.fill(0);
 
 }
 
 export function resizeGrid(width, height) {
-    board = new Uint8Array(cells * cells);
+
     if (width > height) {
         W = Math.min(height, width * 3 / 4) - margin;
         cellSize = W / cells;

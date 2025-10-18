@@ -1,10 +1,7 @@
 // input.js
-import { margin } from "../main.js";
-import { SHAPES } from "./blocks.js";
 import { cells, cellSize, doesFit, insertBlock, W } from "./grid.js";
 import {
     setPreviewBlock,
-    getPreviewBlock,
     getAvailableBlocks,
     setAvailbleBlocks,
     setColorPreviewBlock,

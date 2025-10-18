@@ -13,11 +13,10 @@ export function setBestScore(val) { bestScore = val; }
 export function setCombo(val) { combo = val; }
 export function blockInserted(blockId) {
     if (!blockId || !board) return;
-
     const shape = SHAPES[blockId];
     if (!shape) return;
 
-    // 1️⃣ punti base: 1 punto per ogni cella del pezzo
+    // 1️⃣ punti base: più celle nel pezzo → più punti
     const basePoints = shape.length;
     score += basePoints;
 
@@ -25,19 +24,11 @@ export function blockInserted(blockId) {
     let clearedRows = [];
     let clearedCols = [];
 
-    // righe
     for (let row = 0; row < cells; row++) {
-        let full = true;
-        for (let col = 0; col < cells; col++) {
-            if (board[idx(col, row)] === 0) {
-                full = false;
-                break;
-            }
+        if (board.slice(row * cells, row * cells + cells).every(v => v !== 0)) {
+            clearedRows.push(row);
         }
-        if (full) clearedRows.push(row);
     }
-
-    // colonne
     for (let col = 0; col < cells; col++) {
         let full = true;
         for (let row = 0; row < cells; row++) {
@@ -50,34 +41,43 @@ export function blockInserted(blockId) {
     }
 
     // 3️⃣ svuota righe e colonne e assegna punti bonus
-    const rowPoints = 10; // punti per ogni riga
-    const colPoints = 10; // punti per ogni colonna
+    const rowBase = 10;
+    const colBase = 10;
 
-    // combo multiplier: +0.5 per ogni riga/colonna extra nella stessa mossa
-    let multiplier = 1 + (clearedRows.length + clearedCols.length - 1) * 0.5 + 1 / 10 * combo;
+    // Combina bonus per righe + colonne: più ce ne sono in un turno, più punti
+    const comboMultiplier = 1 + (clearedRows.length + clearedCols.length - 1) * 0.5;
+    const consecutiveBonus = 1 + combo * 0.3; // bonus extra per combo di turni consecutivi
+
+    // svuota righe
     clearedRows.forEach(row => {
-        score += rowPoints * multiplier;
         for (let col = 0; col < cells; col++) {
             const i = idx(col, row);
-            clearingAnimations.push({ progress: 0, x: col,y: row, color: colorCells[i] });
+            clearingAnimations.push({ progress: 0, x: col, y: row, color: colorCells[i] });
             board[i] = 0;
         }
+        score += rowBase * comboMultiplier * consecutiveBonus;
     });
+
+    // svuota colonne
     clearedCols.forEach(col => {
-        score += colPoints * multiplier;
         for (let row = 0; row < cells; row++) {
             const i = idx(col, row);
             clearingAnimations.push({ progress: 0, x: col, y: row, color: colorCells[i] });
             board[i] = 0;
         }
+        score += colBase * comboMultiplier * consecutiveBonus;
     });
 
+    // Aggiorna combo: più righe/colonne in un turno → combo maggiore
+    combo = (clearedRows.length + clearedCols.length) * 1.5;
 
-    // aggiorna combo
-    combo = clearedRows.length + clearedCols.length / 2;
+    // Salva bestScore immediatamente se superato
+    if (score > bestScore) bestScore = score;
+
     controlAvaible();
     checkAvailableBlocksFit();
 }
+
 
 
 // Genera un blocco casuale dato un range di difficoltà

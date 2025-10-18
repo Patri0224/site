@@ -1,7 +1,7 @@
 import { initGrid, resizeGrid } from './core/grid.js';
 import { bestScore, controlAvaible, setScore } from './core/logic.js';
 import { render, setAvailbleBlocks } from './core/render.js'; // drawText è una funzione helper per disegnare testo
-import { caricaStato, salvaStato } from './core/utils.js';
+import { caricaBestScore, salvaBestScore } from './core/utils.js';
 export const margin = window.innerWidth / 100;
 export let CW, CH;
 const canvas = document.getElementById('canvas');
@@ -17,6 +17,7 @@ export function gameOver() {
     setAvailbleBlocks(1, 0);
     setAvailbleBlocks(2, 0);
     controlAvaible(); // resetta i blocchi disponibili
+    salvaBestScore();
 }
 
 function resize() {
@@ -33,9 +34,9 @@ resize();
 initGrid();
 
 
-window.addEventListener("beforeunload", salvaStato);
+window.addEventListener("beforeunload", salvaBestScore);
 window.addEventListener("load", () => {
-    if (!caricaStato()) {
+    if (!caricaBestScore()) {
         console.log("Nessuno stato precedente, avvio nuova simulazione.");
     }
 });
@@ -62,7 +63,7 @@ function loop() {
 
     requestAnimationFrame(loop);
 }
-
+caricaBestScore();
 loop();
 
 // =================== RENDER MENU ===================
