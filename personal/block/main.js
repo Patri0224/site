@@ -34,7 +34,6 @@ window.addEventListener('resize', resize);
 resize();
 initGrid();
 
-
 window.addEventListener("beforeunload", salvaBestScore);
 window.addEventListener("load", () => {
     if (!caricaBestScore()) {

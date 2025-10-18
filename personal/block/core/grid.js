@@ -3,6 +3,9 @@ import { cells, MAX, MIN, SHAPES } from "./blocks.js";
 import { blockInserted } from "./logic.js";
 import { getColorPreviewBlock, setCellSize, setColorCells } from "./render.js";
 export let W, cellSize, board;// { type: 'row'|'col', index, progress }
+ // inizialmente tutte da disegnare
+
+
 export function setBoard(val) {
     board.splice(0, board.length, ...val);
 }
@@ -18,8 +21,9 @@ export function doesFit(block, x, y) {
 }
 export function insertBlock(block, x, y) {
     for (const [dx, dy] of SHAPES[block]) {
-        board[idx(x + dx, y + dy)] = 1;
-        setColorCells(idx(x + dx, y + dy), getColorPreviewBlock())
+        const i = idx(x + dx, y + dy);
+        board[i] = 1;
+        setColorCells(i, getColorPreviewBlock());
     }
     blockInserted(block);
 }
