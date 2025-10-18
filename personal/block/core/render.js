@@ -164,6 +164,7 @@ function renderGrid(ctx, delta) {
         let colore = hexaToRGB(anim.color);
         colore.a = fade;
         drawCell(ctx, anim.x * cellSize + ma2, anim.y * cellSize + ma2, cellSize, colore);
+        ctx.globalAlpha = 1;
     }
     // Rimuovi gli elementi completati
     for (let i = clearingAnimations.length - 1; i >= 0; i--) {
