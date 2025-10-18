@@ -4,6 +4,9 @@ import { blockInserted } from "./logic.js";
 import { getColorPreviewBlock, setColorCells } from "./render.js";
 export const cells = 8;
 export let W, cellSize, board;// { type: 'row'|'col', index, progress }
+export function setBoard(val) {
+    board.splice(0, board.length, ...val);
+}
 export function idx(x, y) { return y * cells + x; }
 export function inBounds(x, y) { return x >= 0 && x < cells && y >= 0 && y < cells; }
 export function doesFit(block, x, y) {

@@ -10,6 +10,7 @@ export let bestScore = 0;
 export let clearingAnimations = [];
 export function setScore(val) { score = val; }
 export function setBestScore(val) { bestScore = val; }
+export function setCombo(val) { combo = val; }
 export function blockInserted(blockId) {
     if (!blockId || !board) return;
 
@@ -125,7 +126,7 @@ export function controlAvaible() {
     // assegna ai 3 slot
     for (let i = 0; i < 3; i++) {
         setAvailbleBlocks(i, newBlocks[i]);
-        setColorAvailableBlocks(i, colors[fastRandomInt(4) + 2]);
+        setColorAvailableBlocks(i, colors[fastRandomInt(4) + 3]);
     }
 }
 export function checkAvailableBlocksFit() {

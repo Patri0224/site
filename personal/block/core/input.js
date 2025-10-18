@@ -1,7 +1,7 @@
 // input.js
 import { margin } from "../main.js";
 import { SHAPES } from "./blocks.js";
-import { cells, cellSize, doesFit, insertBlock } from "./grid.js";
+import { cells, cellSize, doesFit, insertBlock, W } from "./grid.js";
 import {
     setPreviewBlock,
     getPreviewBlock,
@@ -59,33 +59,33 @@ function updatePointer(clientX, clientY) {
 
 function handlePointerDown(clientX, clientY) {
     updatePointer(clientX, clientY);
-
+    if (dragging) return;
     const slotIndex = checkClickOnOptions(mouseX, mouseY);
     if (slotIndex >= 0) {
         // Inizio trascinamento da uno slot
-        dragging = true;
         draggedBlock = getAvailableBlocks(slotIndex);
+        if (draggedBlock === 0) return;
+        dragging = true;
         draggedSlotIndex = slotIndex;
         setPreviewBlock(draggedBlock);
         setColorPreviewBlock(getColorAvailableBlocks(slotIndex));
         setAvailbleBlocks(slotIndex, 0); // slot temporaneamente vuoto
         return;
     }
-
-    // Se cliccato sulla griglia e c’è un blocco selezionato
-    const gx = Math.floor(mouseX / cellSize);
-    const gy = Math.floor(mouseY / cellSize);
-    const pb = getPreviewBlock();
-    if (pb !== 0 && doesFit(pb, gx, gy)) {
-        insertBlock(pb, gx, gy);
-        setPreviewBlock(0);
-    }
+    /*
+        // Se cliccato sulla griglia e c’è un blocco selezionato
+        const gx = Math.floor(mouseX / cellSize);
+        const gy = Math.floor(mouseY / cellSize);
+        const pb = getPreviewBlock();
+        if (pb !== 0 && doesFit(pb, gx, gy)) {
+            insertBlock(pb, gx, gy);
+            setPreviewBlock(0);
+        }*/
 }
 
 function handlePointerUp(clientX, clientY) {
     updatePointer(clientX, clientY);
-    if (!dragging) return;
-
+    if (!dragging || draggedBlock === 0) return;
     dragging = false;
 
     const gx = Math.floor(mouseX / cellSize);
@@ -107,31 +107,57 @@ function handlePointerUp(clientX, clientY) {
 
 // =================== CHECK CLICK SU BLOCCO OPZIONE ===================
 function checkClickOnOptions(mx, my) {
-    const slotSize = cellSize * 2.5;
-    const gap = 20;
+    const slotSize = cellSize * 1.8; // deve essere lo stesso del render
+    const margin = 20;
     const isLandscape = canvas.width > canvas.height;
 
     let startX, startY;
 
     if (isLandscape) {
-        startX = cells * cellSize + gap;
-        startY = (canvas.height - (slotSize * 4 + gap * 3)) / 2;
+        // modalità orizzontale → opzioni a destra
+        startX = cells * cellSize + margin;
+        startY = (W - (slotSize * 4 + margin * 2)) / 2; // 3 blocchi + slot score
 
+        // 3 slot dei blocchi
         for (let i = 0; i < 3; i++) {
             const x = startX;
-            const y = startY + i * (slotSize + gap);
-            if (mx >= x && mx <= x + slotSize && my >= y && my <= y + slotSize) return i;
+            const y = startY + i * (slotSize + margin);
+            if (mx >= x && mx <= x + slotSize && my >= y && my <= y + slotSize) {
+                return i;
+            }
         }
-    } else {
-        startX = (canvas.width - (slotSize * 4 + gap * 3)) / 2;
-        startY = cells * cellSize + gap;
 
+        // slot punteggio (non selezionabile)
+        const yScore = startY + 3 * (slotSize + margin);
+        const xScore = startX;
+        if (mx >= xScore && mx <= xScore + slotSize && my >= yScore && my <= yScore + slotSize) {
+            console.log("Click sullo slot punteggio");
+            return -1;
+        }
+
+    } else {
+        // modalità verticale → opzioni in basso
+        startX = (W - (slotSize * 4 + margin * 3)) / 2;
+        startY = cells * cellSize + margin;
+
+        // 3 slot dei blocchi
         for (let i = 0; i < 3; i++) {
-            const x = startX + i * (slotSize + gap);
+            const x = startX + i * (slotSize + margin);
             const y = startY;
-            if (mx >= x && mx <= x + slotSize && my >= y && my <= y + slotSize) return i;
+            if (mx >= x && mx <= x + slotSize && my >= y && my <= y + slotSize) {
+                return i;
+            }
+        }
+
+        // slot punteggio (non selezionabile)
+        const xScore = startX + 3 * (slotSize + margin);
+        const yScore = startY;
+        if (mx >= xScore && mx <= xScore + slotSize && my >= yScore && my <= yScore + slotSize) {
+            console.log("Click sullo slot punteggio");
+            return -1;
         }
     }
 
     return -1;
 }
+
