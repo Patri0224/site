@@ -1,9 +1,9 @@
 import { margin } from "../main.js";
 import { cells, MAX, MIN, SHAPES } from "./blocks.js";
 import { blockInserted } from "./logic.js";
-import { getColorPreviewBlock, setCellSize, setColorCells } from "./render.js";
+import { getColorPreviewBlock, precompileCells, setCellSize, setColorCells } from "./render.js";
 export let W, cellSize, board;// { type: 'row'|'col', index, progress }
- // inizialmente tutte da disegnare
+// inizialmente tutte da disegnare
 
 
 export function setBoard(val) {
@@ -34,7 +34,7 @@ export function initGrid() {
 
 }
 
-export function resizeGrid(width, height) {
+export function resizeGrid(width, height, ctx) {
 
     if (width > height) {
         W = Math.min(height, width * 3 / 4) - margin;
@@ -44,5 +44,7 @@ export function resizeGrid(width, height) {
         cellSize = W / cells;
     }
     setCellSize(cellSize);
+
+    precompileCells(ctx, cellSize);
 
 }

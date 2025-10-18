@@ -37,6 +37,29 @@ function getGradient(ctx, color, alpha) {
     }
     return gradientCache[key];
 }
+// ==================== PRECOMPILA CELLE ====================
+
+const precompiledCells = {};
+
+export function precompileCells(ctx, size = cellSize) {
+    for (const colorHex of colors.slice(3, 7)) { // scegli tu quanti
+        const color = hexaToRGB(colorHex);
+
+        // Crea un canvas temporaneo per la cella
+        const off = document.createElement('canvas');
+        off.width = size;
+        off.height = size;
+        const offCtx = off.getContext('2d');
+
+        // Disegna la cella come nel drawCell originale
+        drawCell(offCtx, 0, 0, size, color);
+
+        // Crea un ImageBitmap (più veloce di <canvas>)
+        createImageBitmap(off).then(img => {
+            precompiledCells[colorHex] = img;
+        });
+    }
+}
 
 // ==================== PRECOMPUTE POSITIONS ====================
 let ma2 = 0;
@@ -82,8 +105,16 @@ function renderGrid(ctx, delta) {
         for (let x = 0; x < cells; x++) {
             const i = idx(x, y);
             if (board[i] === 1) {
-                const c = hexaToRGB(colorCells[i]);
-                drawCell(ctx, cellPositions[x], cellPositions[y], cellSize, c);
+                const colorHex = colorCells[i];
+                const img = precompiledCells[colorHex];
+                if (img) {
+                    ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);
+                } else {
+                    // fallback finché l'immagine non è pronta
+                    const c = hexaToRGB(colorHex);
+                    drawCell(ctx, cellPositions[x], cellPositions[y], cellSize, c);
+                }
+
             }
         }
     }

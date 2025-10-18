@@ -1,6 +1,6 @@
 import { initGrid, resizeGrid } from './core/grid.js';
 import { bestScore, controlAvaible, setScore } from './core/logic.js';
-import { render, setAvailbleBlocks, setMa2 } from './core/render.js'; // drawText è una funzione helper per disegnare testo
+import { precompileCells, render, setAvailbleBlocks, setMa2 } from './core/render.js'; // drawText è una funzione helper per disegnare testo
 import { caricaBestScore, salvaBestScore } from './core/utils.js';
 export const margin = window.innerWidth / 100;
 export let CW, CH;
@@ -26,7 +26,7 @@ function resize() {
     CW = canvas.width;
     CH = canvas.height;
     canvas.style.margin = margin + "px";
-    resizeGrid(canvas.width, canvas.height);
+    resizeGrid(canvas.width, canvas.height,ctx);
     setMa2(margin);
 }
 
