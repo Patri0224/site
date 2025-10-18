@@ -40,6 +40,7 @@ function getGradient(ctx, color, alpha) {
 // ==================== PRECOMPILA CELLE ====================
 
 const precompiledCells = {};
+const precompiledCellsOption = {};
 
 export function precompileCells(ctx, size = cellSize) {
     for (const colorHex of colors.slice(3, 7)) { // scegli tu quanti
@@ -57,6 +58,23 @@ export function precompileCells(ctx, size = cellSize) {
         // Crea un ImageBitmap (più veloce di <canvas>)
         createImageBitmap(off).then(img => {
             precompiledCells[colorHex] = img;
+        });
+    }
+    for (const colorHex of colors.slice(3, 7)) { // scegli tu quanti
+        const color = hexaToRGB(colorHex);
+
+        // Crea un canvas temporaneo per la cella
+        const off = document.createElement('canvas');
+        off.width = size * 0.3;
+        off.height = size * 0.3;
+        const offCtx = off.getContext('2d');
+
+        // Disegna la cella come nel drawCell originale
+        drawCell(offCtx, 0, 0, size * 0.3, color);
+
+        // Crea un ImageBitmap (più veloce di <canvas>)
+        createImageBitmap(off).then(img => {
+            precompiledCellsOption[colorHex] = img;
         });
     }
 }
@@ -231,7 +249,7 @@ function renderOption(ctx) {
         for (let i = 0; i < 3; i++) {
             const y = startY + i * (slotSize + margin);
             const x = startX;
-            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], hexaToRGB(colorAvailableBlocks[i]));
+            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], colorAvailableBlocks[i]);
         }
         drawScoreSlot(ctx, startX, startY + 3 * (slotSize + margin), slotSize);
     } else {
@@ -240,7 +258,7 @@ function renderOption(ctx) {
         for (let i = 0; i < 3; i++) {
             const x = startX + i * (slotSize + margin);
             const y = startY;
-            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], hexaToRGB(colorAvailableBlocks[i]));
+            drawOptionSlot(ctx, x, y, slotSize, availableBlocks[i], colorAvailableBlocks[i]);
         }
         drawScoreSlot(ctx, startX + 3 * (slotSize + margin), startY, slotSize);
     }
@@ -257,7 +275,8 @@ function drawScoreSlot(ctx, x, y, size) {
 }
 
 function drawOptionSlot(ctx, x, y, slotSize, blockId, color) {
-    ctx.strokeStyle = `rgba(${color.r},${color.g},${color.b},0.6)`;
+    let colord = hexaToRGB(color);
+    ctx.strokeStyle = `rgba(${colord.r},${colord.g},${colord.b},0.6)`;
     ctx.lineWidth = 2; ctx.strokeRect(x, y, slotSize, slotSize);
     if (blockId != null && SHAPES[blockId]) drawBlock(ctx, SHAPES[blockId], x + slotSize / 2, y + slotSize / 2, cellSize * 0.3, color);
 }
@@ -278,7 +297,12 @@ function renderPiecePreview(ctx) {
     const offsetY = canPlace ? gridY : mouseY - size / 2;
 
     for (const [dx, dy] of shape) {
-        drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
+        const img = precompiledCells[colorpreviewBlock];
+        if (img) {
+            ctx.drawImage(img, offsetX + dx * size, offsetY + dy * size, size, size);
+        } else {
+            drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
+        }
     }
 }
 
@@ -294,7 +318,12 @@ function drawBlock(ctx, shape, cx, cy, size, color) {
     const offsetX = cx - width / 2 - minX * size;
     const offsetY = cy - height / 2 - minY * size;
     for (const [dx, dy] of shape) {
-        drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
+        const img = precompiledCellsOption[color];
+        if (img) {
+            ctx.drawImage(img, offsetX + dx * size, offsetY + dy * size, size, size);
+        } else {
+            drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, hexaToRGB(color));
+        }
     }
 }
 
