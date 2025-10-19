@@ -126,7 +126,10 @@ function renderGrid(ctx, delta) {
                 const colorHex = colorCells[i];
                 const img = precompiledCells[colorHex];
                 if (img) {
+                    ctx.filter = `saturate(${saturation})`;
                     ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);
+                    ctx.filter = 'none';
+
                 } else {
                     // fallback finché l'immagine non è pronta
                     const c = hexaToRGB(colorHex);
@@ -289,8 +292,8 @@ function renderPiecePreview(ctx) {
     const color = hexaToRGB(colorpreviewBlock);
     const size = cellSize;
 
-    const gx = Math.floor((mouseX - margin) / cellSize);
-    const gy = Math.floor((mouseY - margin) / cellSize);
+    const gx = Math.floor((mouseX) / cellSize);
+    const gy = Math.floor((mouseY) / cellSize);
     const canPlace = doesFit(previewBlock, gx, gy);
     const gridX = gx * cellSize;
     const gridY = gy * cellSize;

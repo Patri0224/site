@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+    background: linear-gradient(160deg, #1db954, #121212);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.3em;
+}
+
+.subtitle {
+    color: #ccc;
+    margin-bottom: 2em;
+}
+
+.menu button {
+    display: block;
+    width: 220px;
+    margin: 0.5em auto;
+    padding: 0.8em;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 12px;
+    background-color: #282828;
+    color: white;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.menu button:hover {
+    background-color: #1db954;
+    transform: scale(1.05);
+}

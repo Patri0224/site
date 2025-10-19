@@ -157,7 +157,7 @@ export function checkAvailableBlocksFit() {
             }
             risaturate();
             gameOver();
-        }, 500);
+        }, 2200);
     }
 
     // eventualmente si può chiamare initGrid() o mostrare un popup
