@@ -180,7 +180,7 @@ function animateClocks(timestamp) {
     if (!animateClocks.last) animateClocks.last = timestamp;
     const dt = (timestamp - animateClocks.last) / 1000;
     animateClocks.last = timestamp;
-
+    if (dt > 0.1) dt = 0.1;
     let i = 0;
     miniClocks.forEach(mc => {
         const hTarget = mc.targetH;
