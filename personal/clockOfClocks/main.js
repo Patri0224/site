@@ -196,7 +196,7 @@ function animateClocks(timestamp) {
 
         // --- Aggiungiamo velocità effettiva graduale
         if (mc.currentSpeed === undefined) mc.currentSpeed = targetSpeed; // inizializza
-        const smoothFactor = 1.1; // più alto = più reattivo (2-5 ideale)
+        const smoothFactor = 1; // più alto = più reattivo (2-5 ideale)
         mc.currentSpeed += (targetSpeed - mc.currentSpeed) * dt * smoothFactor;
 
         const speed = mc.currentSpeed; // usa la velocità smussata
