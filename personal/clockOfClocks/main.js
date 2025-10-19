@@ -153,7 +153,7 @@ function createDigit(digit, index) {
     if (index === 1 || index === 3) {
         const sep = document.createElement("div");
         sep.className = "separator";
-        sep.textContent = ":";
+        sep.textContent = "";
         app.appendChild(sep);
     }
 
@@ -178,7 +178,7 @@ function setTargets() {
 
 function animateClocks(timestamp) {
     if (!animateClocks.last) animateClocks.last = timestamp;
-    const dt = (timestamp - animateClocks.last) / 1000;
+    let dt = (timestamp - animateClocks.last) / 1000;
     animateClocks.last = timestamp;
     if (dt > 0.1) dt = 0.1;
     let i = 0;
@@ -191,7 +191,7 @@ function animateClocks(timestamp) {
         if (i > 24 * 4) targetSpeed = fastSpeed;
 
         const isTargetE = (hTarget % 360) === E.h && (mTarget % 360) === E.m;
-        if (i > 24 * 4 && isTargetE) targetSpeed /= 4;
+        if (i > 24 * 4 && isTargetE) targetSpeed /= 6;
         i++;
 
         // --- Aggiungiamo velocità effettiva graduale
@@ -211,7 +211,7 @@ function animateClocks(timestamp) {
         mc.hour.style.transform = `rotate(${mc.currentH}deg)`;
 
         if (isTargetE) {
-            mc.currentM += speed * dt * 1.5;
+            mc.currentM += speed * dt * 1.7;
         } else if (Math.abs(mTarget - mc.currentM) > 0.1) {
             mc.currentM += speed * dt;
             if (mc.currentM > mTarget) mc.currentM = mTarget;
@@ -222,6 +222,42 @@ function animateClocks(timestamp) {
     requestAnimationFrame(animateClocks);
 }
 
+function resizeDigits() {
+    const appWidth = window.innerWidth;
+    const digits = document.querySelectorAll('.digit');
+
+    digits.forEach(d => {
+        const digitSize = appWidth * 0.14; // 14% dello schermo
+        d.style.width = `${digitSize}px`;
+        d.style.gap = `${appWidth * 0.001}px`;
+
+        const clocks = d.querySelectorAll('.clock');
+        clocks.forEach(clock => {
+            clock.style.width = '100%';
+            clock.style.height = '100%';
+
+            const hour = clock.querySelector('.hour');
+            const minute = clock.querySelector('.minute');
+
+            // Scala le lancette proporzionalmente alla cifra
+            hour.style.width = `${digitSize * 0.09}px`;
+            hour.style.height = `${digitSize * 0.012}px`;
+            hour.style.top = "50%";
+            hour.style.left = "50%";
+            hour.style.transformOrigin = "0% 50%";
+
+            minute.style.width = `${digitSize * 0.12}px`;
+            minute.style.height = `${digitSize * 0.012}px`;
+            minute.style.top = "50%";
+            minute.style.left = "50%";
+            minute.style.transformOrigin = "0% 50%"; // leggermente più spessa
+        });
+    });
+}
+
+// Applica subito e ogni volta che cambia la dimensione
+resizeDigits();
+window.addEventListener('resize', resizeDigits);
 
 // Aggiorna target ogni secondo
 setInterval(setTargets, 1000);
