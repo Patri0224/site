@@ -200,7 +200,7 @@ function drawCell(ctx, x, y, size, color) {
 
     ctx.strokeStyle = `rgba(0,0,0,0.3)`;
     ctx.lineWidth = 1;
-    ctx.strokeRect(cx, cy, csize, csize);
+    ctx.strokeRect(x, y, size, size);
     // quadrato centrale
     const csize = size * 0.625;
     const cx = x + (size - csize) / 2;
