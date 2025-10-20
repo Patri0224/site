@@ -197,9 +197,7 @@ function drawCell(ctx, x, y, size, color) {
     // triangoli
     ctx.beginPath();
     ctx.moveTo(x, y); ctx.lineTo(x + size, y); ctx.lineTo(x, y + size); ctx.closePath();
-    ctx.shadowColor = "rgba(0,0,0,0.15)"; ctx.shadowBlur = 3; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
     ctx.fillStyle = lightColor; ctx.fill();
-    ctx.shadowColor = "transparent";
 
     ctx.beginPath();
     ctx.moveTo(x + size, y); ctx.lineTo(x, y + size); ctx.lineTo(x + size, y + size); ctx.closePath();
@@ -217,10 +215,9 @@ function drawCell(ctx, x, y, size, color) {
     const csize = size * 0.625;
     const cx = x + (size - csize) / 2;
     const cy = y + (size - csize) / 2;
-    const gradient = getGradient(ctx, { r: rS, g: gS, b: bS }, a);
     // Applica fade dell'animazione
     ctx.globalAlpha = a;  // 'a' qui è il fade del clearingAnimation
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = `rgba(${rS},${gS},${bS},${a})`;
     ctx.fillRect(cx, cy, csize, csize);
     ctx.strokeStyle = `rgba(${Math.max(rS - 50, 0)},${Math.max(gS - 50, 0)},${Math.max(bS - 50, 0)},${a})`;
     ctx.lineWidth = 1;
