@@ -92,10 +92,11 @@ const digits = [
 
 function getTimeDigits() {
     const now = new Date();
+    const future = new Date(now.getTime() + 7 * 1000);
     // solo ore e minuti
     return [
         ...String(now.getHours()).padStart(2, "0"),
-        ...String(now.getMinutes()).padStart(2, "0"),
+        ...String(future.getMinutes() % 60).padStart(2, "0"),
         ...String(now.getSeconds()).padStart(2, "0")
     ].map(Number);
 }
@@ -108,7 +109,7 @@ function normalizeClockwise(next, prev) {
 
 const app = document.getElementById("app");
 const miniClocks = [];
-const slowSpeed = 12;   // 12 gradi/sec = 360 gradi in 30 sec
+const slowSpeed = 36;   // 36 gradi/sec = 360 gradi in 10 sec
 const fastSpeed = 480;       // stesso: 1 minuto per andare al target
 
 function createClock(h, m) {
@@ -233,8 +234,8 @@ function resizeDigits() {
 
         const clocks = d.querySelectorAll('.clock');
         clocks.forEach(clock => {
-            clock.style.width = '100%';
-            clock.style.height = '100%';
+            clock.style.width = '99%';
+            clock.style.height = '99%';
 
             const hour = clock.querySelector('.hour');
             const minute = clock.querySelector('.minute');
