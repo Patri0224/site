@@ -80,7 +80,6 @@ let lastFpsUpdate = performance.now();
 
 // =================== LOOP ===================
 function loop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     const now = performance.now();
     const delta = now - lastFrameTime;
     lastFrameTime = now;
@@ -109,6 +108,8 @@ loop();
 
 // =================== RENDER MENU ===================
 function renderMenu(ctx) {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#161616';
     ctx.fillRect(0, 0, CW, CH);
 

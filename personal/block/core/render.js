@@ -24,7 +24,9 @@ export function setColorAvailableBlocks(pos, val) { colorAvailableBlocks[pos] = 
 const bgRGB = hexaToRGB(colors[0]);
 const gridCRGB = hexaToRGB(colors[1]);
 const gridLRGB = hexaToRGB(colors[2]);
-
+let lastRenderTime = 0;
+const targetFPS = 30;
+const frameDuration = 1000 / targetFPS;
 // ==================== PRECOMPILA CELLE ====================
 
 const precompiledCells = {};
@@ -89,7 +91,12 @@ export function render(ctx) {
     const now = performance.now();
     const delta = (now - lastTime) / 1000;
     lastTime = now;
+    const deltaTime = now - lastRenderTime;
 
+    if (deltaTime < frameDuration) return; // skip se non è ancora il momento del prossimo frame
+    lastRenderTime = now;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderGrid(ctx, delta);
     renderOption(ctx);
     renderPiecePreview(ctx);
@@ -165,7 +172,7 @@ export function desaturate() {
     requestAnimationFrame(step);
 }
 export function risaturate() {
-    const step = () => { saturation = 1; };
+    const step = () => { saturation = Math.min(1, saturation + 0.02); if (saturation < 1) requestAnimationFrame(step); };
     requestAnimationFrame(step);
 }
 
