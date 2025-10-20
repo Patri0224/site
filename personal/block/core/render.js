@@ -185,7 +185,7 @@ function drawCell(ctx, x, y, size, color) {
     // triangoli
     ctx.fillStyle = lightColor;
     ctx.fillRect(x, y, size, size);
-
+/*
     ctx.beginPath();
     ctx.moveTo(x + size, y); ctx.lineTo(x, y + size); ctx.lineTo(x + size, y + size); ctx.closePath();
     ctx.fillStyle = darkColor; ctx.fill();
