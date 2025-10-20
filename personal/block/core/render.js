@@ -113,9 +113,8 @@ function renderGrid(ctx, delta) {
         for (let x = 0; x < cells; x++) {
             const i = idx(x, y);
             if (board[i] === 1) {
-                /*const img = precompiledCells[colorCells[i]];
-                if (img) ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);*/
-                drawCell(ctx, cellPositions[x], cellPositions[y], cellSize, hexaToRGB(colorCells[i]));
+                const img = precompiledCells[colorCells[i]];
+                if (img) ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);
             }
         }
     }
@@ -184,9 +183,8 @@ function drawCell(ctx, x, y, size, color) {
     const darkColor = `rgba(${Math.max(rS - 40, 0)},${Math.max(gS - 40, 0)},${Math.max(bS - 40, 0)},${a})`;
 
     // triangoli
-    ctx.beginPath();
-    ctx.moveTo(x, y); ctx.lineTo(x + size, y); ctx.lineTo(x, y + size); ctx.closePath();
-    ctx.fillStyle = lightColor; ctx.fill();
+    ctx.fillStyle = lightColor;
+    ctx.fillRect(x, y, size, size);
 
     ctx.beginPath();
     ctx.moveTo(x + size, y); ctx.lineTo(x, y + size); ctx.lineTo(x + size, y + size); ctx.closePath();
@@ -200,23 +198,26 @@ function drawCell(ctx, x, y, size, color) {
     ctx.moveTo(x + size, y); ctx.lineTo(x, y + size);
     ctx.stroke();
 
+    ctx.strokeStyle = `rgba(0,0,0,0.3)`;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(cx, cy, csize, csize);
     // quadrato centrale
     const csize = size * 0.625;
     const cx = x + (size - csize) / 2;
     const cy = y + (size - csize) / 2;
     // Applica fade dell'animazione
-    ctx.globalAlpha = a;  // 'a' qui è il fade del clearingAnimation
+    //ctx.globalAlpha = a;  // 'a' qui è il fade del clearingAnimation
     ctx.fillStyle = baseColor;
     ctx.fillRect(cx, cy, csize, csize);
     ctx.strokeStyle = `rgba(${Math.max(rS - 50, 0)},${Math.max(gS - 50, 0)},${Math.max(bS - 50, 0)},${a})`;
     ctx.lineWidth = 1;
     ctx.strokeRect(cx, cy, csize, csize);
-
-    // dettagli angoli
-    const dotSize = size * 0.08;
-    ctx.fillStyle = "rgba(255,255,255,0.3)";
-    ctx.fillRect(x + size * 0.2, y + size * 0.2, dotSize, dotSize);
-    ctx.fillRect(x + size * 0.75, y + size * 0.75, dotSize, dotSize);
+    /*
+        // dettagli angoli
+        const dotSize = size * 0.08;
+        ctx.fillStyle = "rgba(255,255,255,0.3)";
+        ctx.fillRect(x + size * 0.2, y + size * 0.2, dotSize, dotSize);
+        ctx.fillRect(x + size * 0.75, y + size * 0.75, dotSize, dotSize);*/
 }
 
 // ==================== OPZIONI BLOCCO ====================
