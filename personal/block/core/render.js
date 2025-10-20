@@ -117,10 +117,10 @@ function renderGrid(ctx, delta) {
     // sfondo griglia
     ctx.fillStyle = `rgba(${bgRGB.r},${bgRGB.g},${bgRGB.b},${bgRGB.a})`;
     ctx.fillRect(ma2, ma2, cells * cellSize, cells * cellSize);
-
-    ctx.save();
-    ctx.filter = `saturate(${saturation})`;
-
+    if (saturation === 1) {
+        ctx.save();
+        ctx.filter = `saturate(${saturation})`;
+    }
     for (let y = 0; y < cells; y++) {
         for (let x = 0; x < cells; x++) {
             const i = idx(x, y);
@@ -131,7 +131,7 @@ function renderGrid(ctx, delta) {
         }
     }
 
-    ctx.restore();
+    if (saturation === 1) ctx.restore();
 
     // linee griglia
     ctx.lineWidth = 1.2;
@@ -177,7 +177,7 @@ export function desaturate() {
     requestAnimationFrame(step);
 }
 export function risaturate() {
-    const step = () => { saturation = Math.min(1, saturation + 0.02); if (saturation < 1) requestAnimationFrame(step); };
+    const step = () => { saturation = 1; };
     requestAnimationFrame(step);
 }
 
