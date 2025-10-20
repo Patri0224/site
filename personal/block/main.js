@@ -99,7 +99,7 @@ function loop() {
     }
 
     ctx.font = '30px monospace';
-    ctx.fillStyle = 'green';
+    ctx.fillStyle = 'red';
     ctx.fillText(`FPS: ${fps}`, 60, 30);
     requestAnimationFrame(loop);
 }

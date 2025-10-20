@@ -25,18 +25,6 @@ const bgRGB = hexaToRGB(colors[0]);
 const gridCRGB = hexaToRGB(colors[1]);
 const gridLRGB = hexaToRGB(colors[2]);
 
-const gradientCache = {};
-function getGradient(ctx, color, alpha) {
-    const key = `${color.r},${color.g},${color.b}`;
-    if (!gradientCache[key]) {
-        const csize = cellSize * 0.625;
-        const gradient = ctx.createLinearGradient(0, 0, csize, csize);
-        gradient.addColorStop(0, `rgba(${Math.min(color.r + 50, 255)},${Math.min(color.g + 50, 255)},${Math.min(color.b + 50, 255)},${alpha})`);
-        gradient.addColorStop(1, `rgba(${color.r},${color.g},${color.b},${alpha})`);
-        gradientCache[key] = gradient;
-    }
-    return gradientCache[key];
-}
 // ==================== PRECOMPILA CELLE ====================
 
 const precompiledCells = {};
@@ -125,8 +113,9 @@ function renderGrid(ctx, delta) {
         for (let x = 0; x < cells; x++) {
             const i = idx(x, y);
             if (board[i] === 1) {
-                const img = precompiledCells[colorCells[i]];
-                if (img) ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);
+                /*const img = precompiledCells[colorCells[i]];
+                if (img) ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);*/
+                drawCell(ctx, cellPositions[x], cellPositions[y], cellSize, hexaToRGB(colorCells[i]));
             }
         }
     }
@@ -217,7 +206,7 @@ function drawCell(ctx, x, y, size, color) {
     const cy = y + (size - csize) / 2;
     // Applica fade dell'animazione
     ctx.globalAlpha = a;  // 'a' qui è il fade del clearingAnimation
-    ctx.fillStyle = `rgba(${rS},${gS},${bS},${a})`;
+    ctx.fillStyle = baseColor;
     ctx.fillRect(cx, cy, csize, csize);
     ctx.strokeStyle = `rgba(${Math.max(rS - 50, 0)},${Math.max(gS - 50, 0)},${Math.max(bS - 50, 0)},${a})`;
     ctx.lineWidth = 1;
