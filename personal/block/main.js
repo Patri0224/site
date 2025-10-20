@@ -21,14 +21,35 @@ export function gameOver() {
 }
 
 function resize() {
-    canvas.width = window.innerWidth - 2 * margin;
-    canvas.height = window.innerHeight - 2 * margin;
+    const dpr = window.devicePixelRatio || 1;
+
+    // Risoluzione virtuale (visiva)
+    const targetW = window.innerWidth - 2 * margin;
+    const targetH = window.innerHeight - 2 * margin;
+
+    // Scala di rendering interna (riduci per guadagnare FPS)
+    const scale = 1; // 0.5 = metà risoluzione (prova anche 0.75)
+
+    canvas.width = targetW * scale;
+    canvas.height = targetH * scale;
+
+    // Mantieni le dimensioni visive reali
+    canvas.style.width = `${targetW}px`;
+    canvas.style.height = `${targetH}px`;
+    canvas.style.margin = `${margin}px`;
+
+    // Aggiorna coordinate globali
     CW = canvas.width;
     CH = canvas.height;
-    canvas.style.margin = margin + "px";
-    resizeGrid(canvas.width, canvas.height,ctx);
+
+    // Adatta le trasformazioni di disegno
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+
+    // Aggiorna la griglia e margini
+    resizeGrid(canvas.width, canvas.height, ctx);
     setMa2(margin);
 }
+
 
 window.addEventListener('resize', resize);
 resize();
@@ -76,10 +97,10 @@ function loop() {
     } else if (state === GAME) {
         render(ctx);
     }
-/*
+
     ctx.font = '30px monospace';
-    ctx.fillStyle = 'white';
-    ctx.fillText(`FPS: ${fps}`, 60, 30);*/
+    ctx.fillStyle = 'red';
+    ctx.fillText(`FPS: ${fps}`, 60, 30);
     requestAnimationFrame(loop);
 }
 

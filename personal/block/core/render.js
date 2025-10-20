@@ -118,27 +118,20 @@ function renderGrid(ctx, delta) {
     ctx.fillStyle = `rgba(${bgRGB.r},${bgRGB.g},${bgRGB.b},${bgRGB.a})`;
     ctx.fillRect(ma2, ma2, cells * cellSize, cells * cellSize);
 
-    // celle
+    ctx.save();
+    ctx.filter = `saturate(${saturation})`;
+
     for (let y = 0; y < cells; y++) {
         for (let x = 0; x < cells; x++) {
             const i = idx(x, y);
             if (board[i] === 1) {
-                const colorHex = colorCells[i];
-                const img = precompiledCells[colorHex];
-                if (img) {
-                    ctx.filter = `saturate(${saturation})`;
-                    ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);
-                    ctx.filter = 'none';
-
-                } else {
-                    // fallback finché l'immagine non è pronta
-                    const c = hexaToRGB(colorHex);
-                    drawCell(ctx, cellPositions[x], cellPositions[y], cellSize, c);
-                }
-
+                const img = precompiledCells[colorCells[i]];
+                if (img) ctx.drawImage(img, cellPositions[x], cellPositions[y], cellSize, cellSize);
             }
         }
     }
+
+    ctx.restore();
 
     // linee griglia
     ctx.lineWidth = 1.2;
@@ -305,7 +298,7 @@ function renderPiecePreview(ctx) {
         if (img) {
             ctx.drawImage(img, offsetX + dx * size, offsetY + dy * size, size, size);
         } else {
-            drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
+            //drawCell(ctx, offsetX + dx * size, offsetY + dy * size, size, color);
         }
     }
 }
