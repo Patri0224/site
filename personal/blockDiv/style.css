@@ -29,7 +29,8 @@ body {
 #grid-container {
     display: grid;
     width: 90vmin;
-    margin: auto 0;
+    margin: 0;
+    margin-top: auto;
     /* occupa fino al 90% del lato minore */
     aspect-ratio: 1 / 1;
     /* griglia quadrata */
