@@ -9,6 +9,8 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
+    overflow-y: hidden;
+    touch-action: none;
 }
 
 #game-container {

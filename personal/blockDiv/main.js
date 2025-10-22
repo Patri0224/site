@@ -496,7 +496,14 @@ function blockInserted(block) {
     document.getElementById('best-score-text-game').textContent = "Best: " + bestScore;
     updateGridDisplay();
     if (!checkAvailableBlocksFit()) {
-        gameOver();
+        desaturateGrid()
+        setTimeout(() => {
+            if (score > bestScore) {
+                bestScore = score;
+            }
+            risaturateGrid();
+            gameOver();
+        }, 2200);
     }
 }
 function updateLayout() {
@@ -535,6 +542,7 @@ function checkAvailableBlocksFit() {
         if (canFit) break;
     }
     return canFit;
+
 }
 function desaturateGrid() {
     const cells = document.querySelectorAll(".cell");
