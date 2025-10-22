@@ -1,0 +1,256 @@
+/* Contenitore della griglia */
+body {
+    background-color: #111;
+    color: #eee;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+    /* default verticale */
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 12px;
+    padding: 8px;
+}
+
+#grid-container {
+    display: grid;
+    width: 90vmin;
+    margin: auto 0;
+    /* occupa fino al 90% del lato minore */
+    aspect-ratio: 1 / 1;
+    /* griglia quadrata */
+    background-color: #222;
+    border: 1px solid #7a7a7a;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+}
+
+/* Celle */
+.cell {
+    position: relative;
+    width: 96%;
+    height: 96%;
+    margin: 2%;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    /* leggero bianco trasparente */
+    box-shadow:
+        inset 4px 4px 8px rgba(255, 255, 255, 0.296),
+        /* bordo chiaro */
+        inset -4px -4px 8px rgba(0, 0, 0, 0.4);
+    /* bordo scuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+#grid-container .empty {
+    border: 1px solid #555;
+}
+
+/* Effetto responsive con padding */
+@media (max-width: 600px) {
+    #grid-container {
+        width: 90vmin;
+    }
+}
+
+@media (min-aspect-ratio: 1/1) {
+    #game-container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    #options-container {
+        flex-direction: column;
+        /* blocchi uno sotto l'altro */
+    }
+}
+
+#options-container {
+    width: 18vmin;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    margin: auto 0;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.option-slot {
+    width: 17vmin;
+    height: 17vmin;
+    border-radius: 10px;
+    padding: 2%;
+    border: 2px solid #aaa;
+    background-color: #222;
+    /* più scuro per contrastare il blocco */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.option-slot>div {
+    display: grid;
+    width: 90%;
+    height: 90%;
+    aspect-ratio: 1 / 1;
+    /* aumenta lo spazio tra le celle */
+    /* opzionale, per aggiungere margine interno */
+}
+
+#option-0 {
+    display: grid;
+    gap: 2px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    text-align: center;
+    background-color: #222;
+    transition: background-color 0.2s ease;
+}
+
+#option-0 p {
+    margin: 0;
+    padding: 0 4px;
+    user-select: none;
+}
+
+#option-0:hover {
+    background-color: #333;
+}
+
+#option-0:active {
+    background-color: #444;
+}
+
+.option-slot.empty {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#preview-block {
+    z-index: 100;
+    position: absolute;
+    display: grid;
+    margin: 0 auto;
+    background-color: #00000000;
+    border-radius: 10px;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+}
+
+.empty {
+    width: 94%;
+    height: 94%;
+    border-radius: 2px;
+    margin: 3%;
+    background-color: transparent;
+    transition: background-color 0.15s ease;
+    /* leggero bianco trasparente */
+    box-shadow: none;
+    /* bordo scuro */
+}
+
+/* --- Schermata menu principale --- */
+#menu-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #222 0%, #111 100%);
+    color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 999;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    user-select: none;
+    transition: opacity 0.4s ease;
+}
+
+/* --- Titolo --- */
+#menu-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #00b4ff;
+    text-shadow: 0 0 20px rgba(0, 180, 255, 0.6);
+}
+
+/* --- Sottotitolo --- */
+#menu-screen p {
+    margin: 5px 0;
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* --- Bottone start --- */
+#start-button {
+    margin-top: 25px;
+    padding: 15px 40px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00b4ff, #0078d7);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 180, 255, 0.3);
+    -webkit-tap-highlight-color: transparent;
+}
+
+#start-button:hover,
+#start-button:active {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 180, 255, 0.5);
+}
+
+/* --- Best Score --- */
+#best-score-text {
+    margin-top: 20px;
+    font-size: 1rem;
+    opacity: 0.6;
+}
+
+/* --- Responsivo su telefoni --- */
+@media (max-width: 600px) {
+    #menu-screen h1 {
+        font-size: 2.2rem;
+    }
+
+    #start-button {
+        width: 70%;
+        padding: 14px 0;
+        font-size: 1.2rem;
+    }
+
+    #menu-screen p {
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Block grid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div id="menu-screen">
+        <h1>Block Grid</h1>
+        <p>Clicca per iniziare una nuova partita</p>
+        <button id="start-button">Inizia</button>
+        <p id="best-score-text">Best Score: 0</p>
+    </div>
+    <div id="game-container">
+        <div id="grid-container"></div>
+        <div id="options-container">
+            <div class="option-slot" id="option-0">
+                <p id="score-text">Score: 0</p>
+                <p id="best-score-text-game">Best: 0</p>
+            </div>
+            <div class="option-slot" id="option-1"></div>
+            <div class="option-slot" id="option-2"></div>
+            <div class="option-slot" id="option-3"></div>
+        </div>
+    </div>
+    <div id="preview-block" class="preview-empty"></div>
+    <script src="blocks.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
