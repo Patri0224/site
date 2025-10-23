@@ -30,7 +30,7 @@ body {
     display: grid;
     width: 90vmin;
     margin: 0;
-    margin-top: auto;
+    margin-top: 3%;
     /* occupa fino al 90% del lato minore */
     aspect-ratio: 1 / 1;
     /* griglia quadrata */
