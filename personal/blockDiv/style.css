@@ -51,9 +51,9 @@ body {
     background: rgba(255, 255, 255, 0.06);
     /* leggero bianco trasparente */
     box-shadow:
-        inset 4px 4px 8px rgba(255, 255, 255, 0.296),
+        inset 6px 6px 2px rgba(255, 255, 255, 0.296),
         /* bordo chiaro */
-        inset -4px -4px 8px rgba(0, 0, 0, 0.4);
+        inset -6px -6px 2px rgba(0, 0, 0, 0.4);
     /* bordo scuro */
     display: flex;
     justify-content: center;
@@ -117,6 +117,10 @@ body {
     width: 90%;
     height: 90%;
     aspect-ratio: 1 / 1;
+    box-shadow:
+        inset 3px 3px 1px rgba(255, 255, 255, 0.379),
+        /* bordo chiaro */
+        inset -3px -3px 1px rgba(0, 0, 0, 0.486) !important;
     /* aumenta lo spazio tra le celle */
     /* opzionale, per aggiungere margine interno */
 }
@@ -147,10 +151,13 @@ body {
     background-color: #444;
 }
 
-.option-slot.empty {
-    opacity: 0.4;
-    cursor: not-allowed;
+.option-slot .empty {
+    box-shadow:
+        inset 1px 1px 1px rgba(255, 255, 255, 0),
+        /* bordo chiaro */
+        inset -1px -1px 1px rgba(0, 0, 0, 0) !important;
 }
+
 
 #preview-block {
     z-index: 100;

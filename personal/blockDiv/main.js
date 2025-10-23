@@ -390,7 +390,6 @@ function updateOptionsDisplay() {
                 for (let x = 0; x < max; x++) {
                     const cellDiv = document.createElement('div');
                     cellDiv.classList.add('cell');
-
                     // Confronta coordinate corrette del blocco
                     const gridX = x - offsetX;
                     const gridY = y - offsetY;
