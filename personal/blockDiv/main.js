@@ -349,8 +349,9 @@ function generaOpzioni() {
         let randomColor = Math.random() * 4 + 3;
         colorOptionsBlocks[i] = colors[Math.floor(randomColor)];
     }
-    if (!checkAvailableBlocksFit()) {
-        if (score < bestScore || Math.random() < 0.5) {
+    let diff = 3;
+    while (diff > 0) {
+        if (!checkAvailableBlocksFit() && score < bestScore) {
             optionsBlocks = [0, 0, 0];
             colorOptionsBlocks = [null, null, null];
             for (let i = 0; i < 3; i++) {
@@ -360,6 +361,7 @@ function generaOpzioni() {
                 colorOptionsBlocks[i] = colors[Math.floor(randomColor)];
             }
         }
+        diff--;
     }
     updateOptionsDisplay();
 }
