@@ -166,18 +166,6 @@ getTimeDigits().forEach((d, i) => createDigit(d, i));
 
 function setTargets() {
     const digitsNow = getTimeDigits();
-    let idx = 0;
-    for (const d of digitsNow) {
-        digits[d].forEach(({ h, m }) => {
-            const mc = miniClocks[idx];
-            mc.targetH = normalizeClockwise(h, mc.currentH);
-            mc.targetM = normalizeClockwise(m, mc.currentM);
-            idx++;
-        });
-    }
-}
-function setTargets() {
-    const digitsNow = getTimeDigits();
     const now = new Date();
     let idx = 0;
 
@@ -186,22 +174,19 @@ function setTargets() {
             const mc = miniClocks[idx];
 
             // Se il clock è parte della "E" (le ultime 4x24 celle)
-            const bool = idx > 24 * 4;
             let hTarget = h;
             let mTarget = m;
 
-            // --- Caso speciale: mini-orologi della E
-            if (bool) {
-                const isTargetE = (h % 360) === E.h && (m % 360) === E.m;
-                if (isTargetE) {
-                    // usa l'ora reale come target
-                    hTarget = ((now.getHours() % 12) + now.getMinutes() / 60) * 30 - 90;
-                    mTarget = now.getMinutes() * 6 + now.getSeconds() * 0.1 - 90;
+            const isTargetE = (h % 360) === E.h && (m % 360) === E.m;
+            if (isTargetE) {
+                // usa l'ora reale come target
+                hTarget = ((now.getHours() % 12) + now.getMinutes() / 60) * 30 - 90;
+                mTarget = now.getMinutes() * 6 + now.getSeconds() * 0.1 - 90;
 
-                    hTarget = (hTarget + 360) % 360;
-                    mTarget = (mTarget + 360) % 360;
-                }
+                hTarget = (hTarget + 360) % 360;
+                mTarget = (mTarget + 360) % 360;
             }
+
 
             // --- Normalizza movimento clockwise rispetto alla posizione corrente
             mc.targetH = normalizeClockwise(hTarget, mc.currentH);
