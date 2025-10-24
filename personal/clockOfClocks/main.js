@@ -183,18 +183,22 @@ function animateClocks(timestamp) {
     animateClocks.last = timestamp;
     if (dt > 0.1) dt = 0.1;
     let i = 0;
+    const now = new Date();
     miniClocks.forEach(mc => {
-        const hTarget = mc.targetH;
-        const mTarget = mc.targetM;
-
+        let hTarget = mc.targetH;
+        let mTarget = mc.targetM;
+        let bool = i > 24 * 4;
         // --- Calcolo velocità target (stessa logica di prima)
         let targetSpeed = slowSpeed;
-        if (i > 24 * 4) targetSpeed = fastSpeed;
+        if (bool) targetSpeed = fastSpeed;
 
         const isTargetE = (hTarget % 360) === E.h && (mTarget % 360) === E.m;
-        if (i > 24 * 4 && isTargetE) targetSpeed /= 6;
+        if (bool && isTargetE) targetSpeed /= 6;
         i++;
-
+        if (!bool && isTargetE) {
+            hTarget = ((now.getHours() % 12) + now.getMinutes() / 60) * 30 - 90;
+            mTarget = now.getMinutes() * 6 + now.getSeconds() * 0.1 - 90;
+        }
         // --- Aggiungiamo velocità effettiva graduale
         if (mc.currentSpeed === undefined) mc.currentSpeed = targetSpeed; // inizializza
         const smoothFactor = 1; // più alto = più reattivo (2-5 ideale)
@@ -203,7 +207,7 @@ function animateClocks(timestamp) {
         const speed = mc.currentSpeed; // usa la velocità smussata
 
         // --- Rotazioni (logica invariata)
-        if (isTargetE) {
+        if (bool && isTargetE) {
             mc.currentH += speed * dt;
         } else if (Math.abs(hTarget - mc.currentH) > 0.1) {
             mc.currentH += speed * dt;
@@ -211,13 +215,14 @@ function animateClocks(timestamp) {
         }
         mc.hour.style.transform = `rotate(${mc.currentH}deg)`;
 
-        if (isTargetE) {
+        if (bool && isTargetE) {
             mc.currentM += speed * dt * 1.7;
         } else if (Math.abs(mTarget - mc.currentM) > 0.1) {
             mc.currentM += speed * dt;
             if (mc.currentM > mTarget) mc.currentM = mTarget;
         }
         mc.minute.style.transform = `rotate(${mc.currentM}deg)`;
+
     });
 
     requestAnimationFrame(animateClocks);
