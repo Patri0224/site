@@ -4,7 +4,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 97vh;
     color: #f0f0f0;
     font-family: 'Inter', sans-serif;
     letter-spacing: 1px;
@@ -36,6 +36,36 @@ body {
     height: 100%;
     background: rgb(31, 31, 31);
     border-radius: 30%;
+    overflow: visible;
+}
+
+/* Hover: leggero effetto tattile */
+.clock:hover {
+    background: #2a2a2a;
+    box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+/* Trattini delle ore */
+.clock .tick {
+    position: absolute;
+    top: 88%;
+    left: 48%;
+    width: 4%;
+    height: 10%;
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 2px;
+    transform-origin: center calc(-370%);
+    /* punto attorno a cui ruotare */
+}
+
+.clock .tick.major {
+    background: rgba(255, 255, 255, 0.05);
+}
+.clock:hover .tick {
+    background: rgba(255, 255, 255, 0.15);
+}
+.clock:hover .tick.major {
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .clock div {
@@ -43,11 +73,11 @@ body {
     top: 50%;
     left: 50%;
     transform-origin: center left;
-    background: rgb(176, 176, 176);
+    background: rgb(255, 255, 255);
 }
 
 .clock div.hour {
-    background: rgb(188, 188, 188);
+    background: linear-gradient(to right, rgba(178, 178, 178, 0.623), rgb(187, 187, 187));
     box-shadow: 0 0 6px #000000;
     width: 50%;
     /* percentuale della dimensione del clock */
@@ -55,10 +85,19 @@ body {
 }
 
 .clock div.minute {
-    background: rgb(157, 157, 157);
+    background: linear-gradient(to right, rgba(178, 178, 178, 0.623), rgb(187, 187, 187));
     box-shadow: 0 0 6px #000000;
     width: 60%;
     height: 30%;
+}
+
+.clock div.second {
+    background: linear-gradient(to right, rgba(75, 75, 75, 0.477), rgba(156, 156, 156, 0.707));
+    width: 60%;
+    height: 20%;
+    opacity: 0;
+    /* stato iniziale */
+    transition: opacity 1s ease;
 }
 
 /* === SEPARATORE (i due puntini tra ore e minuti) === */
@@ -75,10 +114,4 @@ body {
     50% {
         opacity: 0.1;
     }
-}
-
-/* Hover: leggero effetto tattile */
-.clock:hover {
-    background: #2a2a2a;
-    box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.1);
 }
