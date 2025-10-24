@@ -97,7 +97,7 @@ body {
     height: 20%;
     opacity: 0;
     /* stato iniziale */
-    transition: opacity 1s ease;
+    transition: opacity 0.7s ease;
 }
 
 /* === SEPARATORE (i due puntini tra ore e minuti) === */

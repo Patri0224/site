@@ -297,7 +297,7 @@ function resizeDigits() {
             second.style.left = "50%";
             second.style.transformOrigin = "0% 50%";
             second.style.opacity = "0";
-            second.style.transition = "opacity 1s ease";
+            second.style.transition = "opacity 0.7s ease";
 
         });
     });
