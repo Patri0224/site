@@ -52,14 +52,14 @@ body {
     left: 48%;
     width: 4%;
     height: 10%;
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.02);
     border-radius: 2px;
     transform-origin: center calc(-370%);
     /* punto attorno a cui ruotare */
 }
 
 .clock .tick.major {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
 }
 .clock:hover .tick {
     background: rgba(255, 255, 255, 0.15);
