@@ -88,10 +88,20 @@ const digits = [
         TR, H, H, TL,
     ],
 ];
-
+const app = document.getElementById("app");
+const miniClocks = [];
+const slowSpeed = 36;   // 36 gradi/sec = 360 gradi in 10 sec
+const fastSpeed = 480;
+let modTime = 0;
+let O = 0;
+let M = 0;
+let S = 0;
+function getNow() {
+    return new Date(Date.now() + modTime * 1000);
+}
 
 function getTimeDigits() {
-    const now = new Date();
+    const now = new getNow();
     const future = new Date(now.getTime() + 7 * 1000);
     // solo ore e minuti
     return [
@@ -107,13 +117,10 @@ function normalizeClockwise(next, prev) {
     return prev + delta;
 }
 
-const app = document.getElementById("app");
-const miniClocks = [];
-const slowSpeed = 36;   // 36 gradi/sec = 360 gradi in 10 sec
-const fastSpeed = 480;       // stesso: 1 minuto per andare al target
+// stesso: 1 minuto per andare al target
 
 function createClock(h, m) {
-    const now = new Date();
+    const now = getNow();
     const s = now.getSeconds() * 6 - 90 + 1;
     if (h === E.h && m === E.m) {
         // Per la "E", inizializza le lancette in base all'ora attuale
@@ -183,7 +190,7 @@ getTimeDigits().forEach((d, i) => createDigit(d, i));
 
 function setTargets() {
     const digitsNow = getTimeDigits();
-    const now = new Date();
+    const now = getNow();
     let idx = 0;
 
     for (const d of digitsNow) {
@@ -311,6 +318,47 @@ function addHourTicks(clockEl) {
         clockEl.appendChild(tick);
     }
 }
+let piuMeno = 1;
+function changePiuMeno() {
+    if (piuMeno == 1) {
+        piuMeno = -1;
+        document.getElementById("piumeno").innerHTML = "-";
+    }
+    else {
+        piuMeno = 1;
+        document.getElementById("piumeno").innerHTML = "+";
+    }
+}
+function reset() {
+    modTime = 0;
+    O = 0;
+    M = 0;
+    S = 0;
+    updateModTime();
+}
+function modOra() {
+    O = (O + piuMeno) % 12;
+    updateModTime();
+}
+function modMinuto() {
+    M = (M + piuMeno) % 60;
+    updateModTime();
+}
+function modSecondo() {
+    S = (S + piuMeno) % 60;
+    updateModTime();
+}
+
+function updateModTime() {
+    // Calcolo del tempo modificato totale in secondi
+    modTime = O * 3600 + M * 60 + S;
+
+    // Formatto la stringa in due cifre, mantenendo il segno se negativo
+    const fmt = n => (n < 0 ? "-" + String(Math.abs(n)).padStart(2, "0") : String(n).padStart(2, "0"));
+    document.getElementById("totChange").innerHTML = `${fmt(O)}:${fmt(M)}:${fmt(S)}`;
+}
+
+
 document.querySelectorAll('.clock').forEach(addHourTicks);
 
 // Applica subito e ogni volta che cambia la dimensione

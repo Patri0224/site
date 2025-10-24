@@ -61,9 +61,11 @@ body {
 .clock .tick.major {
     background: rgba(255, 255, 255, 0.04);
 }
+
 .clock:hover .tick {
     background: rgba(255, 255, 255, 0.15);
 }
+
 .clock:hover .tick.major {
     background: rgba(255, 255, 255, 0.4);
 }
@@ -114,4 +116,45 @@ body {
     50% {
         opacity: 0.1;
     }
+}
+
+#time-control {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    background-color: transparent;
+    top: 1%;
+    left: 1%;
+    height: fit-content;
+    width: 90%;
+    gap: 4px; /* Spazio uniforme tra i bottoni */
+}
+
+#time-control button {
+    background-color: #3e3e3e3b;
+    border: 1px solid #000;
+    color: #fcfcfc44;
+    text-align: center;
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+#time-control button:hover {
+    background-color: #55555588;
+    color: #fff;
+}
+
+#totChange {
+    color: #fcfcfc88;
+    text-align: center;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 14px;
 }
