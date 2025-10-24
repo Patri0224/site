@@ -45,6 +45,9 @@ function start() {
         const rect = DIVGRID.getBoundingClientRect();
         mouseX = rect.left + rect.width / 2;
         mouseY = rect.top + rect.height / 2;
+        optionsBlocksOld = [-1, -1, -1];
+        gridOld = Array(cells * cells).fill(0);
+        previewBlockOld = -1;
         creaGriglia();
         generaOpzioni();
         updateGridDisplay();
@@ -174,22 +177,27 @@ function insertBlock(block, x, y) {
     updatePreviewBlockDisplay();
     blockInserted(block);
 }
+let gridOld = Array(cells * cells).fill(0);
 function updateGridDisplay() {
-    //debugger;
-    for (let y = 0; y < cells; y++) {
-        for (let x = 0; x < cells; x++) {
-            const i = idx(x, y);
-            const cell = grid[i];
-            const cellDiv = document.getElementById(`cell-${i}`);
-            if (cell == 1) {
-                cellDiv.style.backgroundColor = colorGrid[i];
-                cellDiv.classList.remove('empty');
-            } else {
-                cellDiv.style.backgroundColor = "#33333300";
-                cellDiv.classList.add('empty');
-            }
-        }
+    const changed = [];
+    for (let i = 0; i < grid.length; i++) {
+        if (gridOld[i] !== grid[i]) changed.push(i);
+        gridOld[i] = grid[i];
     }
+    updateGridDispla(changed);
+}
+function updateGridDispla(changes) {
+    changes.forEach(i => {
+        const cellDiv = document.getElementById(`cell-${i}`);
+        const cell = grid[i];
+        if (cell) {
+            cellDiv.className = 'cell';
+            cellDiv.style.backgroundColor = colorGrid[i];
+        } else {
+            cellDiv.style.backgroundColor = "transparent";
+            cellDiv.className = 'cell empty';
+        }
+    });
 }
 function selectOption(optionNumber) {
     selectedOption = optionNumber - 1;
@@ -231,7 +239,7 @@ function getGridY(screenY) {
     const cellSize = rect.height / cells;
     return Math.floor(relativeY / cellSize);
 }
-
+let previewBlockOld = -1;
 function updatePreviewBlockDisplay() {
     if (previewBlock < MIN || previewBlock > MAX) {
         DIVPREVIEW.style.display = "none";
@@ -247,29 +255,29 @@ function updatePreviewBlockDisplay() {
 
     const widthCells = maxDx - minDx + 1;
     const heightCells = maxDy - minDy + 1;
+    if (previewBlock !== previewBlockOld) {
+        DIVPREVIEW.style.gridTemplateColumns = `repeat(${widthCells}, 1fr)`;
+        DIVPREVIEW.style.gridTemplateRows = `repeat(${heightCells}, 1fr)`;
+        DIVPREVIEW.innerHTML = '';
 
-    DIVPREVIEW.style.gridTemplateColumns = `repeat(${widthCells}, 1fr)`;
-    DIVPREVIEW.style.gridTemplateRows = `repeat(${heightCells}, 1fr)`;
-    DIVPREVIEW.innerHTML = '';
+        for (let y = minDy; y <= maxDy; y++) {
+            for (let x = minDx; x <= maxDx; x++) {
+                const cellDiv = document.createElement('div');
+                cellDiv.classList.add('cell');
 
-    for (let y = minDy; y <= maxDy; y++) {
-        for (let x = minDx; x <= maxDx; x++) {
-            const cellDiv = document.createElement('div');
-            cellDiv.classList.add('cell');
+                const isPartOfShape = shape.some(([dx, dy]) => dx === x && dy === y);
+                if (isPartOfShape) {
+                    cellDiv.style.backgroundColor = colorPreviewBlock;
+                    cellDiv.classList.add('filled');
+                } else {
+                    cellDiv.style.backgroundColor = "transparent";
+                    cellDiv.classList.add('empty');
+                }
 
-            const isPartOfShape = shape.some(([dx, dy]) => dx === x && dy === y);
-            if (isPartOfShape) {
-                cellDiv.style.backgroundColor = colorPreviewBlock;
-                cellDiv.classList.add('filled');
-            } else {
-                cellDiv.style.backgroundColor = "transparent";
-                cellDiv.classList.add('empty');
+                DIVPREVIEW.appendChild(cellDiv);
             }
-
-            DIVPREVIEW.appendChild(cellDiv);
         }
     }
-
     const cellSize = rect.width / cells;
     const gridX = getGridX(mouseX);
     const gridY = getGridY(mouseY);
@@ -300,6 +308,7 @@ function updatePreviewBlockDisplay() {
         DIVPREVIEW.style.top = `${mouseY - heightPx + cellSize / 2}px`;
         DIVPREVIEW.style.opacity = 0.4;
     }
+    previewBlockOld = previewBlock;
 }
 
 function salvaBestScore() {
@@ -365,10 +374,11 @@ function generaOpzioni() {
     }
     updateOptionsDisplay();
 }
+let optionsBlocksOld = [-1, -1, -1];
 function updateOptionsDisplay() {
     const optionDivs = [DIVOPTIONS1, DIVOPTIONS2, DIVOPTIONS3];
     optionDivs.forEach((div, i) => {
-        if (optionsBlocks[i] !== 0) {
+        if (optionsBlocks[i] !== optionsBlocksOld[i] && optionsBlocks[i] !== 0) {
             div.style.display = "grid";
             const shape = SHAPES[optionsBlocks[i]];
             const minDx = Math.min(...shape.map(([dx]) => dx));
@@ -406,9 +416,12 @@ function updateOptionsDisplay() {
                     div.appendChild(cellDiv);
                 }
             }
+
         } else {
-            div.style.opacity = "0";
+            if (optionsBlocks[i] === 0)
+                div.style.opacity = "0";
         }
+        optionsBlocksOld[i] = optionsBlocks[i];
     });
 }
 function blockInserted(block) {
