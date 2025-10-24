@@ -176,53 +176,69 @@ function setTargets() {
         });
     }
 }
+function setTargets() {
+    const digitsNow = getTimeDigits();
+    const now = new Date();
+    let idx = 0;
+
+    for (const d of digitsNow) {
+        digits[d].forEach(({ h, m }) => {
+            const mc = miniClocks[idx];
+
+            // Se il clock è parte della "E" (le ultime 4x24 celle)
+            const bool = idx > 24 * 4;
+            let hTarget = h;
+            let mTarget = m;
+
+            // --- Caso speciale: mini-orologi della E
+            if (bool) {
+                const isTargetE = (h % 360) === E.h && (m % 360) === E.m;
+                if (isTargetE) {
+                    // usa l'ora reale come target
+                    hTarget = ((now.getHours() % 12) + now.getMinutes() / 60) * 30 - 90;
+                    mTarget = now.getMinutes() * 6 + now.getSeconds() * 0.1 - 90;
+
+                    hTarget = (hTarget + 360) % 360;
+                    mTarget = (mTarget + 360) % 360;
+                }
+            }
+
+            // --- Normalizza movimento clockwise rispetto alla posizione corrente
+            mc.targetH = normalizeClockwise(hTarget, mc.currentH);
+            mc.targetM = normalizeClockwise(mTarget, mc.currentM);
+            idx++;
+        });
+    }
+}
 
 function animateClocks(timestamp) {
     if (!animateClocks.last) animateClocks.last = timestamp;
     let dt = (timestamp - animateClocks.last) / 1000;
     animateClocks.last = timestamp;
     if (dt > 0.1) dt = 0.1;
-    let i = 0;
-    const now = new Date();
-    miniClocks.forEach(mc => {
-        let hTarget = mc.targetH;
-        let mTarget = mc.targetM;
-        let bool = i > 24 * 4;
-        // --- Calcolo velocità target (stessa logica di prima)
-        let targetSpeed = slowSpeed;
-        if (bool) targetSpeed = fastSpeed;
 
-        const isTargetE = (hTarget % 360) === E.h && (mTarget % 360) === E.m;
-        if (bool && isTargetE) targetSpeed /= 6;
-        i++;
-        if (!bool && isTargetE) {
-            hTarget = ((now.getHours() % 12) + now.getMinutes() / 60) * 30 - 90;
-            mTarget = now.getMinutes() * 6 + now.getSeconds() * 0.1 - 90;
-        }
-        // --- Aggiungiamo velocità effettiva graduale
-        if (mc.currentSpeed === undefined) mc.currentSpeed = targetSpeed; // inizializza
-        const smoothFactor = 1; // più alto = più reattivo (2-5 ideale)
+    miniClocks.forEach((mc, i) => {
+        const bool = i > 24 * 4;
+        let targetSpeed = bool ? fastSpeed : slowSpeed;
+
+        if (mc.currentSpeed === undefined) mc.currentSpeed = targetSpeed;
+        const smoothFactor = 1;
         mc.currentSpeed += (targetSpeed - mc.currentSpeed) * dt * smoothFactor;
 
-        const speed = mc.currentSpeed; // usa la velocità smussata
+        const speed = mc.currentSpeed;
 
-        // --- Rotazioni (logica invariata)
-        if (bool && isTargetE) {
+        // Rotazioni con raggiungimento progressivo dei target
+        if (Math.abs(mc.targetH - mc.currentH) > 0.1) {
             mc.currentH += speed * dt;
-        } else if (Math.abs(hTarget - mc.currentH) > 0.1) {
-            mc.currentH += speed * dt;
-            if (mc.currentH > hTarget) mc.currentH = hTarget;
+            if (mc.currentH > mc.targetH) mc.currentH = mc.targetH;
         }
         mc.hour.style.transform = `rotate(${mc.currentH}deg)`;
 
-        if (bool && isTargetE) {
-            mc.currentM += speed * dt * 1.7;
-        } else if (Math.abs(mTarget - mc.currentM) > 0.1) {
-            mc.currentM += speed * dt;
-            if (mc.currentM > mTarget) mc.currentM = mTarget;
+        if (Math.abs(mc.targetM - mc.currentM) > 0.1) {
+            mc.currentM += speed * dt * (bool ? 1.7 : 1);
+            if (mc.currentM > mc.targetM) mc.currentM = mc.targetM;
         }
         mc.minute.style.transform = `rotate(${mc.currentM}deg)`;
-
     });
 
     requestAnimationFrame(animateClocks);
