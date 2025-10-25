@@ -90,25 +90,30 @@ const digits = [
 ];
 const app = document.getElementById("app");
 const miniClocks = [];
-const slowSpeed = 36;   // 36 gradi/sec = 360 gradi in 10 sec
+const slowSpeed = 48;   // 36 gradi/sec = 360 gradi in 10 sec
 const fastSpeed = 480;
 let modTime = 0;
 let O = 0;
 let M = 0;
 let S = 0;
+let SecondiAttivi = false;
 function getNow() {
     return new Date(Date.now() + modTime * 1000);
 }
 
 function getTimeDigits() {
-    const now = new getNow();
-    const future = new Date(now.getTime() + 7 * 1000);
-    // solo ore e minuti
-    return [
+    const now = getNow();
+    const future = new Date(now.getTime() + 5 * 1000);
+    const base = [
         ...String(now.getHours()).padStart(2, "0"),
         ...String(future.getMinutes() % 60).padStart(2, "0"),
-        ...String(now.getSeconds()).padStart(2, "0")
-    ].map(Number);
+    ];
+
+    if (SecondiAttivi) {
+        base.push(...String(now.getSeconds()).padStart(2, "0"));
+    }
+
+    return base.map(Number);
 }
 
 function normalizeClockwise(next, prev) {
@@ -169,18 +174,22 @@ function createClock(h, m) {
 function createDigit(digit, index) {
     const container = document.createElement("div");
     container.className = "digit";
+    container.id = "digit" + index;
     digits[digit].forEach(({ h, m }) => {
         container.appendChild(createClock(h, m));
     });
-    app.appendChild(container);
 
     // Aggiungi ":" tra coppie (dopo 2 e 4 cifre)
-    if (index === 1 || index === 3) {
+    if (index === 2 || index === 4) {
         const sep = document.createElement("div");
         sep.className = "separator";
+        sep.id = "s" + index;
         sep.textContent = "";
         app.appendChild(sep);
     }
+
+    app.appendChild(container);
+
 
 }
 
@@ -225,6 +234,7 @@ function setTargets() {
             mc.targetH = normalizeClockwise(hTarget, mc.currentH);
             mc.targetM = normalizeClockwise(mTarget, mc.currentM);
             mc.targetS = normalizeClockwise(sTarget, mc.currentS);
+
             idx++;
         });
     }
@@ -238,6 +248,7 @@ function animateClocks(timestamp) {
 
     miniClocks.forEach((mc, i) => {
         const bool = i > 24 * 4;
+        if (!SecondiAttivi && i > 24 * 4) return;
         let targetSpeed = bool ? fastSpeed : slowSpeed;
 
         if (mc.currentSpeed === undefined) mc.currentSpeed = targetSpeed;
@@ -251,6 +262,9 @@ function animateClocks(timestamp) {
             op = false;
             mc.currentH += speed * dt;
             if (mc.currentH > mc.targetH) mc.currentH = mc.targetH;
+        } else {
+            mc.currentH %= 360;
+            mc.targetH %= 360;
         }
         mc.hour.style.transform = `rotate(${mc.currentH}deg)`;
 
@@ -258,6 +272,9 @@ function animateClocks(timestamp) {
             op = false;
             mc.currentM += speed * dt * (bool ? 1.7 : 1.1);
             if (mc.currentM > mc.targetM) mc.currentM = mc.targetM;
+        } else {
+            mc.currentM = mc.currentM % 360;
+            mc.targetM %= 360;
         }
         mc.minute.style.transform = `rotate(${mc.currentM}deg)`;
         if (op && mc.ifSecond)
@@ -266,7 +283,6 @@ function animateClocks(timestamp) {
             mc.second.style.opacity = "0";
         mc.currentS = mc.targetS;
         mc.second.style.transform = `rotate(${mc.currentS}deg)`;
-
 
     });
 
@@ -365,7 +381,22 @@ function updateModTime() {
     const fmt = n => (n < 0 ? "-" + String(Math.abs(n)).padStart(2, "0") : String(n).padStart(2, "0"));
     document.getElementById("totChange").innerHTML = `${fmt(O)}:${fmt(M)}:${fmt(S)}`;
 }
-
+function changeSecondi() {
+    if (SecondiAttivi) {
+        //disattiva
+        SecondiAttivi = false;
+        document.getElementById("digit4").style.display = "none";
+        document.getElementById("digit5").style.display = "none";
+        document.getElementById("s4").style.display = "none";
+    } else {
+        //attiva
+        SecondiAttivi = true;
+        document.getElementById("digit4").style.display = "grid";
+        document.getElementById("digit5").style.display = "grid";
+        document.getElementById("s4").style.display = "block";
+    }
+    setTargets();
+}
 
 document.querySelectorAll('.clock').forEach(addHourTicks);
 
