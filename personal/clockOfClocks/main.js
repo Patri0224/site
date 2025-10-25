@@ -337,7 +337,7 @@ function reset() {
     updateModTime();
 }
 function modOra() {
-    O = (O + piuMeno) % 12;
+    O = (O + piuMeno) % 24;
     updateModTime();
 }
 function modMinuto() {
