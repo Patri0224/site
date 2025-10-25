@@ -96,7 +96,7 @@ let modTime = 0;
 let O = 0;
 let M = 0;
 let S = 0;
-let SecondiAttivi = false;
+let SecondiAttivi = true;
 function getNow() {
     return new Date(Date.now() + modTime * 1000);
 }
