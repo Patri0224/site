@@ -204,6 +204,8 @@ function setTargets() {
             sTarget = (sTarget + 360) % 360;
             const isTargetE = (h % 360) === E.h && (m % 360) === E.m;
             if (isTargetE) {
+                mc.hour.classList.remove("active");
+                mc.minute.classList.remove("active");
                 // usa l'ora reale come target
                 mc.ifSecond = true;
                 hTarget = ((now.getHours() % 12) + now.getMinutes() / 60) * 30 - 90;
@@ -212,6 +214,10 @@ function setTargets() {
                 hTarget = (hTarget + 360) % 360;
                 mTarget = (mTarget + 360) % 360;
 
+            } else if (!mc.hour.classList.contains("active")) {
+
+                mc.hour.classList.add("active");
+                mc.minute.classList.add("active");
             }
 
 
@@ -291,12 +297,14 @@ function resizeDigits() {
             hour.style.top = "50%";
             hour.style.left = "50%";
             hour.style.transformOrigin = "0% 50%";
+            hour.style.transition = "background-color 0.8s ease-in-out;"
 
             minute.style.width = `${digitSize * 0.12}px`;
             minute.style.height = `${digitSize * 0.012}px`;
             minute.style.top = "50%";
             minute.style.left = "50%";
             minute.style.transformOrigin = "0% 50%"; // leggermente più spessa
+            minute.style.transition = "background-color 0.8s ease-in-out;"
 
             second.style.width = `${digitSize * 0.10}px`;
             second.style.height = `${digitSize * 0.008}px`;
@@ -304,7 +312,7 @@ function resizeDigits() {
             second.style.left = "50%";
             second.style.transformOrigin = "0% 50%";
             second.style.opacity = "0";
-            second.style.transition = "opacity 0.7s ease";
+            second.style.transition = "opacity 0.7s ease-out";
 
         });
     });
