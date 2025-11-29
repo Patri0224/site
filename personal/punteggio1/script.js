@@ -34,7 +34,8 @@ var persone = {
 31:"Sofia",
 32:"Tommaso", 
 33:"Yuri",
-34:"Chiara"
+34:"Chiara", 
+35:"Tony"
 };
 //ogni nome nuovo deve essere aggiunto in fondo alla lista anche se non è più in ordine alfabetico per essere uguale al database
 // automatically uses env NETLIFY_DATABASE_URL
@@ -609,7 +610,10 @@ function preset() {
             29: "Viola", 
 30:"Francesca",
 31:"Sofia",
-32:"Tommaso"
+32:"Tommaso", 
+33:"Yuri",
+34:"Chiara", 
+35:"Tony"
         };
         tempoTemp = getCurrentTimeInSeconds();
 
@@ -703,7 +707,10 @@ function reset() {
             29: "Viola", 
 30:"Francesca",
 31:"Sofia",
-32:"Tommaso"
+32:"Tommaso", 
+33:"Yuri",
+34:"Chiara",
+35:"Tony"
         };
         localStorage.setItem("nt1", document.getElementById('name-team1').textContent);
         localStorage.setItem("st1", document.getElementById('score-team1').textContent);
