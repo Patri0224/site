@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Sudoku</title>
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <button id="noteToggle">Annotazioni: OFF</button>
+    <button id="undoBtn">Annulla</button>
+  </div>
+
+  <div id="board"></div>
+
+  <div id="numpad" class="hidden">
+    <button data-num="1">1</button>
+    <button data-num="2">2</button>
+    <button data-num="3">3</button>
+    <button data-num="4">4</button>
+    <button data-num="5">5</button>
+    <button data-num="6">6</button>
+    <button data-num="7">7</button>
+    <button data-num="8">8</button>
+    <button data-num="9">9</button>
+    <button data-num="clear">Cancella</button>
+  </div>
+
+  <script src="js/state.js"></script>
+  <script src="js/logic.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/input.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

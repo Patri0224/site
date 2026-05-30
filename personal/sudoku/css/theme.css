@@ -1,0 +1,9 @@
+body { background:#fafafa; }
+
+.cell:nth-child(3n) { border-right:2px solid black; }
+.cell:nth-child(9n+1) { border-left:2px solid black; }
+
+.cell { border-top:1px solid #aaa; }
+.cell:nth-child(-n+9) { border-top:2px solid black; }
+
+.cell:nth-last-child(-n+9) { border-bottom:2px solid black; }

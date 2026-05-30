@@ -1,0 +1,8 @@
+@media(max-width:768px){
+  #board{
+    transform: scale(0.9);
+  }
+  #numpad{
+    display:grid;
+  }
+}

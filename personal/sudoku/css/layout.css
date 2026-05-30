@@ -1,0 +1,78 @@
+body {
+  font-family: system-ui;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(9, 50px);
+  grid-template-rows: repeat(9, 50px);
+  gap: 1px;
+}
+
+.cell {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #aaa;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.value {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.notes {
+  position: absolute;
+  inset: 2px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  font-size: 10px;
+  color: gray;
+}
+
+.notes span {
+  text-align: center;
+  visibility: hidden;
+}
+
+
+.cell.filled .notes {
+  display: none;
+}
+
+.cell.selected {
+  background: #e6f2ff;
+}
+
+.highlight-row,
+.highlight-col,
+.highlight-block {
+  background: #f3f8ff;
+}
+
+.highlight-same {
+  background: #d8ecff;
+}
+
+.error {
+  background: #ffe6e6 !important;
+}
+
+.topbar { display: flex; gap: 10px; }
+
+#numpad {
+  display: grid;
+  grid-template-columns: repeat(5, 50px);
+  gap: 6px;
+}
+
+.hidden { display: none; }
